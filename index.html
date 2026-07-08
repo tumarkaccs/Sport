@@ -255,11 +255,11 @@
 </div>
 
 <script>
-    const HOJA_PROD = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=0&single=true&output=csv&cachebust=' + Date.now();
+    const HOJA_PROD = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRNZ8g2bOvAjBDhSsv8KGXAQKvPcmgSPxMBd1dq3kPzvvBzd4lF4EHzR6MA8SMBgvlrqWbwtYZ2Lzhp/pub?gid=0&single=true&output=' + Date.now();
     const HOJA_CONF = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=283577687&single=true&output=csv&cachebust=' + Date.now();
     
     // URL de tu API de Google Apps Script para descontar inventario de forma automática (Reemplazar cuando la crees)
-    const API_RESTAR_STOCK = 'https://script.google.com/macros/s/TU_ID_DE_DEPLOYS_APPS_SCRIPT/exec';
+    const API_RESTAR_STOCK = 'https://script.google.com/macros/s/AKfycbzJyZRou65tzkxAInEiSkEP3ozS_lsmn9pldqqRyAta91_1wid5xv6whHWjk6oXOe-JKw/exec';
 
     let DB = [], CART = [], CONFIG = {tel:''};
     let catActual = 'todos', entregaM = '', pagoM = '', carritoTotalGlobal = 0;
