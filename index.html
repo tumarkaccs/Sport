@@ -15,13 +15,11 @@
             --texto: #2c3e50;
             --gris-suave: #f1f5f9;
             --cian: #007bbd;
-            --cashea: #ffd700;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--fondo); color: var(--texto); padding-bottom: 100px; line-height: 1.4; }
 
-        /* AVISO TOP */
         .aviso-top { background: var(--purpura); color: white; display: flex; align-items: center; justify-content: center; gap: 15px; padding: 8px; font-size: 0.7rem; font-weight: 800; position: sticky; top: 0; z-index: 1200; text-transform: uppercase; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .aviso-item { display: flex; align-items: center; gap: 6px; }
         .icon-moto { height: 18px; filter: brightness(0) invert(1); }
@@ -31,7 +29,6 @@
         .btn-nav { text-decoration: none; font-size: 0.7rem; font-weight: 700; color: var(--cian); border: 1px solid var(--cian); padding: 5px 12px; border-radius: 20px; cursor: pointer; background: transparent; display: inline-flex; align-items: center; justify-content: center; font-family: inherit; line-height: 1.2; }
         .btn-nav:hover { background: var(--cian); color: white; }
 
-        /* HEADER Y LOGO DINÁMICO */
         header { background: var(--blanco); padding: 1.5rem 1rem; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         .sub-logo { font-size: 0.7rem; color: var(--azul-claro); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 5px; }
         .logo-img { max-height: 150px; width: auto; object-fit: contain; margin: 0 auto; display: block; }
@@ -41,7 +38,6 @@
         .punto { width: 8px; height: 8px; border-radius: 50%; }
         .p1 { background: #004b57; } .p2 { background: var(--purpura); } .p3 { background: var(--azul-claro); } .p4 { background: #f39200; } .p5 { background: #4ca844; }
 
-        /* BANNER PRINCIPAL */
         .banner-principal { width: 100%; max-height: 200px; background: var(--petroleo); color: white; display: flex; align-items: center; justify-content: center; text-align: center; background-size: cover; background-position: center; border-radius: 15px; margin-bottom: 15px; overflow: hidden; position: relative; }
         .banner-overlay { background: rgba(0,0,0,0.4); width: 100%; padding: 30px 15px; }
 
@@ -50,7 +46,6 @@
         #buscador { width: 100%; padding: 14px 45px; border-radius: 15px; border: 2px solid var(--petroleo); background: #f1f5f9; font-size: 1rem; }
         .search-icon { position: absolute; left: 15px; top: 14px; opacity: 0.4; }
 
-        /* CATEGORÍAS GRID */
         .categorias { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px 0 20px 0; }
         @media (min-width: 480px) { .categorias { grid-template-columns: repeat(4, 1fr); } }
         @media (min-width: 768px) { .categorias { grid-template-columns: repeat(6, 1fr); } }
@@ -59,7 +54,6 @@
         .btn-cat.activo { background: var(--purpura) !important; color: white !important; }
         .share-cat { background: rgba(9, 121, 247, 0.1); border: none; padding: 8px 5px; cursor: pointer; color: var(--petroleo); font-size: 0.7rem; }
 
-        /* GALERÍA */
         .galeria { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         @media (min-width: 768px) { .galeria { grid-template-columns: repeat(3, 1fr); } }
         @media (min-width: 1024px) { .galeria { grid-template-columns: repeat(4, 1fr); } }
@@ -76,17 +70,14 @@
         .btn-add:disabled { background: #cbd5e1; cursor: not-allowed; }
         .btn-ver-mas { background: transparent; color: var(--azul-claro); border: 1px solid #ddd; padding: 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; cursor: pointer; margin-bottom: 8px; width: 100%; }
 
-        /* SELECTORES DE OPCIONES */
         .select-opt { width: 100%; padding: 8px; margin-top: 5px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; font-family: inherit; }
         .qty-box { display: flex; align-items: center; justify-content: center; gap: 10px; margin: 10px 0; }
         .qty-btn { background: #e2e8f0; border: none; padding: 5px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
-        /* MODALES */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 15px; }
         .modal-content { background: white; width: 100%; max-width: 480px; border-radius: 20px; padding: 20px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .btn-close-modal { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; background: #f1f5f9; color: #64748b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; cursor: pointer; border: none; z-index: 10; }
 
-        /* METODOS DE PAGO MOVIL ADAPTADO */
         .metodos-pago-box {
             background: #f1f5f9;
             padding: 12px;
@@ -102,12 +93,10 @@
             border: 1px solid #e2e8f0;
         }
 
-        /* PREGUNTAS FRECUENTES (FAQ) */
         .faq-item { border-bottom: 1px solid #eee; padding: 10px 0; }
         .faq-pregunta { font-weight: bold; cursor: pointer; color: var(--petroleo); margin: 5px 0; }
         .faq-respuesta { font-size: 0.85rem; color: #64748b; margin-bottom: 5px; }
 
-        /* FOOTER Y CARRITO */
         .footer-cart { position: fixed; bottom: 0; left: 0; right: 0; background: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 -4px 15px rgba(0,0,0,0.08); z-index: 1100; }
         .btn-main { background: var(--verde-wa); color: white; padding: 12px 25px; border-radius: 25px; border: none; font-weight: 800; cursor: pointer; display: none; }
         .btn-opcion { width: 100%; padding: 12px; margin-bottom: 8px; border: 1px solid #ddd; border-radius: 10px; background: white; cursor: pointer; font-weight: bold; }
@@ -125,6 +114,10 @@
         .admin-stock-control { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
         .input-stock { width: 70px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; text-align: center; font-weight: bold; }
         .btn-save-stock { background: var(--petroleo); color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
+        
+        .tab-admin-bar { display: flex; gap: 5px; margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; }
+        .tab-admin-btn { padding: 8px 12px; font-size: 0.8rem; font-weight: bold; border: none; background: transparent; cursor: pointer; border-bottom: 2px solid transparent; }
+        .tab-admin-btn.activo { border-color: var(--petroleo); color: var(--petroleo); }
     </style>
 </head>
 <body>
@@ -158,7 +151,6 @@
 </header>
 
 <div class="contenedor">
-    <!-- BANNER DINÁMICO -->
     <div id="banner-box" class="banner-principal" style="display:none;">
         <div class="banner-overlay">
             <h2 id="banner-titulo" style="margin:0; font-size:1.2rem;"></h2>
@@ -193,7 +185,6 @@
             <div id="m-stock-variant" style="font-size:0.85rem; font-weight:bold; color:#2563eb; background:#eff6ff; padding:4px 10px; border-radius:12px;">Stock: 0</div>
         </div>
         
-        <!-- OPCIONES DE TALLA Y COLOR -->
         <div id="box-talla" style="display:none; margin-top:10px;">
             <label style="font-size:0.8rem; font-weight:bold;">Talla:</label>
             <select id="m-talla" class="select-opt" onchange="actualizarStockModal()"></select>
@@ -204,7 +195,6 @@
             <select id="m-color" class="select-opt" onchange="actualizarStockModal()"></select>
         </div>
 
-        <!-- CANTIDAD -->
         <div style="margin-top:10px;">
             <label style="font-size:0.8rem; font-weight:bold;">Cantidad:</label>
             <div class="qty-box">
@@ -244,7 +234,7 @@
     </div>
 </div>
 
-<!-- MODAL PREGUNTAS FRECUENTES (FAQ) -->
+<!-- MODAL PREGUNTAS FRECUENTES -->
 <div id="modalFAQ" class="modal" onclick="cerrar()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <button class="btn-close-modal" onclick="cerrar()">&times;</button>
@@ -278,29 +268,41 @@
         </div>
 
         <div id="admin-panel-box" style="display:none;">
-            <h3 style="margin-top:0;">Control y Carga de Inventario</h3>
-            <p style="font-size:0.75rem; color:#64748b;">Puedes actualizar manualmente el stock de los productos disponible en la tienda:</p>
-            <div id="admin-inventory-list" style="max-height:320px; overflow-y:auto; margin-bottom:15px;"></div>
-            <button class="btn-opcion" onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
+            <div class="tab-admin-bar">
+                <button class="tab-admin-btn activo" id="tab-btn-auth" onclick="switchAdminTab('auth')">Procesar Pago</button>
+                <button class="tab-admin-btn" id="tab-btn-stock" onclick="switchAdminTab('stock')">Ajustar Stock</button>
+            </div>
+
+            <!-- SECCIÓN A: DESCUENTO DE PEDIDOS VERIFICADOS -->
+            <div id="view-admin-auth">
+                <p style="font-size:0.8rem; color:#64748b;">Ingresa el ID del producto y la cantidad vendida para descontar tras verificar el pago del cliente:</p>
+                <div style="display:flex; gap:8px; margin-bottom:10px;">
+                    <input type="text" id="auth-prod-id" placeholder="ID Producto (Ej: 101)" style="flex:2; padding:8px; border:1px solid #ccc; border-radius:5px;">
+                    <input type="number" id="auth-prod-cant" placeholder="Cant." value="1" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:5px;">
+                </div>
+                <button class="btn-add" id="btn-auth-discount" onclick="autorizarDescuentoAdmin()" style="background:var(--purpura); padding:10px; margin-bottom:15px;">
+                    ✅ Autorizar y Descontar de Sheets
+                </button>
+            </div>
+
+            <!-- SECCIÓN B: CONTROL DIRECTO DE INVENTARIO -->
+            <div id="view-admin-stock" style="display:none;">
+                <div id="admin-inventory-list" style="max-height:280px; overflow-y:auto; margin-bottom:15px;"></div>
+            </div>
+
+            <button class="btn-opcion" onclick="cerrarSesionAdmin()" style="margin-top:10px;">Cerrar Sesión</button>
         </div>
     </div>
 </div>
 
 <footer class="site-footer">
     <div class="footer-content">
-        <div>
-            📍 <span id="f-dir" class="footer-val">Tu Marka Vzla, Avenida Lecuna, de Miseria a Curamichate, Edificio Edy Caracas, 1040, Distrito Capital</span>
-        </div>
-        <a href="https://www.google.com/maps/dir/?api=1&destination=Tu+Marka+Vzla,+Avenida+Lecuna,+de+Miseria+a+Curamichate,+Edificio+Edy+Caracas,+1040,+Distrito+Capital" target="_blank" class="btn-como-llegar">
+        <div>📍 <span id="f-dir" class="footer-val">Tu Marka Vzla, Avenida Lecuna, Edificio Edy Caracas</span></div>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=Tu+Marka+Vzla" target="_blank" class="btn-como-llegar">
             <img src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg" alt="Gmaps">
-            CÓMO LLEGAR (TRAZAR RUTA)
+            CÓMO LLEGAR
         </a>
-        <div style="margin-top: 15px; opacity: 0.8; font-size: 0.7rem;">
-            📞 TELÉFONO: <span id="f-tel" class="footer-val">0412-959-27-31</span>
-        </div>
-        <div style="margin-top: 10px; opacity: 0.6; font-size: 0.6rem;">
-            © 2026 Tu Marka. Todos los derechos reservados.
-        </div>
+        <div style="margin-top: 15px; opacity: 0.8; font-size: 0.7rem;">📞 TELÉFONO: <span id="f-tel" class="footer-val">0412-959-27-31</span></div>
     </div>
 </footer>
 
@@ -315,15 +317,17 @@
 <script>
     const HOJA_PROD = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=0&single=true&output=csv&cachebust=' + Date.now();
     const HOJA_CONF = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=283577687&single=true&output=csv&cachebust=' + Date.now();
+    
+    // URL Generada de Google Apps Script
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbysMonQMR3BNHF2wg8LgsCDaPsiu6vXYkY1zKbWr-Jr3_KrGTWb9y4253pyh4YQlN7O/exec';
 
-    let DB = [], CART = [], CONFIG = { tel:'', user:'admin', pass:'123456', pago:'Pago Móvil / Zelle / Cashea / Efectivo' };
+    let DB = [], CART = [], CONFIG = { tel:'', user:'admin', pass:'123456', pago:'Pago Móvil / Zelle / Cashea 💛 / Efectivo' };
     let catActual = 'todos', entregaM = '', currentQty = 1, selectedProd = null;
 
     async function cargar() {
         try {
             const [rC, rP] = await Promise.all([fetch(HOJA_CONF), fetch(HOJA_PROD)]);
             
-            // Cargar Configuración (Logo, Teléfono, Pagos, etc.)
             const dC = await rC.text();
             dC.split(/\r?\n/).forEach(f => {
                 const [k, v] = f.split(',');
@@ -331,28 +335,15 @@
                     let key = k.toLowerCase().trim();
                     let val = v.trim();
                     if(key.includes("tel")) CONFIG.tel = val;
-                    if(key.includes("logo")) {
-                        document.getElementById('container-logo').innerHTML = `<img src="${val}" class="logo-img" alt="Logo">`;
-                    }
-                    if(key.includes("banner_img") && val) {
-                        document.getElementById('banner-box').style.backgroundImage = `url('${val}')`;
-                        document.getElementById('banner-box').style.display = 'flex';
-                    }
-                    if(key.includes("banner_titulo") && val) {
-                        document.getElementById('banner-titulo').innerText = val;
-                    }
+                    if(key.includes("logo")) document.getElementById('container-logo').innerHTML = `<img src="${val}" class="logo-img" alt="Logo">`;
                     if(key.includes("admin_user")) CONFIG.user = val;
                     if(key.includes("admin_pass")) CONFIG.pass = val;
-                    if(key.includes("pago")) {
-                        // Asegurar la inclusión de Cashea en los métodos de pago
-                        CONFIG.pago = val.includes('Cashea') ? val : val + ' / Cashea 💛';
-                    }
+                    if(key.includes("pago")) CONFIG.pago = val.includes('Cashea') ? val : val + ' / Cashea 💛';
                 }
             });
 
             document.getElementById('metodos-pago-box').innerText = CONFIG.pago;
 
-            // Cargar Productos e Inventario
             const dP = await rP.text();
             DB = dP.split(/\r?\n/).slice(1).map(f => {
                 const c = f.split(',');
@@ -370,7 +361,6 @@
                 };
             }).filter(p => p.nombre);
 
-            // Cargar Categorías en Interfaz
             const catBar = document.getElementById('cat-bar');
             [...new Set(DB.map(p => p.cat))].forEach(c => {
                 if(!c) return;
@@ -393,12 +383,6 @@
         return array;
     }
 
-    function obtenerStockVariante(prod, talla, color) {
-        // Cálculo proporcional de stock según combinaciones seleccionadas
-        if(!prod.stock || prod.stock <= 0) return 0;
-        return prod.stock;
-    }
-
     function mostrar(lista) {
         const g = document.getElementById('grid');
         g.innerHTML = '';
@@ -413,7 +397,7 @@
                     ${stockDisplay}
                     <img src="${p.img}" loading="lazy" onclick="abrirFicha('${p.id}')">
                     <div class="p-info">
-                        <div class="p-nombre">${p.nombre}</div>
+                        <div class="p-nombre">${p.nombre} (ID: ${p.id})</div>
                         <div class="precio">$${p.precio.toFixed(2)}</div>
                         <button class="btn-ver-mas" onclick="abrirFicha('${p.id}')">Ver opciones / Detalle</button>
                         <button class="btn-add" ${isAgotado ? 'disabled' : ''} onclick="abrirFicha('${p.id}')">
@@ -429,8 +413,7 @@
         btn.classList.add('activo');
         btn.parentElement.classList.add('activo');
         catActual = c;
-        let filtrados = c === 'todos' ? mezclarProductos([...DB]) : DB.filter(p => p.cat === c);
-        mostrar(filtrados);
+        mostrar(c === 'todos' ? mezclarProductos([...DB]) : DB.filter(p => p.cat === c));
     };
 
     window.filtrar = () => {
@@ -445,28 +428,24 @@
         currentQty = 1;
         document.getElementById('m-qty').innerText = currentQty;
         document.getElementById('m-img').src = selectedProd.img;
-        document.getElementById('m-nombre').innerText = selectedProd.nombre;
+        document.getElementById('m-nombre').innerText = `${selectedProd.nombre} (ID: ${selectedProd.id})`;
         document.getElementById('m-desc').innerText = selectedProd.desc || "Sin descripción.";
         document.getElementById('m-precio').innerText = `$${selectedProd.precio.toFixed(2)}`;
         document.getElementById('m-nota').value = "";
 
-        // Desplegar Tallas
-        const boxTalla = document.getElementById('box-talla');
         const selectTalla = document.getElementById('m-talla');
         selectTalla.innerHTML = '';
         if(selectedProd.tallas && selectedProd.tallas.length > 0) {
             selectedProd.tallas.forEach(t => selectTalla.innerHTML += `<option value="${t}">${t}</option>`);
-            boxTalla.style.display = 'block';
-        } else { boxTalla.style.display = 'none'; }
+            document.getElementById('box-talla').style.display = 'block';
+        } else { document.getElementById('box-talla').style.display = 'none'; }
 
-        // Desplegar Colores
-        const boxColor = document.getElementById('box-color');
         const selectColor = document.getElementById('m-color');
         selectColor.innerHTML = '';
         if(selectedProd.colores && selectedProd.colores.length > 0) {
             selectedProd.colores.forEach(c => selectColor.innerHTML += `<option value="${c}">${c}</option>`);
-            boxColor.style.display = 'block';
-        } else { boxColor.style.display = 'none'; }
+            document.getElementById('box-color').style.display = 'block';
+        } else { document.getElementById('box-color').style.display = 'none'; }
 
         actualizarStockModal();
 
@@ -477,26 +456,17 @@
 
     window.actualizarStockModal = () => {
         if(!selectedProd) return;
-        const tallaSel = document.getElementById('m-talla').value || '';
-        const colorSel = document.getElementById('m-color').value || '';
-        const stockDisp = obtenerStockVariante(selectedProd, tallaSel, colorSel);
-        
         const badgeStock = document.getElementById('m-stock-variant');
         const btnAdd = document.getElementById('m-btn-add');
 
-        if(stockDisp <= 0) {
+        if(selectedProd.stock <= 0) {
             badgeStock.innerText = "Agotado";
             badgeStock.style.color = "#991b1b";
             badgeStock.style.background = "#fee2e2";
             btnAdd.disabled = true;
             btnAdd.innerText = "Sin Stock Disponible";
         } else {
-            let labelVar = [];
-            if(tallaSel) labelVar.push(`Talla: ${tallaSel}`);
-            if(colorSel) labelVar.push(`Color: ${colorSel}`);
-            let textVar = labelVar.length > 0 ? ` (${labelVar.join(', ')})` : '';
-            
-            badgeStock.innerText = `Disponible${textVar}: ${stockDisp} unid.`;
+            badgeStock.innerText = `Disponible: ${selectedProd.stock} unid.`;
             badgeStock.style.color = "#2563eb";
             badgeStock.style.background = "#eff6ff";
             btnAdd.disabled = false;
@@ -506,11 +476,7 @@
 
     window.cambiarQty = (val) => {
         if(!selectedProd) return;
-        const tallaSel = document.getElementById('m-talla').value || '';
-        const colorSel = document.getElementById('m-color').value || '';
-        const stockDisp = obtenerStockVariante(selectedProd, tallaSel, colorSel);
-
-        if(currentQty + val >= 1 && currentQty + val <= stockDisp) {
+        if(currentQty + val >= 1 && currentQty + val <= selectedProd.stock) {
             currentQty += val;
             document.getElementById('m-qty').innerText = currentQty;
         }
@@ -518,17 +484,13 @@
 
     function agregarAlCarrito() {
         if(!selectedProd) return;
-        let tallaSel = document.getElementById('m-talla').value || '';
-        let colorSel = document.getElementById('m-color').value || '';
-        let notaSel = document.getElementById('m-nota').value.trim();
-
         CART.push({
             ...selectedProd,
             tid: Date.now(),
             cantidad: currentQty,
-            talla: tallaSel,
-            color: colorSel,
-            instruccion: notaSel
+            talla: document.getElementById('m-talla').value || '',
+            color: document.getElementById('m-color').value || '',
+            instruccion: document.getElementById('m-nota').value.trim()
         });
         actualizar();
     }
@@ -549,7 +511,7 @@
             l.innerHTML += `
                 <div class="item-c">
                     <div style="flex:1;">
-                        <b>${i.cantidad}x ${i.nombre}</b>
+                        <b>${i.cantidad}x ${i.nombre} (ID: ${i.id})</b>
                         ${dH}
                     </div>
                     <span>$${subtotal.toFixed(2)}
@@ -569,7 +531,7 @@
     window.abrirModalFAQ = () => document.getElementById('modalFAQ').style.display = 'flex';
     window.abrirModalAdmin = () => document.getElementById('modalAdmin').style.display = 'flex';
 
-    /* MÓDULO DE ADMINISTRACIÓN E INVENTARIO (CARGA Y DESCUENTO) */
+    /* ADMINISTRACIÓN E INVENTARIO CON VERIFICACIÓN DE PAGO */
     window.loginAdmin = () => {
         let u = document.getElementById('admin-user').value;
         let p = document.getElementById('admin-pass').value;
@@ -582,6 +544,61 @@
         }
     };
 
+    window.switchAdminTab = (tab) => {
+        document.querySelectorAll('.tab-admin-btn').forEach(b => b.classList.remove('activo'));
+        if(tab === 'auth') {
+            document.getElementById('tab-btn-auth').classList.add('activo');
+            document.getElementById('view-admin-auth').style.display = 'block';
+            document.getElementById('view-admin-stock').style.display = 'none';
+        } else {
+            document.getElementById('tab-btn-stock').classList.add('activo');
+            document.getElementById('view-admin-auth').style.display = 'none';
+            document.getElementById('view-admin-stock').style.display = 'block';
+        }
+    };
+
+    // AUTORIZACIÓN Y DESCUENTO DE PAGO VERIFICADO
+    window.autorizarDescuentoAdmin = async () => {
+        let idProd = document.getElementById('auth-prod-id').value.trim();
+        let cant = parseInt(document.getElementById('auth-prod-cant').value);
+
+        if(!idProd || isNaN(cant) || cant <= 0) return alert("Ingresa un ID válido y una cantidad mayor a cero.");
+
+        let prod = DB.find(x => x.id == idProd);
+        if(!prod) return alert("El ID introducido no coincide con ningún producto.");
+
+        let btn = document.getElementById('btn-auth-discount');
+        btn.disabled = true;
+        btn.innerText = "Procesando en Sheets...";
+
+        try {
+            await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: "descontar_pedido",
+                    items: [{ id: idProd, cantidad: cant }]
+                })
+            });
+
+            // Actualización local
+            prod.stock = Math.max(0, prod.stock - cant);
+            mostrar(catActual === 'todos' ? mezclarProductos([...DB]) : DB.filter(x => x.cat === catActual));
+            renderInventarioAdmin();
+            
+            alert(`Pago Verificado. Se han descontado ${cant} unidades del producto ID: ${idProd}.`);
+            document.getElementById('auth-prod-id').value = '';
+            document.getElementById('auth-prod-cant').value = '1';
+        } catch(e) {
+            console.error(e);
+            alert("Ocurrió un error al conectar con Google Sheets.");
+        } finally {
+            btn.disabled = false;
+            btn.innerText = "✅ Autorizar y Descontar de Sheets";
+        }
+    };
+
     function renderInventarioAdmin() {
         let container = document.getElementById('admin-inventory-list');
         container.innerHTML = '';
@@ -589,7 +606,7 @@
             container.innerHTML += `
                 <div class="admin-item-row">
                     <div class="admin-item-header">
-                        <span><b>${item.nombre}</b></span>
+                        <span><b>${item.nombre}</b> (ID: ${item.id})</span>
                         <span style="color:var(--petroleo); font-weight:bold;">$${item.precio.toFixed(2)}</span>
                     </div>
                     <div class="admin-stock-control">
@@ -601,14 +618,33 @@
         });
     }
 
-    window.guardarStockAdmin = (id) => {
-        let nStock = parseInt(document.getElementById(`input-stock-${id}`).value);
+    window.guardarStockAdmin = async (id) => {
+        let inputEl = document.getElementById(`input-stock-${id}`);
+        let nStock = parseInt(inputEl.value);
+        
         if(isNaN(nStock) || nStock < 0) return alert("Ingresa una cantidad válida.");
-        let p = DB.find(x => x.id == id);
-        if(p) {
-            p.stock = nStock;
+        
+        let btn = document.querySelector(`button[onclick="guardarStockAdmin('${id}')"]`);
+        if(btn) btn.innerText = "Sincronizando...";
+
+        try {
+            await fetch(APPS_SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ action: "actualizar_stock", id: id, stock: nStock })
+            });
+
+            let p = DB.find(x => x.id == id);
+            if(p) p.stock = nStock;
+            
             mostrar(catActual === 'todos' ? mezclarProductos([...DB]) : DB.filter(x => x.cat === catActual));
-            alert(`Stock de "${p.nombre}" actualizado a ${nStock}.`);
+            alert(`Stock ajustado manualmente a ${nStock}.`);
+        } catch (error) {
+            console.error(error);
+            alert("Error al actualizar Google Sheets.");
+        } finally {
+            if(btn) btn.innerText = "Guardar";
         }
     };
 
@@ -628,16 +664,7 @@
 
     window.abrirDelivery = (btn) => selEntrega('Delivery', btn);
 
-    function descontarInventario() {
-        CART.forEach(itemCart => {
-            let p = DB.find(x => x.id == itemCart.id);
-            if(p) {
-                p.stock = Math.max(0, p.stock - itemCart.cantidad);
-            }
-        });
-        mostrar(catActual === 'todos' ? mezclarProductos([...DB]) : DB.filter(x => x.cat === catActual));
-    }
-
+    // ENVÍO DE PEDIDO POR WHATSAPP SIN DESCUENTO AUTOMÁTICO
     function enviarWA() {
         let dir = document.getElementById('dir-val').value;
         if(entregaM === 'Delivery' && !dir) return alert("Por favor, ingresa tu dirección.");
@@ -645,18 +672,16 @@
         let pStr = CART.map((i, idx) => {
             let subtotal = i.precio * i.cantidad;
             total += subtotal;
-            let itemLine = `${idx + 1}. *${i.cantidad}x ${i.nombre}* ($${subtotal.toFixed(2)})`;
+            let itemLine = `${idx + 1}. *${i.cantidad}x ${i.nombre}* (ID: ${i.id}) - $${subtotal.toFixed(2)}`;
             if(i.talla) itemLine += `%0A   📏 _Talla: ${i.talla}_`;
             if(i.color) itemLine += `%0A   🎨 _Color: ${i.color}_`;
             if(i.instruccion) itemLine += `%0A   📝 _Nota: ${i.instruccion}_`;
             return itemLine;
         }).join('%0A%0A');
 
-        let m = `*¡Hola, Tu Marka!* 🙌%0AHe armado mi carrito:%0A%0A*DETALLE DE MI COMPRA*%0A------------------------------------------%0A${pStr}%0A------------------------------------------%0A💰 *TOTAL: $${total.toFixed(2)}*%0A%0A💳 *Métodos de pago:* ${CONFIG.pago}%0A📍 *Entrega:* ${entregaM}`;
+        let m = `*¡Hola, Tu Marka!* 🙌%0AHe armado mi solicitud de compra:%0A%0A*DETALLE DEL PEDIDO*%0A------------------------------------------%0A${pStr}%0A------------------------------------------%0A💰 *TOTAL: $${total.toFixed(2)}*%0A%0A💳 *Método de pago a utilizar:* ${CONFIG.pago}%0A📍 *Entrega:* ${entregaM}`;
         if(entregaM === 'Delivery') m += `%0A🏠 *Dirección:* ${dir}`;
         
-        descontarInventario();
-
         window.open(`https://wa.me/${CONFIG.tel.replace(/\s+/g,'')}?text=${m}`, '_blank');
         cerrar();
     }
