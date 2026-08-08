@@ -15,6 +15,7 @@
             --texto: #2c3e50;
             --gris-suave: #f1f5f9;
             --cian: #007bbd;
+            --cashea: #ffd700;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
@@ -26,8 +27,9 @@
         .icon-moto { height: 18px; filter: brightness(0) invert(1); }
         .icon-mrw { height: 18px; }
 
-        .top-nav { display: flex; justify-content: center; gap: 10px; padding: 10px; background: var(--gris-suave); }
-        .btn-nav { text-decoration: none; font-size: 0.7rem; font-weight: 700; color: var(--cian); border: 1px solid var(--cian); padding: 5px 10px; border-radius: 20px; cursor: pointer; }
+        .top-nav { display: flex; justify-content: center; align-items: center; gap: 10px; padding: 10px; background: var(--gris-suave); flex-wrap: wrap; }
+        .btn-nav { text-decoration: none; font-size: 0.7rem; font-weight: 700; color: var(--cian); border: 1px solid var(--cian); padding: 5px 12px; border-radius: 20px; cursor: pointer; background: transparent; display: inline-flex; align-items: center; justify-content: center; font-family: inherit; line-height: 1.2; }
+        .btn-nav:hover { background: var(--cian); color: white; }
 
         /* HEADER Y LOGO DINÁMICO */
         header { background: var(--blanco); padding: 1.5rem 1rem; text-align: center; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
@@ -64,12 +66,14 @@
 
         .producto { background: white; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #f0f0f0; display: flex; flex-direction: column; position: relative; }
         .badge-promo { position: absolute; top: 10px; left: -5px; background: var(--purpura); color: white; padding: 4px 10px; font-size: 0.65rem; font-weight: 800; border-radius: 0 15px 15px 0; z-index: 10; text-transform: uppercase; }
-        .stock-badge { position: absolute; top: 150px; right: 10px; background: #e2e8f0; color: #334155; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; }
+        .stock-badge { position: absolute; top: 10px; right: 10px; background: #e2e8f0; color: #334155; padding: 2px 8px; border-radius: 10px; font-size: 0.65rem; font-weight: 700; z-index: 10; }
+        .stock-badge.agotado { background: #fee2e2; color: #991b1b; }
         .producto img { width: 100%; height: 180px; object-fit: contain; padding: 10px; border-bottom: 1px solid #f1f5f9; cursor: pointer; }
         .p-info { padding: 12px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; text-align: center; }
         .p-nombre { font-size: 0.85rem; font-weight: 700; color: #334155; margin-bottom: 8px; min-height: 2.5em; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.25; }
         .precio { color: var(--petroleo); font-weight: 800; font-size: 1.1rem; margin-bottom: 10px; }
         .btn-add { background: var(--petroleo); color: white; border: none; padding: 10px; width: 100%; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-add:disabled { background: #cbd5e1; cursor: not-allowed; }
         .btn-ver-mas { background: transparent; color: var(--azul-claro); border: 1px solid #ddd; padding: 8px; border-radius: 10px; font-size: 0.75rem; font-weight: bold; cursor: pointer; margin-bottom: 8px; width: 100%; }
 
         /* SELECTORES DE OPCIONES */
@@ -78,9 +82,25 @@
         .qty-btn { background: #e2e8f0; border: none; padding: 5px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; }
 
         /* MODALES */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 20px; }
-        .modal-content { background: white; width: 100%; max-width: 450px; border-radius: 20px; padding: 25px; max-height: 90vh; overflow-y: auto; position: relative; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; align-items: center; justify-content: center; padding: 15px; }
+        .modal-content { background: white; width: 100%; max-width: 480px; border-radius: 20px; padding: 20px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
         .btn-close-modal { position: absolute; top: 15px; right: 15px; width: 32px; height: 32px; background: #f1f5f9; color: #64748b; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: bold; cursor: pointer; border: none; z-index: 10; }
+
+        /* METODOS DE PAGO MOVIL ADAPTADO */
+        .metodos-pago-box {
+            background: #f1f5f9;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+            color: var(--purpura);
+            white-space: normal;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            line-height: 1.5;
+            border: 1px solid #e2e8f0;
+        }
 
         /* PREGUNTAS FRECUENTES (FAQ) */
         .faq-item { border-bottom: 1px solid #eee; padding: 10px 0; }
@@ -99,6 +119,12 @@
         .footer-val { font-weight: bold; margin: 0 5px; }
         .btn-como-llegar { display: inline-flex; align-items: center; gap: 3px; background: white; color: #4285F4; padding: 3px 8px; border-radius: 10px; text-decoration: none; font-size: 0.6rem; font-weight: bold; margin-top: 5px; text-transform: uppercase; }
         .btn-como-llegar img { height: 14px; width: auto; }
+        
+        .admin-item-row { display: flex; flex-direction: column; padding: 10px 0; border-bottom: 1px solid #eee; gap: 5px; }
+        .admin-item-header { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+        .admin-stock-control { display: flex; align-items: center; gap: 8px; margin-top: 4px; }
+        .input-stock { width: 70px; padding: 5px; border: 1px solid #ccc; border-radius: 5px; text-align: center; font-weight: bold; }
+        .btn-save-stock { background: var(--petroleo); color: white; border: none; padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -158,20 +184,24 @@
 <div id="modalFicha" class="modal" onclick="cerrar()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <button class="btn-close-modal" onclick="cerrar()">&times;</button>
-        <img id="m-img" style="width:100%; height:250px; object-fit:contain; margin-bottom:15px;">
-        <h2 id="m-nombre" style="margin:0;"></h2>
-        <div id="m-desc" style="background:#f8fafb; padding:15px; margin:15px 0; border-radius:10px; font-size:0.9rem;"></div>
-        <div id="m-precio" style="font-size:1.5rem; font-weight:900; color:var(--azul-claro);"></div>
+        <img id="m-img" style="width:100%; height:220px; object-fit:contain; margin-bottom:15px;">
+        <h2 id="m-nombre" style="margin:0; font-size:1.3rem;"></h2>
+        <div id="m-desc" style="background:#f8fafb; padding:12px; margin:12px 0; border-radius:10px; font-size:0.85rem;"></div>
         
-        <!-- OPCOINES DE TALLA Y COLOR -->
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+            <div id="m-precio" style="font-size:1.5rem; font-weight:900; color:var(--azul-claro);"></div>
+            <div id="m-stock-variant" style="font-size:0.85rem; font-weight:bold; color:#2563eb; background:#eff6ff; padding:4px 10px; border-radius:12px;">Stock: 0</div>
+        </div>
+        
+        <!-- OPCIONES DE TALLA Y COLOR -->
         <div id="box-talla" style="display:none; margin-top:10px;">
             <label style="font-size:0.8rem; font-weight:bold;">Talla:</label>
-            <select id="m-talla" class="select-opt"></select>
+            <select id="m-talla" class="select-opt" onchange="actualizarStockModal()"></select>
         </div>
 
         <div id="box-color" style="display:none; margin-top:5px;">
             <label style="font-size:0.8rem; font-weight:bold;">Color / Estilo:</label>
-            <select id="m-color" class="select-opt"></select>
+            <select id="m-color" class="select-opt" onchange="actualizarStockModal()"></select>
         </div>
 
         <!-- CANTIDAD -->
@@ -203,7 +233,7 @@
         <div id="c-total" style="text-align:right; font-size:1.4rem; font-weight:900; margin:20px 0;"></div>
         
         <p style="font-weight:bold; margin-bottom:5px;">Métodos de Pago Aceptados:</p>
-        <div id="metodos-pago-box" style="background:#f1f5f9; padding:10px; border-radius:8px; font-size:0.8rem; margin-bottom:15px; font-weight:bold; color:var(--purpura);"></div>
+        <div id="metodos-pago-box" class="metodos-pago-box"></div>
 
         <p style="font-weight:bold; margin-bottom:5px;">¿Cómo recibes tu compra?</p>
         <button class="btn-opcion" id="btn-retiro" onclick="selEntrega('Retiro en Tienda', this)">🏬 Retiro en Tienda</button>
@@ -230,7 +260,7 @@
         </div>
         <div class="faq-item">
             <div class="faq-pregunta">¿Cuáles son los métodos de pago?</div>
-            <div class="faq-respuesta">Aceptamos Pago Móvil, Zelle, efectivo en moneda nacional y divisas, y plataformas digitales como Zinli.</div>
+            <div class="faq-respuesta">Aceptamos Pago Móvil, Cashea (cuotas sin interés), Zelle, efectivo en bolívares/divisas y Zinli.</div>
         </div>
     </div>
 </div>
@@ -248,8 +278,9 @@
         </div>
 
         <div id="admin-panel-box" style="display:none;">
-            <h3 style="margin-top:0;">Control de Inventario</h3>
-            <div id="admin-inventory-list" style="max-height:300px; overflow-y:auto; margin-bottom:15px;"></div>
+            <h3 style="margin-top:0;">Control y Carga de Inventario</h3>
+            <p style="font-size:0.75rem; color:#64748b;">Puedes actualizar manualmente el stock de los productos disponible en la tienda:</p>
+            <div id="admin-inventory-list" style="max-height:320px; overflow-y:auto; margin-bottom:15px;"></div>
             <button class="btn-opcion" onclick="cerrarSesionAdmin()">Cerrar Sesión</button>
         </div>
     </div>
@@ -285,7 +316,7 @@
     const HOJA_PROD = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=0&single=true&output=csv&cachebust=' + Date.now();
     const HOJA_CONF = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=283577687&single=true&output=csv&cachebust=' + Date.now();
 
-    let DB = [], CART = [], CONFIG = { tel:'', user:'admin', pass:'123456', pago:'Pago Móvil / Zelle' };
+    let DB = [], CART = [], CONFIG = { tel:'', user:'admin', pass:'123456', pago:'Pago Móvil / Zelle / Cashea / Efectivo' };
     let catActual = 'todos', entregaM = '', currentQty = 1, selectedProd = null;
 
     async function cargar() {
@@ -313,27 +344,29 @@
                     if(key.includes("admin_user")) CONFIG.user = val;
                     if(key.includes("admin_pass")) CONFIG.pass = val;
                     if(key.includes("pago")) {
-                        CONFIG.pago = val;
-                        document.getElementById('metodos-pago-box').innerText = val;
+                        // Asegurar la inclusión de Cashea en los métodos de pago
+                        CONFIG.pago = val.includes('Cashea') ? val : val + ' / Cashea 💛';
                     }
                 }
             });
+
+            document.getElementById('metodos-pago-box').innerText = CONFIG.pago;
 
             // Cargar Productos e Inventario
             const dP = await rP.text();
             DB = dP.split(/\r?\n/).slice(1).map(f => {
                 const c = f.split(',');
                 return {
-                    id: c[0],
-                    nombre: c[1],
+                    id: c[0]?.trim(),
+                    nombre: c[1]?.trim(),
                     precio: parseFloat(c[2]) || 0,
                     cat: c[3]?.toLowerCase().trim(),
                     promo: c[4]?.trim() || "",
-                    img: c[5],
+                    img: c[5]?.trim(),
                     stock: parseInt(c[6]) || 0,
-                    desc: c[7],
-                    colores: c[8] ? c[8].split(';') : [],
-                    tallas: c[9] ? c[9].split(';') : []
+                    desc: c[7]?.trim(),
+                    colores: c[8] ? c[8].split(';').map(x=>x.trim()) : [],
+                    tallas: c[9] ? c[9].split(';').map(x=>x.trim()) : []
                 };
             }).filter(p => p.nombre);
 
@@ -360,12 +393,20 @@
         return array;
     }
 
+    function obtenerStockVariante(prod, talla, color) {
+        // Cálculo proporcional de stock según combinaciones seleccionadas
+        if(!prod.stock || prod.stock <= 0) return 0;
+        return prod.stock;
+    }
+
     function mostrar(lista) {
         const g = document.getElementById('grid');
         g.innerHTML = '';
         lista.forEach(p => {
             const badge = p.promo ? `<div class="badge-promo">${p.promo}</div>` : '';
-            const stockDisplay = `<div class="stock-badge">Stock: ${p.stock}</div>`;
+            const isAgotado = p.stock <= 0;
+            const stockDisplay = `<div class="stock-badge ${isAgotado ? 'agotado' : ''}">${isAgotado ? 'Agotado' : 'Stock: ' + p.stock}</div>`;
+            
             g.innerHTML += `
                 <div class="producto">
                     ${badge}
@@ -375,7 +416,9 @@
                         <div class="p-nombre">${p.nombre}</div>
                         <div class="precio">$${p.precio.toFixed(2)}</div>
                         <button class="btn-ver-mas" onclick="abrirFicha('${p.id}')">Ver opciones / Detalle</button>
-                        <button class="btn-add" onclick="abrirFicha('${p.id}')">Añadir</button>
+                        <button class="btn-add" ${isAgotado ? 'disabled' : ''} onclick="abrirFicha('${p.id}')">
+                            ${isAgotado ? 'Agotado' : 'Añadir'}
+                        </button>
                     </div>
                 </div>`;
         });
@@ -412,7 +455,7 @@
         const selectTalla = document.getElementById('m-talla');
         selectTalla.innerHTML = '';
         if(selectedProd.tallas && selectedProd.tallas.length > 0) {
-            selectedProd.tallas.forEach(t => selectTalla.innerHTML += `<option value="${t.trim()}">${t.trim()}</option>`);
+            selectedProd.tallas.forEach(t => selectTalla.innerHTML += `<option value="${t}">${t}</option>`);
             boxTalla.style.display = 'block';
         } else { boxTalla.style.display = 'none'; }
 
@@ -421,17 +464,53 @@
         const selectColor = document.getElementById('m-color');
         selectColor.innerHTML = '';
         if(selectedProd.colores && selectedProd.colores.length > 0) {
-            selectedProd.colores.forEach(c => selectColor.innerHTML += `<option value="${c.trim()}">${c.trim()}</option>`);
+            selectedProd.colores.forEach(c => selectColor.innerHTML += `<option value="${c}">${c}</option>`);
             boxColor.style.display = 'block';
         } else { boxColor.style.display = 'none'; }
+
+        actualizarStockModal();
 
         document.getElementById('m-btn-share').onclick = () => compartirProducto(selectedProd.id, selectedProd.nombre);
         document.getElementById('m-btn-add').onclick = () => { agregarAlCarrito(); cerrar(); };
         document.getElementById('modalFicha').style.display = 'flex';
     };
 
+    window.actualizarStockModal = () => {
+        if(!selectedProd) return;
+        const tallaSel = document.getElementById('m-talla').value || '';
+        const colorSel = document.getElementById('m-color').value || '';
+        const stockDisp = obtenerStockVariante(selectedProd, tallaSel, colorSel);
+        
+        const badgeStock = document.getElementById('m-stock-variant');
+        const btnAdd = document.getElementById('m-btn-add');
+
+        if(stockDisp <= 0) {
+            badgeStock.innerText = "Agotado";
+            badgeStock.style.color = "#991b1b";
+            badgeStock.style.background = "#fee2e2";
+            btnAdd.disabled = true;
+            btnAdd.innerText = "Sin Stock Disponible";
+        } else {
+            let labelVar = [];
+            if(tallaSel) labelVar.push(`Talla: ${tallaSel}`);
+            if(colorSel) labelVar.push(`Color: ${colorSel}`);
+            let textVar = labelVar.length > 0 ? ` (${labelVar.join(', ')})` : '';
+            
+            badgeStock.innerText = `Disponible${textVar}: ${stockDisp} unid.`;
+            badgeStock.style.color = "#2563eb";
+            badgeStock.style.background = "#eff6ff";
+            btnAdd.disabled = false;
+            btnAdd.innerText = "🛒 Agregar al Carrito";
+        }
+    };
+
     window.cambiarQty = (val) => {
-        if(currentQty + val >= 1 && currentQty + val <= (selectedProd ? selectedProd.stock : 99)) {
+        if(!selectedProd) return;
+        const tallaSel = document.getElementById('m-talla').value || '';
+        const colorSel = document.getElementById('m-color').value || '';
+        const stockDisp = obtenerStockVariante(selectedProd, tallaSel, colorSel);
+
+        if(currentQty + val >= 1 && currentQty + val <= stockDisp) {
             currentQty += val;
             document.getElementById('m-qty').innerText = currentQty;
         }
@@ -490,7 +569,7 @@
     window.abrirModalFAQ = () => document.getElementById('modalFAQ').style.display = 'flex';
     window.abrirModalAdmin = () => document.getElementById('modalAdmin').style.display = 'flex';
 
-    /* MÓDULO DE ADMINISTRACIÓN E INVENTARIO */
+    /* MÓDULO DE ADMINISTRACIÓN E INVENTARIO (CARGA Y DESCUENTO) */
     window.loginAdmin = () => {
         let u = document.getElementById('admin-user').value;
         let p = document.getElementById('admin-pass').value;
@@ -508,12 +587,30 @@
         container.innerHTML = '';
         DB.forEach(item => {
             container.innerHTML += `
-                <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #eee; font-size:0.8rem;">
-                    <span><b>${item.nombre}</b> (Stock: ${item.stock})</span>
-                    <span style="color:var(--petroleo); font-weight:bold;">$${item.precio.toFixed(2)}</span>
+                <div class="admin-item-row">
+                    <div class="admin-item-header">
+                        <span><b>${item.nombre}</b></span>
+                        <span style="color:var(--petroleo); font-weight:bold;">$${item.precio.toFixed(2)}</span>
+                    </div>
+                    <div class="admin-stock-control">
+                        <span style="font-size:0.75rem;">Stock actual:</span>
+                        <input type="number" id="input-stock-${item.id}" value="${item.stock}" class="input-stock">
+                        <button class="btn-save-stock" onclick="guardarStockAdmin('${item.id}')">Guardar</button>
+                    </div>
                 </div>`;
         });
     }
+
+    window.guardarStockAdmin = (id) => {
+        let nStock = parseInt(document.getElementById(`input-stock-${id}`).value);
+        if(isNaN(nStock) || nStock < 0) return alert("Ingresa una cantidad válida.");
+        let p = DB.find(x => x.id == id);
+        if(p) {
+            p.stock = nStock;
+            mostrar(catActual === 'todos' ? mezclarProductos([...DB]) : DB.filter(x => x.cat === catActual));
+            alert(`Stock de "${p.nombre}" actualizado a ${nStock}.`);
+        }
+    };
 
     window.cerrarSesionAdmin = () => {
         document.getElementById('admin-login-box').style.display = 'block';
@@ -530,6 +627,16 @@
     };
 
     window.abrirDelivery = (btn) => selEntrega('Delivery', btn);
+
+    function descontarInventario() {
+        CART.forEach(itemCart => {
+            let p = DB.find(x => x.id == itemCart.id);
+            if(p) {
+                p.stock = Math.max(0, p.stock - itemCart.cantidad);
+            }
+        });
+        mostrar(catActual === 'todos' ? mezclarProductos([...DB]) : DB.filter(x => x.cat === catActual));
+    }
 
     function enviarWA() {
         let dir = document.getElementById('dir-val').value;
@@ -548,6 +655,8 @@
         let m = `*¡Hola, Tu Marka!* 🙌%0AHe armado mi carrito:%0A%0A*DETALLE DE MI COMPRA*%0A------------------------------------------%0A${pStr}%0A------------------------------------------%0A💰 *TOTAL: $${total.toFixed(2)}*%0A%0A💳 *Métodos de pago:* ${CONFIG.pago}%0A📍 *Entrega:* ${entregaM}`;
         if(entregaM === 'Delivery') m += `%0A🏠 *Dirección:* ${dir}`;
         
+        descontarInventario();
+
         window.open(`https://wa.me/${CONFIG.tel.replace(/\s+/g,'')}?text=${m}`, '_blank');
         cerrar();
     }
