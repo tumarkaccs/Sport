@@ -1,1007 +1,934 @@
+```html
 <!DOCTYPE html>
-
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#0979f7">
 
 <title>Tu Marka Sport | Tienda Oficial</title>
 
+<meta name="description" content="Tu Marka Sport - Ropa deportiva y productos personalizados.">
+<meta name="theme-color" content="#0979f7">
+
 <style>
-:root {
-    --petroleo: #0979f7;
-    --purpura: #9b3081;
-    --azul-claro: #007bbd;
-    --fondo: #f8fafb;
-    --blanco: #fff;
-    --verde-wa: #25d366;
-    --texto: #2c3e50;
-    --gris-suave: #f1f5f9;
-    --borde: #e2e8f0;
-    --rojo: #991b1b;
+:root{
+    --petroleo:#0979f7;
+    --purpura:#9b3081;
+    --azul-claro:#007bbd;
+    --fondo:#f8fafb;
+    --blanco:#fff;
+    --verde-wa:#25D366;
+    --texto:#2c3e50;
+    --gris-suave:#f1f5f9;
+    --gris:#64748b;
+    --rojo:#dc2626;
+    --verde:#16a34a;
+    --amarillo:#f59e0b;
 }
 
-* {
-    box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
 }
 
-html {
-    scroll-behavior: smooth;
+html{
+    scroll-behavior:smooth;
 }
 
-body {
-    margin: 0;
-    padding-bottom: 95px;
-    background: var(--fondo);
-    color: var(--texto);
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.4;
+body{
+    margin:0;
+    padding-bottom:100px;
+    background:var(--fondo);
+    color:var(--texto);
+    font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif;
+    line-height:1.4;
 }
 
 button,
 input,
-select,
-textarea {
-    font: inherit;
+textarea,
+select{
+    font-family:inherit;
 }
 
-button {
-    cursor: pointer;
+button{
+    cursor:pointer;
 }
 
-button:disabled {
-    cursor: not-allowed;
+button:disabled{
+    opacity:.55;
+    cursor:not-allowed;
 }
 
-/* =========================================================
+/* =========================
    BARRA SUPERIOR
-========================================================= */
+========================= */
 
-.aviso-top {
-    position: sticky;
-    top: 0;
-    z-index: 1200;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-
-    padding: 8px;
-
-    background: var(--purpura);
-    color: #fff;
-
-    font-size: .7rem;
-    font-weight: 800;
-    text-transform: uppercase;
-
-    box-shadow: 0 2px 5px rgba(0,0,0,.1);
+.aviso-top{
+    background:var(--purpura);
+    color:#fff;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:15px;
+    padding:8px;
+    font-size:.7rem;
+    font-weight:800;
+    position:sticky;
+    top:0;
+    z-index:1200;
+    text-transform:uppercase;
+    box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 
-.aviso-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
+.aviso-item{
+    display:flex;
+    align-items:center;
+    gap:6px;
 }
 
 .icon-moto,
-.icon-mrw {
-    height: 18px;
-    width: auto;
+.icon-mrw{
+    height:18px;
+    width:auto;
 }
 
-.icon-moto {
-    filter: brightness(0) invert(1);
+.icon-moto{
+    filter:brightness(0) invert(1);
 }
 
-/* =========================================================
-   NAVEGACIÓN
-========================================================= */
+/* =========================
+   NAV
+========================= */
 
-.top-nav {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 10px;
-
-    padding: 10px;
-
-    background: var(--gris-suave);
+.top-nav{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    padding:10px;
+    background:var(--gris-suave);
+    flex-wrap:wrap;
 }
 
-.btn-nav {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 5px 12px;
-
-    border: 1px solid var(--azul-claro);
-    border-radius: 20px;
-
-    background: transparent;
-    color: var(--azul-claro);
-
-    text-decoration: none;
-    font-size: .7rem;
-    font-weight: 700;
-
-    transition: .2s ease;
+.btn-nav{
+    text-decoration:none;
+    font-size:.7rem;
+    font-weight:700;
+    color:var(--azul-claro);
+    border:1px solid var(--azul-claro);
+    padding:6px 12px;
+    border-radius:20px;
+    background:transparent;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:.2s;
 }
 
-.btn-nav:hover {
-    background: var(--azul-claro);
-    color: #fff;
+.btn-nav:hover{
+    background:var(--azul-claro);
+    color:white;
 }
 
-/* =========================================================
+/* =========================
    HEADER
-========================================================= */
+========================= */
 
-header {
-    position: sticky;
-    top: 36px;
-    z-index: 1000;
-
-    padding: 1.5rem 1rem;
-
-    background: var(--blanco);
-    text-align: center;
-
-    border-bottom: 1px solid #eee;
-    box-shadow: 0 4px 12px rgba(0,0,0,.05);
+header{
+    background:#fff;
+    padding:1.5rem 1rem;
+    text-align:center;
+    border-bottom:1px solid #eee;
+    position:sticky;
+    top:38px;
+    z-index:1000;
+    box-shadow:0 4px 12px rgba(0,0,0,.05);
 }
 
-.sub-logo {
-    margin-bottom: 5px;
-
-    color: var(--azul-claro);
-
-    font-size: .7rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
+.sub-logo{
+    font-size:.7rem;
+    color:var(--azul-claro);
+    letter-spacing:3px;
+    text-transform:uppercase;
+    margin-bottom:5px;
 }
 
-.logo-img {
-    display: block;
-    width: auto;
-    max-width: 100%;
-    max-height: 150px;
-    margin: 0 auto;
-    object-fit: contain;
+.logo-img{
+    max-height:150px;
+    width:auto;
+    object-fit:contain;
+    margin:auto;
+    display:block;
+    max-width:90%;
 }
 
-.logo-texto {
-    margin: 0;
-
-    color: var(--petroleo);
-
-    font-size: 1.8rem;
-    font-weight: 800;
-    line-height: 1;
-    text-transform: uppercase;
+.logo-texto{
+    font-size:1.8rem;
+    font-weight:800;
+    color:var(--petroleo);
+    margin:0;
+    text-transform:uppercase;
+    line-height:1;
 }
 
-.puntos-decoracion {
-    display: flex;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 12px;
+.puntos-decoracion{
+    display:flex;
+    justify-content:center;
+    gap:6px;
+    margin-top:12px;
 }
 
-.punto {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
+.punto{
+    width:8px;
+    height:8px;
+    border-radius:50%;
 }
 
-.p1 { background: #004b57; }
-.p2 { background: var(--purpura); }
-.p3 { background: var(--azul-claro); }
-.p4 { background: #f39200; }
-.p5 { background: #4ca844; }
+.p1{background:#004b57}
+.p2{background:var(--purpura)}
+.p3{background:var(--azul-claro)}
+.p4{background:#f39200}
+.p5{background:#4ca844}
 
-/* =========================================================
+/* =========================
    CONTENEDOR
-========================================================= */
+========================= */
 
-.contenedor {
-    width: 100%;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 15px;
+.contenedor{
+    max-width:1150px;
+    margin:auto;
+    padding:15px;
 }
 
-/* =========================================================
+/* =========================
    BANNER
-========================================================= */
+========================= */
 
-.banner-principal {
-    width: 100%;
-    max-height: 200px;
-
-    margin-bottom: 15px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    overflow: hidden;
-
-    border-radius: 15px;
-
-    background: var(--petroleo);
-    background-size: cover;
-    background-position: center;
-
-    color: #fff;
-    text-align: center;
+.banner-principal{
+    width:100%;
+    min-height:130px;
+    max-height:250px;
+    background:var(--petroleo);
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    background-size:cover;
+    background-position:center;
+    border-radius:15px;
+    margin-bottom:15px;
+    overflow:hidden;
+    position:relative;
 }
 
-.banner-overlay {
-    width: 100%;
-    padding: 30px 15px;
-    background: rgba(0,0,0,.4);
+.banner-overlay{
+    background:rgba(0,0,0,.45);
+    width:100%;
+    padding:30px 15px;
 }
 
-/* =========================================================
+/* =========================
    BUSCADOR
-========================================================= */
+========================= */
 
-.search-box {
-    position: relative;
-    margin: 15px 0;
+.search-box{
+    position:relative;
+    margin:15px 0;
 }
 
-#buscador {
-    width: 100%;
-
-    padding: 14px 45px;
-
-    border: 2px solid var(--petroleo);
-    border-radius: 15px;
-
-    background: var(--gris-suave);
-
-    font-size: 1rem;
+#buscador{
+    width:100%;
+    padding:14px 45px;
+    border-radius:15px;
+    border:2px solid var(--petroleo);
+    background:#fff;
+    font-size:1rem;
+    outline:none;
 }
 
-.search-icon {
-    position: absolute;
-    top: 13px;
-    left: 15px;
-
-    opacity: .45;
-
-    pointer-events: none;
+#buscador:focus{
+    box-shadow:0 0 0 3px rgba(9,121,247,.15);
 }
 
-/* =========================================================
+.search-icon{
+    position:absolute;
+    left:15px;
+    top:14px;
+    opacity:.4;
+}
+
+/* =========================
    CATEGORÍAS
-========================================================= */
+========================= */
 
-.categorias {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-
-    padding: 10px 0 20px;
+.categorias{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    padding:10px 0 20px;
 }
 
-.cat-pill {
-    display: flex;
-    align-items: center;
-
-    overflow: hidden;
-
-    background: #fff;
-
-    border: 2px solid var(--petroleo);
-    border-radius: 10px;
-
-    transition: .2s;
+@media(min-width:480px){
+    .categorias{
+        grid-template-columns:repeat(4,1fr);
+    }
 }
 
-.cat-pill.activo {
-    border-color: var(--purpura);
+@media(min-width:768px){
+    .categorias{
+        grid-template-columns:repeat(6,1fr);
+    }
 }
 
-.btn-cat {
-    flex: 1;
-
-    padding: 8px 4px;
-
-    border: 0;
-    background: transparent;
-    color: var(--petroleo);
-
-    font-size: .7rem;
-    font-weight: 700;
-
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.cat-pill{
+    display:flex;
+    align-items:center;
+    background:#fff;
+    border:2px solid var(--petroleo);
+    border-radius:10px;
+    overflow:hidden;
 }
 
-.btn-cat.activo {
-    background: var(--purpura);
-    color: #fff;
+.cat-pill.activo{
+    border-color:var(--purpura);
 }
 
-.share-cat {
-    padding: 8px 5px;
-
-    border: 0;
-
-    background: rgba(9,121,247,.1);
-    color: var(--petroleo);
+.btn-cat{
+    background:transparent;
+    color:var(--petroleo);
+    border:0;
+    padding:9px 4px;
+    font-weight:700;
+    font-size:.7rem;
+    flex-grow:1;
+    text-align:center;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-/* =========================================================
+.btn-cat.activo{
+    background:var(--purpura);
+    color:#fff;
+}
+
+.share-cat{
+    background:rgba(9,121,247,.1);
+    border:0;
+    padding:9px 6px;
+    color:var(--petroleo);
+}
+
+/* =========================
    GALERÍA
-========================================================= */
+========================= */
 
-.galeria {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+.galeria{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
 }
 
-.producto {
-    position: relative;
-
-    display: flex;
-    flex-direction: column;
-
-    overflow: hidden;
-
-    background: #fff;
-
-    border: 1px solid #f0f0f0;
-    border-radius: 15px;
-
-    box-shadow: 0 4px 6px rgba(0,0,0,.02);
+@media(min-width:768px){
+    .galeria{
+        grid-template-columns:repeat(3,1fr);
+    }
 }
 
-.producto-img-box {
-    position: relative;
+@media(min-width:1024px){
+    .galeria{
+        grid-template-columns:repeat(4,1fr);
+    }
 }
 
-.producto img {
-    display: block;
-
-    width: 100%;
-    height: 180px;
-
-    padding: 10px;
-
-    object-fit: contain;
-
-    border-bottom: 1px solid var(--gris-suave);
-
-    cursor: pointer;
+.producto{
+    background:#fff;
+    border-radius:15px;
+    overflow:hidden;
+    box-shadow:0 4px 10px rgba(0,0,0,.04);
+    border:1px solid #f0f0f0;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    min-width:0;
 }
 
-.badge-promo {
-    position: absolute;
-    top: 10px;
-    left: -5px;
-    z-index: 5;
-
-    padding: 4px 10px;
-
-    border-radius: 0 15px 15px 0;
-
-    background: var(--purpura);
-    color: #fff;
-
-    font-size: .65rem;
-    font-weight: 800;
-
-    text-transform: uppercase;
+.producto-img-box{
+    position:relative;
 }
 
-.stock-badge {
-    position: absolute;
-    top: 150px;
-    right: 10px;
-    z-index: 5;
-
-    padding: 2px 8px;
-
-    border-radius: 10px;
-
-    background: #e2e8f0;
-    color: #334155;
-
-    font-size: .65rem;
-    font-weight: 700;
+.producto img{
+    width:100%;
+    height:190px;
+    object-fit:contain;
+    padding:10px;
+    border-bottom:1px solid #f1f5f9;
+    cursor:pointer;
+    display:block;
 }
 
-.stock-badge.agotado {
-    background: #fee2e2;
-    color: var(--rojo);
+.badge-promo{
+    position:absolute;
+    top:10px;
+    left:-5px;
+    background:var(--purpura);
+    color:#fff;
+    padding:4px 10px;
+    font-size:.65rem;
+    font-weight:800;
+    border-radius:0 15px 15px 0;
+    z-index:10;
+    text-transform:uppercase;
 }
 
-.p-info {
-    flex: 1;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-
-    padding: 12px;
-
-    text-align: center;
+.stock-badge{
+    position:absolute;
+    top:10px;
+    right:8px;
+    background:#e2e8f0;
+    color:#334155;
+    padding:3px 8px;
+    border-radius:10px;
+    font-size:.65rem;
+    font-weight:700;
+    z-index:10;
 }
 
-.p-nombre {
-    min-height: 2.5em;
-    margin-bottom: 8px;
-
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    overflow: hidden;
-
-    color: #334155;
-
-    font-size: .85rem;
-    font-weight: 700;
-    line-height: 1.25;
+.stock-badge.agotado{
+    background:#fee2e2;
+    color:#991b1b;
 }
 
-.precio {
-    margin-bottom: 10px;
+.stock-badge.bajo{
+    background:#fef3c7;
+    color:#92400e;
+}
 
-    color: var(--petroleo);
+.p-info{
+    padding:12px;
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    text-align:center;
+}
 
-    font-size: 1.1rem;
-    font-weight: 800;
+.p-nombre{
+    font-size:.85rem;
+    font-weight:700;
+    color:#334155;
+    margin-bottom:8px;
+    min-height:2.5em;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    overflow:hidden;
+    line-height:1.25;
+}
+
+.p-id{
+    font-size:.65rem;
+    color:#94a3b8;
+    margin-bottom:5px;
+}
+
+.precio{
+    color:var(--petroleo);
+    font-weight:800;
+    font-size:1.1rem;
+    margin-bottom:10px;
 }
 
 .btn-add,
-.btn-ver-mas {
-    width: 100%;
-    border-radius: 10px;
-    font-weight: 700;
+.btn-ver-mas{
+    width:100%;
+    border-radius:10px;
+    font-weight:bold;
 }
 
-.btn-add {
-    padding: 10px;
-
-    border: 0;
-
-    background: var(--petroleo);
-    color: #fff;
+.btn-add{
+    background:var(--petroleo);
+    color:#fff;
+    border:0;
+    padding:10px;
 }
 
-.btn-add:disabled {
-    background: #cbd5e1;
+.btn-ver-mas{
+    background:transparent;
+    color:var(--azul-claro);
+    border:1px solid #ddd;
+    padding:8px;
+    font-size:.75rem;
+    margin-bottom:8px;
 }
 
-.btn-ver-mas {
-    margin-bottom: 8px;
-    padding: 8px;
-
-    border: 1px solid #ddd;
-
-    background: transparent;
-    color: var(--azul-claro);
-
-    font-size: .75rem;
-}
-
-/* =========================================================
+/* =========================
    MODALES
-========================================================= */
+========================= */
 
-.modal {
-    position: fixed;
-    inset: 0;
-    z-index: 2000;
-
-    display: none;
-    align-items: center;
-    justify-content: center;
-
-    padding: 15px;
-
-    background: rgba(0,0,0,.6);
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.65);
+    z-index:3000;
+    align-items:center;
+    justify-content:center;
+    padding:15px;
 }
 
-.modal.visible {
-    display: flex;
+.modal-content{
+    background:#fff;
+    width:100%;
+    max-width:500px;
+    border-radius:20px;
+    padding:20px;
+    max-height:90vh;
+    overflow-y:auto;
+    position:relative;
+    box-shadow:0 15px 40px rgba(0,0,0,.25);
 }
 
-.modal-content {
-    position: relative;
-
-    width: 100%;
-    max-width: 480px;
-    max-height: 90vh;
-
-    overflow-y: auto;
-
-    padding: 20px;
-
-    border-radius: 20px;
-
-    background: #fff;
-
-    box-shadow: 0 10px 25px rgba(0,0,0,.2);
+.btn-close-modal{
+    position:absolute;
+    top:15px;
+    right:15px;
+    width:34px;
+    height:34px;
+    background:#f1f5f9;
+    color:#64748b;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:1.4rem;
+    font-weight:bold;
+    cursor:pointer;
+    border:0;
+    z-index:10;
 }
 
-.btn-close-modal {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    z-index: 10;
+/* =========================
+   FICHA
+========================= */
 
-    width: 32px;
-    height: 32px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 0;
-    border-radius: 50%;
-
-    background: var(--gris-suave);
-    color: #64748b;
-
-    font-size: 1.4rem;
-    font-weight: bold;
+#modalFicha .modal-content{
+    max-width:520px;
 }
 
-/* =========================================================
-   PRODUCTO MODAL
-========================================================= */
-
-.modal-product-img {
-    width: 100%;
-    height: 220px;
-
-    margin-bottom: 15px;
-
-    object-fit: contain;
+#modalFicha #m-img{
+    width:100%;
+    height:230px;
+    object-fit:contain;
+    margin-bottom:15px;
 }
 
-.modal-price-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    margin-bottom: 10px;
+.select-opt{
+    width:100%;
+    padding:9px;
+    margin-top:5px;
+    margin-bottom:10px;
+    border-radius:8px;
+    border:1px solid #ddd;
+    background:#fff;
 }
 
-.modal-price {
-    color: var(--azul-claro);
-
-    font-size: 1.5rem;
-    font-weight: 900;
+.qty-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:15px;
+    margin:10px 0;
 }
 
-.modal-stock {
-    padding: 4px 10px;
-
-    border-radius: 12px;
-
-    background: #eff6ff;
-    color: #2563eb;
-
-    font-size: .85rem;
-    font-weight: 700;
+.qty-btn{
+    background:#e2e8f0;
+    border:0;
+    padding:6px 14px;
+    border-radius:6px;
+    font-weight:bold;
+    font-size:1.1rem;
 }
 
-.select-opt {
-    width: 100%;
-
-    margin-top: 5px;
-    margin-bottom: 10px;
-
-    padding: 8px;
-
-    border: 1px solid #ddd;
-    border-radius: 8px;
+.stock-variant{
+    font-size:.85rem;
+    font-weight:bold;
+    padding:4px 10px;
+    border-radius:12px;
 }
 
-.qty-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-
-    margin: 10px 0;
-}
-
-.qty-btn {
-    padding: 5px 12px;
-
-    border: 0;
-    border-radius: 5px;
-
-    background: #e2e8f0;
-
-    font-weight: bold;
-}
-
-textarea,
-.admin-input {
-    width: 100%;
-
-    padding: 10px;
-
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-/* =========================================================
+/* =========================
    CARRITO
-========================================================= */
+========================= */
 
-.item-c {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 10px 0;
-
-    border-bottom: 1px solid #eee;
-
-    font-size: .9rem;
+.item-c{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:12px 0;
+    border-bottom:1px solid #eee;
+    font-size:.9rem;
 }
 
-.item-info {
-    flex: 1;
-    padding-right: 10px;
+.item-info{
+    flex:1;
+    min-width:0;
 }
 
-.item-details {
-    display: block;
-
-    color: var(--purpura);
-
-    font-size: .75rem;
+.item-price{
+    white-space:nowrap;
+    font-weight:bold;
 }
 
-.item-note {
-    display: block;
-
-    color: #64748b;
-
-    font-size: .75rem;
-    font-style: italic;
+.item-details{
+    display:block;
+    color:var(--purpura);
+    font-size:.75rem;
 }
 
-.btn-del {
-    margin-left: 10px;
-
-    border: 0;
-    background: none;
-
-    color: #ff4444;
-
-    font-weight: bold;
+.item-note{
+    display:block;
+    color:#64748b;
+    font-size:.75rem;
+    font-style:italic;
 }
 
-.metodos-pago-box {
-    margin-bottom: 15px;
-    padding: 12px;
-
-    border: 1px solid var(--borde);
-    border-radius: 10px;
-
-    background: var(--gris-suave);
-    color: var(--purpura);
-
-    font-size: .85rem;
-    font-weight: 700;
-    line-height: 1.5;
-
-    overflow-wrap: break-word;
+.btn-del{
+    background:none;
+    border:0;
+    color:#ff4444;
+    font-weight:bold;
+    margin-left:8px;
 }
 
-.btn-opcion {
-    width: 100%;
-
-    margin-bottom: 8px;
-    padding: 12px;
-
-    border: 1px solid #ddd;
-    border-radius: 10px;
-
-    background: #fff;
-
-    font-weight: bold;
+.metodos-pago-box{
+    background:#f1f5f9;
+    padding:12px;
+    border-radius:10px;
+    font-size:.85rem;
+    margin-bottom:15px;
+    font-weight:bold;
+    color:var(--purpura);
+    line-height:1.5;
+    border:1px solid #e2e8f0;
 }
 
-.btn-opcion.seleccionado {
-    border-color: var(--petroleo);
-    background: #e0f0ff;
+.btn-opcion{
+    width:100%;
+    padding:12px;
+    margin-bottom:8px;
+    border:1px solid #ddd;
+    border-radius:10px;
+    background:#fff;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-/* =========================================================
+.btn-opcion.seleccionado{
+    border-color:var(--petroleo);
+    background:#e0f0ff;
+}
+
+/* =========================
    FAQ
-========================================================= */
+========================= */
 
-.faq-item {
-    padding: 10px 0;
-    border-bottom: 1px solid #eee;
+.faq-item{
+    border-bottom:1px solid #eee;
+    padding:10px 0;
 }
 
-.faq-pregunta {
-    margin: 5px 0;
-
-    color: var(--petroleo);
-
-    font-weight: bold;
+.faq-pregunta{
+    font-weight:bold;
+    color:var(--petroleo);
 }
 
-.faq-respuesta {
-    margin-bottom: 5px;
-
-    color: #64748b;
-
-    font-size: .85rem;
+.faq-respuesta{
+    font-size:.85rem;
+    color:#64748b;
+    margin-top:5px;
 }
 
-/* =========================================================
+/* =========================
    ADMIN
-========================================================= */
+========================= */
 
-.tab-admin-bar {
-    display: flex;
-    gap: 5px;
-
-    margin-bottom: 15px;
-
-    border-bottom: 2px solid var(--borde);
+.admin-item-row{
+    display:flex;
+    flex-direction:column;
+    padding:10px 0;
+    border-bottom:1px solid #eee;
+    gap:5px;
 }
 
-.tab-admin-btn {
-    padding: 8px 12px;
-
-    border: 0;
-    border-bottom: 2px solid transparent;
-
-    background: transparent;
-
-    font-size: .8rem;
-    font-weight: bold;
+.admin-item-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    font-size:.85rem;
 }
 
-.tab-admin-btn.activo {
-    border-color: var(--petroleo);
-    color: var(--petroleo);
+.admin-stock-control{
+    display:flex;
+    align-items:center;
+    gap:8px;
 }
 
-.admin-item-row {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-
-    padding: 10px 0;
-
-    border-bottom: 1px solid #eee;
+.input-stock{
+    width:70px;
+    padding:6px;
+    border:1px solid #ccc;
+    border-radius:5px;
+    text-align:center;
+    font-weight:bold;
 }
 
-.admin-item-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    font-size: .85rem;
+.btn-save-stock{
+    background:var(--petroleo);
+    color:white;
+    border:0;
+    padding:6px 10px;
+    border-radius:5px;
+    font-size:.75rem;
+    cursor:pointer;
+    font-weight:bold;
 }
 
-.admin-stock-control {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+.tab-admin-bar{
+    display:flex;
+    gap:5px;
+    margin-bottom:15px;
+    border-bottom:2px solid #e2e8f0;
+    overflow-x:auto;
 }
 
-.input-stock {
-    width: 70px;
-
-    padding: 5px;
-
-    border: 1px solid #ccc;
-    border-radius: 5px;
-
-    text-align: center;
-    font-weight: bold;
+.tab-admin-btn{
+    padding:8px 12px;
+    font-size:.8rem;
+    font-weight:bold;
+    border:0;
+    background:transparent;
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    white-space:nowrap;
 }
 
-.btn-save-stock {
-    padding: 5px 10px;
-
-    border: 0;
-    border-radius: 5px;
-
-    background: var(--petroleo);
-    color: #fff;
-
-    font-size: .75rem;
-    font-weight: bold;
+.tab-admin-btn.activo{
+    border-color:var(--petroleo);
+    color:var(--petroleo);
 }
 
-/* =========================================================
+.admin-status{
+    padding:10px;
+    border-radius:8px;
+    background:#f8fafb;
+    margin-bottom:10px;
+    font-size:.8rem;
+}
+
+.admin-danger{
+    color:var(--rojo);
+}
+
+/* =========================
    FOOTER
-========================================================= */
+========================= */
 
-.site-footer {
-    margin-top: 30px;
-    padding: 15px;
-
-    border-radius: 20px 20px 0 0;
-
-    background: linear-gradient(
-        135deg,
-        var(--petroleo),
-        var(--purpura)
-    );
-
-    color: #fff;
-
-    text-align: center;
-    font-size: .8rem;
+.site-footer{
+    background:linear-gradient(135deg,var(--petroleo),var(--purpura));
+    color:#fff;
+    padding:20px 15px;
+    text-align:center;
+    margin-top:30px;
+    border-radius:20px 20px 0 0;
+    font-size:.8rem;
 }
 
-.footer-val {
-    margin: 0 5px;
-    font-weight: bold;
+.footer-val{
+    font-weight:bold;
+    margin:0 5px;
 }
 
-.btn-como-llegar {
-    display: inline-flex;
-    align-items: center;
-    gap: 3px;
-
-    margin-top: 5px;
-    padding: 3px 8px;
-
-    border-radius: 10px;
-
-    background: #fff;
-    color: #4285f4;
-
-    text-decoration: none;
-
-    font-size: .6rem;
-    font-weight: bold;
-    text-transform: uppercase;
+.btn-como-llegar{
+    display:inline-flex;
+    align-items:center;
+    gap:3px;
+    background:white;
+    color:#4285F4;
+    padding:4px 8px;
+    border-radius:10px;
+    text-decoration:none;
+    font-size:.6rem;
+    font-weight:bold;
+    margin-top:5px;
+    text-transform:uppercase;
 }
 
-.btn-como-llegar img {
-    width: auto;
-    height: 14px;
+.btn-como-llegar img{
+    height:14px;
+    width:auto;
 }
 
-/* =========================================================
-   CARRITO FIJO
-========================================================= */
+/* =========================
+   CARRITO INFERIOR
+========================= */
 
-.footer-cart {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: 1100;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    padding: 15px 20px;
-
-    background: #fff;
-
-    box-shadow: 0 -4px 15px rgba(0,0,0,.08);
+.footer-cart{
+    position:fixed;
+    bottom:0;
+    left:0;
+    right:0;
+    background:#fff;
+    padding:12px 20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:15px;
+    box-shadow:0 -4px 15px rgba(0,0,0,.08);
+    z-index:2000;
 }
 
-.cart-stats {
-    cursor: pointer;
+.cart-stats{
+    cursor:pointer;
 }
 
-#n-items {
-    display: block;
+#n-items{
+    display:block;
+    font-size:.8rem;
 }
 
-#f-total {
-    color: var(--petroleo);
-    font-size: 1.2rem;
-    font-weight: 900;
+#f-total{
+    display:block;
+    color:var(--petroleo);
+    font-size:1.2rem;
+    font-weight:900;
 }
 
-.btn-main {
-    display: none;
-
-    padding: 12px 25px;
-
-    border: 0;
-    border-radius: 25px;
-
-    background: var(--verde-wa);
-    color: #fff;
-
-    font-weight: 800;
+.btn-main{
+    background:var(--verde-wa);
+    color:#fff;
+    padding:12px 20px;
+    border-radius:25px;
+    border:0;
+    font-weight:800;
+    display:none;
 }
 
-/* =========================================================
-   RESPONSIVE
-========================================================= */
+/* =========================
+   ESTADOS
+========================= */
 
-@media (min-width: 480px) {
-    .categorias {
-        grid-template-columns: repeat(4, 1fr);
+.estado{
+    text-align:center;
+    padding:40px 15px;
+    color:#64748b;
+}
+
+.spinner{
+    width:35px;
+    height:35px;
+    border:4px solid #e2e8f0;
+    border-top-color:var(--petroleo);
+    border-radius:50%;
+    animation:girar .8s linear infinite;
+    margin:0 auto 15px;
+}
+
+@keyframes girar{
+    to{transform:rotate(360deg)}
+}
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:90px;
+    transform:translateX(-50%);
+    background:#1e293b;
+    color:#fff;
+    padding:10px 16px;
+    border-radius:20px;
+    font-size:.8rem;
+    z-index:5000;
+    opacity:0;
+    pointer-events:none;
+    transition:.25s;
+}
+
+.toast.visible{
+    opacity:1;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media(max-width:480px){
+
+    header{
+        top:36px;
+        padding:1rem;
     }
-}
 
-@media (min-width: 768px) {
-    .categorias {
-        grid-template-columns: repeat(6, 1fr);
+    .logo-texto{
+        font-size:1.45rem;
     }
 
-    .galeria {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-@media (min-width: 1024px) {
-    .galeria {
-        grid-template-columns: repeat(4, 1fr);
-    }
-}
-
-@media (max-width: 420px) {
-    .footer-cart {
-        padding: 12px;
+    .footer-cart{
+        padding:10px 12px;
     }
 
-    .btn-main {
-        padding: 10px 15px;
-        font-size: .8rem;
+    .btn-main{
+        padding:10px 14px;
+        font-size:.8rem;
+    }
+
+    .modal{
+        padding:8px;
+    }
+
+    .modal-content{
+        border-radius:15px;
+        padding:16px;
+        max-height:94vh;
     }
 }
 </style>
-
 </head>
 
 <body>
 
 <!-- =====================================================
-     AVISO SUPERIOR
+     BARRA SUPERIOR
 ===================================================== -->
 
 <div class="aviso-top">
 
-```
-<div class="aviso-item">
-    <img
-        src="https://cdn.prod.website-files.com/627eccaab96d0621ae273f80/628ce42faac4d72151e20815_ymy_hdr_logo_white.png"
-        class="icon-moto"
-        alt="Delivery"
-    >
-    <span>Delivery</span>
-</div>
+    <div class="aviso-item">
+        <img
+            src="https://cdn.prod.website-files.com/627eccaab96d0621ae273f80/628ce42faac4d72151e20815_ymy_hdr_logo_white.png"
+            class="icon-moto"
+            alt="Delivery"
+        >
+        <span>Delivery</span>
+    </div>
 
-<span style="opacity:.4">|</span>
+    <span style="opacity:.4">|</span>
 
-<div class="aviso-item">
-    <span>Envíos Nacionales</span>
+    <div class="aviso-item">
+        <span>Envíos Nacionales</span>
 
-    <img
-        src="https://w7.pngwing.com/pngs/379/910/png-transparent-mrw-hd-logo-thumbnail.png"
-        class="icon-mrw"
-        alt="MRW"
-    >
-</div>
-```
+        <img
+            src="https://w7.pngwing.com/pngs/379/910/png-transparent-mrw-hd-logo-thumbnail.png"
+            class="icon-mrw"
+            alt="MRW"
+        >
+    </div>
 
 </div>
 
@@ -1011,24 +938,22 @@ textarea,
 
 <div class="top-nav">
 
-```
-<a
-    href="https://www.instagram.com/tumarka_sport/"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="btn-nav"
->
-    INSTAGRAM
-</a>
+    <a
+        href="https://www.instagram.com/tumarka_sport/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-nav"
+    >
+        INSTAGRAM
+    </a>
 
-<button class="btn-nav" type="button" onclick="App.ui.openModal('modalFAQ')">
-    PREGUNTAS FRECUENTES
-</button>
+    <button class="btn-nav" onclick="abrirModalFAQ()">
+        PREGUNTAS FRECUENTES
+    </button>
 
-<button class="btn-nav" type="button" onclick="App.admin.open()">
-    ADMINISTRACIÓN
-</button>
-```
+    <button class="btn-nav" onclick="abrirModalAdmin()">
+        ADMINISTRACIÓN
+    </button>
 
 </div>
 
@@ -1038,25 +963,23 @@ textarea,
 
 <header>
 
-```
-<div class="sub-logo">
-    Premium Collection
-</div>
+    <div class="sub-logo">
+        Premium Collection
+    </div>
 
-<div id="container-logo">
-    <h1 class="logo-texto" id="logo-texto">
-        TU MARKA SPORT
-    </h1>
-</div>
+    <div id="container-logo">
+        <h1 class="logo-texto">
+            TU MARKA SPORT
+        </h1>
+    </div>
 
-<div class="puntos-decoracion">
-    <div class="punto p1"></div>
-    <div class="punto p2"></div>
-    <div class="punto p3"></div>
-    <div class="punto p4"></div>
-    <div class="punto p5"></div>
-</div>
-```
+    <div class="puntos-decoracion">
+        <div class="punto p1"></div>
+        <div class="punto p2"></div>
+        <div class="punto p3"></div>
+        <div class="punto p4"></div>
+        <div class="punto p5"></div>
+    </div>
 
 </header>
 
@@ -1064,47 +987,76 @@ textarea,
      CONTENIDO
 ===================================================== -->
 
-<main class="contenedor">
+<div class="contenedor">
 
-```
-<div
-    id="banner-box"
-    class="banner-principal"
-    style="display:none"
->
-    <div class="banner-overlay">
-        <h2
-            id="banner-titulo"
-            style="margin:0;font-size:1.2rem"
-        ></h2>
+    <div
+        id="banner-box"
+        class="banner-principal"
+        style="display:none"
+    >
+        <div class="banner-overlay">
+            <h2
+                id="banner-titulo"
+                style="margin:0;font-size:1.2rem"
+            ></h2>
+        </div>
     </div>
-</div>
 
-<div class="search-box">
+    <div class="search-box">
 
-    <span class="search-icon">🔍</span>
+        <span class="search-icon">
+            🔍
+        </span>
 
-    <input
-        type="search"
-        id="buscador"
-        placeholder="¿Qué estás buscando?"
-        autocomplete="off"
+        <input
+            type="search"
+            id="buscador"
+            placeholder="¿Qué estás buscando?"
+            autocomplete="off"
+        >
+
+    </div>
+
+    <div
+        class="categorias"
+        id="cat-bar"
     >
 
+        <div
+            class="cat-pill activo"
+            id="pill-todos"
+        >
+
+            <button
+                class="btn-cat activo"
+                data-cat="todos"
+            >
+                Todos
+            </button>
+
+            <button
+                class="share-cat"
+                data-share-cat="todos"
+                aria-label="Compartir categoría"
+            >
+                🔗
+            </button>
+
+        </div>
+
+    </div>
+
+    <div
+        class="galeria"
+        id="grid"
+    >
+        <div class="estado">
+            <div class="spinner"></div>
+            Cargando catálogo...
+        </div>
+    </div>
+
 </div>
-
-<div
-    class="categorias"
-    id="cat-bar"
-></div>
-
-<div
-    class="galeria"
-    id="grid"
-></div>
-```
-
-</main>
 
 <!-- =====================================================
      MODAL PRODUCTO
@@ -1113,185 +1065,156 @@ textarea,
 <div
     id="modalFicha"
     class="modal"
-    aria-hidden="true"
 >
-
-```
-<div class="modal-content">
-
-    <button
-        class="btn-close-modal"
-        type="button"
-        onclick="App.ui.closeModal('modalFicha')"
-    >
-        &times;
-    </button>
-
-    <img
-        id="m-img"
-        class="modal-product-img"
-        alt=""
-    >
-
-    <h2
-        id="m-nombre"
-        style="margin:0;font-size:1.3rem"
-    ></h2>
-
     <div
-        id="m-desc"
-        style="
-            background:#f8fafb;
-            padding:12px;
-            margin:12px 0;
-            border-radius:10px;
-            font-size:.85rem;
-        "
-    ></div>
+        class="modal-content"
+        onclick="event.stopPropagation()"
+    >
 
-    <div class="modal-price-row">
+        <button
+            class="btn-close-modal"
+            onclick="cerrar()"
+        >
+            ×
+        </button>
+
+        <img
+            id="m-img"
+            alt="Producto"
+        >
+
+        <h2
+            id="m-nombre"
+            style="margin:0;font-size:1.3rem"
+        ></h2>
 
         <div
-            id="m-precio"
-            class="modal-price"
+            id="m-id"
+            style="font-size:.7rem;color:#94a3b8;margin-top:3px"
         ></div>
 
         <div
-            id="m-stock-variant"
-            class="modal-stock"
+            id="m-desc"
+            style="background:#f8fafb;padding:12px;margin:12px 0;border-radius:10px;font-size:.85rem"
+        ></div>
+
+        <div
+            style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;gap:10px"
         >
-            Stock: 0
-        </div>
 
-    </div>
+            <div
+                id="m-precio"
+                style="font-size:1.5rem;font-weight:900;color:var(--azul-claro)"
+            ></div>
 
-    <div
-        id="box-talla"
-        style="display:none;margin-top:10px"
-    >
-
-        <label
-            for="m-talla"
-            style="font-size:.8rem;font-weight:bold"
-        >
-            Talla:
-        </label>
-
-        <select
-            id="m-talla"
-            class="select-opt"
-        ></select>
-
-    </div>
-
-    <div
-        id="box-color"
-        style="display:none;margin-top:5px"
-    >
-
-        <label
-            for="m-color"
-            style="font-size:.8rem;font-weight:bold"
-        >
-            Color / Estilo:
-        </label>
-
-        <select
-            id="m-color"
-            class="select-opt"
-        ></select>
-
-    </div>
-
-    <div style="margin-top:10px">
-
-        <label style="font-size:.8rem;font-weight:bold">
-            Cantidad:
-        </label>
-
-        <div class="qty-box">
-
-            <button
-                class="qty-btn"
-                type="button"
-                onclick="App.product.changeQty(-1)"
+            <div
+                id="m-stock-variant"
+                class="stock-variant"
             >
-                −
-            </button>
-
-            <span
-                id="m-qty"
-                style="font-weight:bold"
-            >
-                1
-            </span>
-
-            <button
-                class="qty-btn"
-                type="button"
-                onclick="App.product.changeQty(1)"
-            >
-                +
-            </button>
+                Stock: 0
+            </div>
 
         </div>
 
-    </div>
-
-    <div style="margin-top:10px">
-
-        <label
-            for="m-nota"
-            style="
-                font-size:.8rem;
-                font-weight:bold;
-                color:var(--purpura)
-            "
+        <div
+            id="box-talla"
+            style="display:none"
         >
-            Instrucciones o nota (opcional):
-        </label>
 
-        <textarea
-            id="m-nota"
-            rows="2"
-            placeholder="Ej: Nombre para personalizado..."
-            style="
-                width:100%;
-                margin-top:5px;
-                resize:none;
-            "
-        ></textarea>
+            <label style="font-size:.8rem;font-weight:bold">
+                Talla:
+            </label>
+
+            <select
+                id="m-talla"
+                class="select-opt"
+            ></select>
+
+        </div>
+
+        <div
+            id="box-color"
+            style="display:none"
+        >
+
+            <label style="font-size:.8rem;font-weight:bold">
+                Color / Estilo:
+            </label>
+
+            <select
+                id="m-color"
+                class="select-opt"
+            ></select>
+
+        </div>
+
+        <div>
+
+            <label style="font-size:.8rem;font-weight:bold">
+                Cantidad:
+            </label>
+
+            <div class="qty-box">
+
+                <button
+                    class="qty-btn"
+                    onclick="cambiarQty(-1)"
+                >
+                    −
+                </button>
+
+                <span
+                    id="m-qty"
+                    style="font-weight:bold"
+                >
+                    1
+                </span>
+
+                <button
+                    class="qty-btn"
+                    onclick="cambiarQty(1)"
+                >
+                    +
+                </button>
+
+            </div>
+
+        </div>
+
+        <div>
+
+            <label
+                style="font-size:.8rem;font-weight:bold;color:var(--purpura)"
+            >
+                Instrucciones o nota:
+            </label>
+
+            <textarea
+                id="m-nota"
+                rows="2"
+                maxlength="500"
+                placeholder="Ej: Nombre para personalizado..."
+                style="width:100%;padding:10px;border-radius:8px;border:1px solid #ddd;margin-top:5px;resize:none"
+            ></textarea>
+
+        </div>
+
+        <button
+            id="m-btn-add"
+            class="btn-add"
+            style="margin-top:15px;padding:15px"
+        >
+            🛒 Agregar al Carrito
+        </button>
+
+        <button
+            id="m-btn-share"
+            style="width:100%;margin-top:10px;padding:10px;border:0;border-radius:10px;background:#f1f5f9;cursor:pointer;font-weight:bold"
+        >
+            📤 Compartir este producto
+        </button>
 
     </div>
-
-    <button
-        id="m-btn-add"
-        class="btn-add"
-        type="button"
-        style="margin-top:15px;padding:15px"
-    >
-        🛒 Agregar al Carrito
-    </button>
-
-    <button
-        id="m-btn-share"
-        type="button"
-        style="
-            width:100%;
-            margin-top:10px;
-            padding:10px;
-            border:0;
-            border-radius:10px;
-            background:#f1f5f9;
-            font-weight:bold;
-        "
-    >
-        📤 Compartir este producto
-    </button>
-
-</div>
-```
-
 </div>
 
 <!-- =====================================================
@@ -1301,338 +1224,356 @@ textarea,
 <div
     id="modalCarrito"
     class="modal"
-    aria-hidden="true"
 >
 
-```
-<div class="modal-content">
-
-    <button
-        class="btn-close-modal"
-        type="button"
-        onclick="App.ui.closeModal('modalCarrito')"
-    >
-        &times;
-    </button>
-
-    <h2 style="text-align:center">
-        Tu Pedido
-    </h2>
-
-    <div id="c-lista"></div>
-
     <div
-        id="c-total"
-        style="
-            text-align:right;
-            font-size:1.4rem;
-            font-weight:900;
-            margin:20px 0;
-        "
+        class="modal-content"
+        onclick="event.stopPropagation()"
     >
-        Total: $0.00
+
+        <button
+            class="btn-close-modal"
+            onclick="cerrar()"
+        >
+            ×
+        </button>
+
+        <h2 style="text-align:center">
+            Tu Pedido
+        </h2>
+
+        <div
+            id="c-lista"
+        ></div>
+
+        <div
+            id="c-total"
+            style="text-align:right;font-size:1.4rem;font-weight:900;margin:20px 0"
+        >
+            Total: $0.00
+        </div>
+
+        <p style="font-weight:bold;margin-bottom:5px">
+            Métodos de Pago Aceptados:
+        </p>
+
+        <div
+            id="metodos-pago-box"
+            class="metodos-pago-box"
+        >
+            Cargando...
+        </div>
+
+        <p style="font-weight:bold;margin-bottom:5px">
+            ¿Cómo recibes tu compra?
+        </p>
+
+        <button
+            class="btn-opcion"
+            id="btn-retiro"
+            onclick="selEntrega('Retiro en Tienda',this)"
+        >
+            🏬 Retiro en Tienda
+        </button>
+
+        <button
+            class="btn-opcion"
+            id="btn-delivery"
+            onclick="abrirDelivery(this)"
+        >
+            🛵 Solicitar Delivery
+        </button>
+
+        <input
+            type="text"
+            id="dir-val"
+            maxlength="500"
+            placeholder="Dirección exacta para el envío..."
+            style="width:100%;padding:12px;margin-top:10px;display:none;border-radius:8px;border:1px solid #ddd"
+        >
+
+        <button
+            class="btn-add"
+            id="btn-final-wa"
+            style="background:var(--verde-wa);margin-top:20px;display:none;padding:15px"
+            onclick="enviarWA()"
+        >
+            🚀 Enviar Pedido por WhatsApp
+        </button>
+
     </div>
-
-    <p style="font-weight:bold;margin-bottom:5px">
-        Métodos de Pago Aceptados:
-    </p>
-
-    <div
-        id="metodos-pago-box"
-        class="metodos-pago-box"
-    ></div>
-
-    <p style="font-weight:bold;margin-bottom:5px">
-        ¿Cómo recibes tu compra?
-    </p>
-
-    <button
-        id="btn-retiro"
-        class="btn-opcion"
-        type="button"
-        onclick="App.cart.selectDelivery('Retiro en Tienda', this)"
-    >
-        🏬 Retiro en Tienda
-    </button>
-
-    <button
-        id="btn-delivery"
-        class="btn-opcion"
-        type="button"
-        onclick="App.cart.selectDelivery('Delivery', this)"
-    >
-        🛵 Solicitar Delivery
-    </button>
-
-    <input
-        type="text"
-        id="dir-val"
-        placeholder="Dirección exacta para el envío..."
-        style="
-            width:100%;
-            padding:12px;
-            margin-top:10px;
-            display:none;
-            border-radius:8px;
-            border:1px solid #ddd;
-        "
-    >
-
-    <button
-        id="btn-final-wa"
-        class="btn-add"
-        type="button"
-        style="
-            background:var(--verde-wa);
-            margin-top:20px;
-            display:none;
-            padding:15px;
-        "
-        onclick="App.whatsapp.sendOrder()"
-    >
-        🚀 Enviar Pedido por WhatsApp
-    </button>
-
-</div>
-```
 
 </div>
 
 <!-- =====================================================
-     FAQ
+     MODAL FAQ
 ===================================================== -->
 
 <div
     id="modalFAQ"
     class="modal"
-    aria-hidden="true"
 >
 
-```
-<div class="modal-content">
-
-    <button
-        class="btn-close-modal"
-        type="button"
-        onclick="App.ui.closeModal('modalFAQ')"
+    <div
+        class="modal-content"
+        onclick="event.stopPropagation()"
     >
-        &times;
-    </button>
 
-    <h2
-        style="
-            text-align:center;
-            color:var(--petroleo)
-        "
-    >
-        Preguntas Frecuentes
-    </h2>
+        <button
+            class="btn-close-modal"
+            onclick="cerrar()"
+        >
+            ×
+        </button>
 
-    <div class="faq-item">
-        <div class="faq-pregunta">
-            ¿Cómo realizo un pedido personalizado?
+        <h2
+            style="text-align:center;color:var(--petroleo)"
+        >
+            Preguntas Frecuentes
+        </h2>
+
+        <div class="faq-item">
+
+            <div class="faq-pregunta">
+                ¿Cómo realizo un pedido personalizado?
+            </div>
+
+            <div class="faq-respuesta">
+                Selecciona el producto, elige las opciones disponibles,
+                agrega las instrucciones y envía el pedido por WhatsApp.
+            </div>
+
         </div>
-        <div class="faq-respuesta">
-            Selecciona el producto deseado, agrega las notas en el cuadro de texto
-            y envía el carrito por WhatsApp.
+
+        <div class="faq-item">
+
+            <div class="faq-pregunta">
+                ¿Hacen envíos a todo el país?
+            </div>
+
+            <div class="faq-respuesta">
+                Sí, realizamos envíos nacionales cobro en destino
+                a través de MRW y delivery motorizado en la zona urbana.
+            </div>
+
         </div>
+
+        <div class="faq-item">
+
+            <div class="faq-pregunta">
+                ¿Cuáles son los métodos de pago?
+            </div>
+
+            <div class="faq-respuesta">
+                Aceptamos Pago Móvil, Cashea, Zelle, efectivo
+                en bolívares/divisas y los métodos indicados en el catálogo.
+            </div>
+
+        </div>
+
     </div>
-
-    <div class="faq-item">
-        <div class="faq-pregunta">
-            ¿Hacen envíos a todo el país?
-        </div>
-        <div class="faq-respuesta">
-            Sí, realizamos envíos nacionales cobro en destino a través de MRW
-            y servicio de delivery motorizado en la zona urbana.
-        </div>
-    </div>
-
-    <div class="faq-item">
-        <div class="faq-pregunta">
-            ¿Cuáles son los métodos de pago?
-        </div>
-        <div class="faq-respuesta">
-            Aceptamos Pago Móvil, Cashea, Zelle, efectivo en bolívares/divisas y Zinli.
-        </div>
-    </div>
-
-</div>
-```
 
 </div>
 
 <!-- =====================================================
-     ADMIN
+     MODAL ADMIN
 ===================================================== -->
 
 <div
     id="modalAdmin"
     class="modal"
-    aria-hidden="true"
 >
 
-```
-<div class="modal-content">
-
-    <button
-        class="btn-close-modal"
-        type="button"
-        onclick="App.ui.closeModal('modalAdmin')"
+    <div
+        class="modal-content"
+        onclick="event.stopPropagation()"
     >
-        &times;
-    </button>
-
-    <h2
-        style="
-            text-align:center;
-            color:var(--petroleo)
-        "
-    >
-        Acceso Administrativo
-    </h2>
-
-    <div id="admin-login-box">
-
-        <input
-            type="text"
-            id="admin-user"
-            class="admin-input"
-            placeholder="Usuario"
-            autocomplete="username"
-            style="margin-bottom:10px"
-        >
-
-        <input
-            type="password"
-            id="admin-pass"
-            class="admin-input"
-            placeholder="Contraseña"
-            autocomplete="current-password"
-            style="margin-bottom:15px"
-        >
 
         <button
-            class="btn-add"
-            type="button"
-            onclick="App.admin.login()"
+            class="btn-close-modal"
+            onclick="cerrar()"
         >
-            Ingresar
+            ×
         </button>
 
-    </div>
+        <h2
+            style="text-align:center;color:var(--petroleo)"
+        >
+            Administración
+        </h2>
 
-    <div
-        id="admin-panel-box"
-        style="display:none"
-    >
+        <!-- LOGIN -->
 
-        <div class="tab-admin-bar">
+        <div id="admin-login-box">
+
+            <p
+                style="font-size:.8rem;color:#64748b"
+            >
+                Acceso exclusivo para administración.
+            </p>
+
+            <input
+                type="text"
+                id="admin-user"
+                autocomplete="username"
+                placeholder="Usuario"
+                style="width:100%;padding:10px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd"
+            >
+
+            <input
+                type="password"
+                id="admin-pass"
+                autocomplete="current-password"
+                placeholder="Contraseña"
+                style="width:100%;padding:10px;margin-bottom:15px;border-radius:8px;border:1px solid #ddd"
+            >
 
             <button
-                id="tab-btn-auth"
-                class="tab-admin-btn activo"
-                type="button"
-                onclick="App.admin.switchTab('auth')"
+                class="btn-add"
+                onclick="loginAdmin()"
             >
-                Procesar Pago
-            </button>
-
-            <button
-                id="tab-btn-stock"
-                class="tab-admin-btn"
-                type="button"
-                onclick="App.admin.switchTab('stock')"
-            >
-                Ajustar Stock
+                Ingresar
             </button>
 
         </div>
 
-        <div id="view-admin-auth">
+        <!-- PANEL -->
 
-            <p
-                style="
-                    font-size:.8rem;
-                    color:#64748b
-                "
-            >
-                Ingresa el ID del producto y la cantidad vendida
-                para descontar tras verificar el pago.
-            </p>
+        <div
+            id="admin-panel-box"
+            style="display:none"
+        >
+
+            <div class="admin-status">
+
+                🔐 Sesión administrativa activa.
+
+                <br>
+
+                <small id="admin-session-info">
+                    Sesión temporal
+                </small>
+
+            </div>
+
+            <div class="tab-admin-bar">
+
+                <button
+                    class="tab-admin-btn activo"
+                    id="tab-btn-orders"
+                    onclick="switchAdminTab('orders')"
+                >
+                    📦 Pedidos
+                </button>
+
+                <button
+                    class="tab-admin-btn"
+                    id="tab-btn-stock"
+                    onclick="switchAdminTab('stock')"
+                >
+                    📊 Stock
+                </button>
+
+                <button
+                    class="tab-admin-btn"
+                    id="tab-btn-discount"
+                    onclick="switchAdminTab('discount')"
+                >
+                    💳 Pago
+                </button>
+
+            </div>
+
+            <!-- PEDIDOS -->
+
+            <div id="view-admin-orders">
+
+                <p style="font-size:.8rem;color:#64748b">
+                    Aquí aparecerán los pedidos registrados.
+                </p>
+
+                <button
+                    class="btn-opcion"
+                    onclick="cargarPedidosAdmin()"
+                >
+                    🔄 Actualizar pedidos
+                </button>
+
+                <div
+                    id="admin-orders-list"
+                    style="max-height:350px;overflow-y:auto"
+                >
+                    <div class="estado">
+                        Presiona actualizar para consultar.
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- STOCK -->
 
             <div
-                style="
-                    display:flex;
-                    gap:8px;
-                    margin-bottom:10px
-                "
+                id="view-admin-stock"
+                style="display:none"
             >
+
+                <button
+                    class="btn-opcion"
+                    onclick="renderInventarioAdmin()"
+                >
+                    🔄 Actualizar inventario
+                </button>
+
+                <div
+                    id="admin-inventory-list"
+                    style="max-height:350px;overflow-y:auto"
+                ></div>
+
+            </div>
+
+            <!-- DESCUENTO -->
+
+            <div
+                id="view-admin-discount"
+                style="display:none"
+            >
+
+                <p
+                    style="font-size:.8rem;color:#64748b"
+                >
+                    Utiliza esta opción únicamente después de verificar
+                    el pago del cliente.
+                </p>
 
                 <input
                     type="text"
-                    id="auth-prod-id"
-                    class="admin-input"
-                    placeholder="ID Producto"
-                    style="flex:2"
+                    id="auth-order-id"
+                    placeholder="Número de pedido"
+                    style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:8px"
                 >
 
-                <input
-                    type="number"
-                    id="auth-prod-cant"
-                    class="admin-input"
-                    placeholder="Cant."
-                    value="1"
-                    min="1"
-                    style="flex:1"
+                <button
+                    class="btn-add"
+                    id="btn-process-order"
+                    style="background:var(--purpura)"
+                    onclick="procesarPedidoAdmin()"
                 >
+                    ✅ Verificar pago y procesar
+                </button>
 
             </div>
 
             <button
-                class="btn-add"
-                id="btn-auth-discount"
-                type="button"
-                onclick="App.admin.discountStock()"
-                style="
-                    background:var(--purpura);
-                    margin-bottom:15px
-                "
+                class="btn-opcion"
+                onclick="cerrarSesionAdmin()"
+                style="margin-top:15px"
             >
-                ✅ Autorizar y Descontar
+                🔒 Cerrar Sesión
             </button>
 
         </div>
 
-        <div
-            id="view-admin-stock"
-            style="display:none"
-        >
-
-            <div
-                id="admin-inventory-list"
-                style="
-                    max-height:280px;
-                    overflow-y:auto;
-                    margin-bottom:15px
-                "
-            ></div>
-
-        </div>
-
-        <button
-            class="btn-opcion"
-            type="button"
-            onclick="App.admin.logout()"
-            style="margin-top:10px"
-        >
-            Cerrar Sesión
-        </button>
-
     </div>
-
-</div>
-```
 
 </div>
 
@@ -1642,44 +1583,49 @@ textarea,
 
 <footer class="site-footer">
 
-```
-<div>
-    📍
-    <span
-        id="f-dir"
-        class="footer-val"
-    >
-        Tu Marka Vzla, Avenida Lecuna, Edificio Edy Caracas
-    </span>
-</div>
+    <div>
 
-<a
-    href="https://www.google.com/maps/dir/?api=1&destination=Tu+Marka+Vzla"
-    target="_blank"
-    rel="noopener noreferrer"
-    class="btn-como-llegar"
->
-    <img
-        src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg"
-        alt="Google Maps"
-    >
-    CÓMO LLEGAR
-</a>
+        📍
 
-<div
-    style="
-        margin-top:15px;
-        opacity:.8;
-        font-size:.7rem
-    "
->
-    📞 TELÉFONO:
-    <span
-        id="f-tel"
-        class="footer-val"
-    ></span>
-</div>
-```
+        <span
+            id="f-dir"
+            class="footer-val"
+        >
+            Tu Marka Vzla, Avenida Lecuna, Edificio Edy Caracas
+        </span>
+
+    </div>
+
+    <a
+        href="https://www.google.com/maps/dir/?api=1&destination=Tu+Marka+Vzla"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn-como-llegar"
+    >
+
+        <img
+            src="https://upload.wikimedia.org/wikipedia/commons/a/aa/Google_Maps_icon_%282020%29.svg"
+            alt="Google Maps"
+        >
+
+        CÓMO LLEGAR
+
+    </a>
+
+    <div
+        style="margin-top:15px;opacity:.8;font-size:.7rem"
+    >
+
+        📞 TELÉFONO:
+
+        <span
+            id="f-tel"
+            class="footer-val"
+        >
+            0412-959-27-31
+        </span>
+
+    </div>
 
 </footer>
 
@@ -1689,2439 +1635,2552 @@ textarea,
 
 <div class="footer-cart">
 
-```
-<div
-    class="cart-stats"
-    onclick="App.cart.open()"
->
-
-    <span
-        id="n-items"
-        style="font-weight:bold"
+    <div
+        class="cart-stats"
+        onclick="abrirCarrito()"
     >
-        0 productos
-    </span>
 
-    <span id="f-total">
-        $0.00
-    </span>
+        <span id="n-items">
+            0 productos
+        </span>
+
+        <span id="f-total">
+            $0.00
+        </span>
+
+    </div>
+
+    <button
+        id="btn-pedir"
+        class="btn-main"
+        onclick="abrirCarrito()"
+    >
+        Revisar Pedido
+    </button>
 
 </div>
 
-<button
-    id="btn-pedir"
-    class="btn-main"
-    type="button"
-    onclick="App.cart.open()"
->
-    Revisar Pedido
-</button>
-```
-
-</div>
+<div
+    id="toast"
+    class="toast"
+></div>
 
 <script>
 
-/* =========================================================
-   CONFIGURACIÓN
-========================================================= */
+/* =====================================================
+   CONFIGURACIÓN V4
+===================================================== */
 
 const CONFIG_URL =
-    'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=283577687&single=true&output=csv';
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=283577687&single=true&output=csv";
 
-const PRODUCTS_URL =
-    'https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=0&single=true&output=csv';
+const PRODUCTOS_URL =
+"https://docs.google.com/spreadsheets/d/e/2PACX-1vTdjQeudLeSccCORPmrQSFjuC826ZE7Mm7pgxRQ99RBmfcMw9Xb6QmRETG--HavNoe_xGX2QtPtOfC7/pub?gid=0&single=true&output=csv";
 
-const API_URL =
-    'https://script.google.com/macros/s/AKfycbysMonQMR3BNHF2wg8LgsCDaPsiu6vXYkY1zKbWr-Jr3_KrGTWb9y4253pyh4YQlN7O/exec';
+const APPS_SCRIPT_URL =
+"https://script.google.com/macros/s/AKfycbysMonQMR3BNHF2wg8LgsCDaPsiu6vXYkY1zKbWr-Jr3_KrGTWb9y4253pyh4YQlN7O/exec";
 
-const CART_STORAGE_KEY = 'tu_marka_sport_cart';
 
-/* =========================================================
-   ESTADO CENTRAL
-========================================================= */
+/* =====================================================
+   ESTADO
+===================================================== */
 
-const App = {
+let DB = [];
+let CART = [];
 
-    state: {
-        db: [],
-        cart: [],
-        category: 'todos',
-        search: '',
-        selectedProduct: null,
-        quantity: 1,
-        delivery: '',
-        config: {
-            tel: '',
-            user: 'admin',
-            pass: '123456',
-            pago: 'Pago Móvil / Zelle / Cashea 💛 / Efectivo'
-        }
-    },
+let CONFIG = {
+    tel:"",
+    pago:"Pago Móvil / Zelle / Cashea 💛 / Efectivo",
+    logo:"",
+    banner:"",
+    bannerTitulo:"",
+};
 
-    /* =====================================================
-       INICIO
-    ===================================================== */
+let catActual = "todos";
+let entregaM = "";
+let currentQty = 1;
+let selectedProd = null;
 
-    async init() {
+let adminSession = {
+    token:"",
+    expires:0
+};
 
-        this.cart.load();
 
-        this.events.init();
+/* =====================================================
+   UTILIDADES
+===================================================== */
 
-        await this.data.load();
+function $(id){
+    return document.getElementById(id);
+}
 
-        this.url.process();
+function mostrarToast(texto){
+    const toast = $("toast");
 
-        this.cart.render();
-    },
+    toast.textContent = texto;
+    toast.classList.add("visible");
 
-    /* =====================================================
-       UTILIDADES
-    ===================================================== */
+    clearTimeout(mostrarToast.timer);
 
-    utils: {
+    mostrarToast.timer = setTimeout(()=>{
+        toast.classList.remove("visible");
+    },3000);
+}
 
-        escapeHTML(value) {
+function escaparHTML(texto){
+    const div = document.createElement("div");
+    div.textContent = texto ?? "";
+    return div.innerHTML;
+}
 
-            return String(value ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
 
-        },
+/* =====================================================
+   CSV ROBUSTO
+   Evita que una coma dentro de una descripción
+   rompa las columnas.
+===================================================== */
 
-        shuffle(array) {
+function parseCSV(texto){
 
-            const result = [...array];
+    const filas = [];
+    let fila = [];
+    let valor = "";
+    let dentroComillas = false;
 
-            for (
-                let i = result.length - 1;
-                i > 0;
-                i--
-            ) {
+    for(let i=0;i<texto.length;i++){
 
-                const j =
-                    Math.floor(Math.random() * (i + 1));
+        const char = texto[i];
+        const siguiente = texto[i+1];
 
-                [
-                    result[i],
-                    result[j]
-                ] = [
-                    result[j],
-                    result[i]
-                ];
-
-            }
-
-            return result;
-        },
-
-        generateOrderId() {
-
-            const now = new Date();
-
-            const date =
-                now.getFullYear().toString() +
-                String(now.getMonth() + 1).padStart(2, '0') +
-                String(now.getDate()).padStart(2, '0');
-
-            const random =
-                Math.floor(
-                    1000 + Math.random() * 9000
-                );
-
-            return `TM-${date}-${random}`;
-
+        if(char === '"' && dentroComillas && siguiente === '"'){
+            valor += '"';
+            i++;
+            continue;
         }
 
-    },
-
-    /* =====================================================
-       EVENTOS
-    ===================================================== */
-
-    events: {
-
-        init() {
-
-            document
-                .getElementById('buscador')
-                .addEventListener(
-                    'input',
-                    event => {
-
-                        App.state.search =
-                            event.target.value
-                                .toLowerCase()
-                                .trim();
-
-                        App.products.render();
-
-                    }
-                );
-
-            document
-                .querySelectorAll('.modal')
-                .forEach(modal => {
-
-                    modal.addEventListener(
-                        'click',
-                        event => {
-
-                            if (
-                                event.target === modal
-                            ) {
-
-                                App.ui.closeModal(
-                                    modal.id
-                                );
-
-                            }
-
-                        }
-                    );
-
-                });
-
+        if(char === '"'){
+            dentroComillas = !dentroComillas;
+            continue;
         }
 
-    },
-
-    /* =====================================================
-       DATOS
-    ===================================================== */
-
-    data: {
-
-        async load() {
-
-            try {
-
-                const cacheBust =
-                    `&cachebust=${Date.now()}`;
-
-                const [
-                    configResponse,
-                    productsResponse
-                ] = await Promise.all([
-
-                    fetch(
-                        CONFIG_URL + cacheBust
-                    ),
-
-                    fetch(
-                        PRODUCTS_URL + cacheBust
-                    )
-
-                ]);
-
-                if (
-                    !configResponse.ok ||
-                    !productsResponse.ok
-                ) {
-
-                    throw new Error(
-                        'No fue posible cargar Google Sheets.'
-                    );
-
-                }
-
-                const configText =
-                    await configResponse.text();
-
-                const productsText =
-                    await productsResponse.text();
-
-                this.parseConfig(configText);
-
-                this.parseProducts(productsText);
-
-                App.products.renderCategories();
-
-                App.products.render();
-
-                document
-                    .getElementById(
-                        'metodos-pago-box'
-                    )
-                    .textContent =
-                    App.state.config.pago;
-
-                document
-                    .getElementById('f-tel')
-                    .textContent =
-                    App.state.config.tel;
-
-            } catch (error) {
-
-                console.error(
-                    'Error cargando datos:',
-                    error
-                );
-
-                document
-                    .getElementById('grid')
-                    .innerHTML = `
-                        <div style="
-                            grid-column:1/-1;
-                            text-align:center;
-                            padding:40px 15px;
-                        ">
-                            <h3>No pudimos cargar la tienda.</h3>
-                            <p style="color:#64748b">
-                                Verifica tu conexión e intenta nuevamente.
-                            </p>
-                            <button
-                                class="btn-add"
-                                onclick="location.reload()"
-                                style="max-width:250px"
-                            >
-                                🔄 Reintentar
-                            </button>
-                        </div>
-                    `;
-
-            }
-
-        },
-
-        parseConfig(csv) {
-
-            const rows =
-                this.parseCSV(csv);
-
-            rows.forEach(row => {
-
-                const key =
-                    String(row[0] ?? '')
-                        .toLowerCase()
-                        .trim();
-
-                const value =
-                    String(row[1] ?? '').trim();
-
-                if (!key || !value) return;
-
-                if (key.includes('tel')) {
-
-                    App.state.config.tel =
-                        value.replace(/\D/g, '');
-
-                }
-
-                if (key.includes('logo')) {
-
-                    document
-                        .getElementById(
-                            'container-logo'
-                        )
-                        .innerHTML = `
-                            <img
-                                src="${App.utils.escapeHTML(value)}"
-                                class="logo-img"
-                                alt="Tu Marka Sport"
-                            >
-                        `;
-
-                }
-
-                if (key.includes('admin_user')) {
-
-                    App.state.config.user = value;
-
-                }
-
-                if (key.includes('admin_pass')) {
-
-                    App.state.config.pass = value;
-
-                }
-
-                if (key.includes('pago')) {
-
-                    App.state.config.pago =
-                        value.includes('Cashea')
-                            ? value
-                            : `${value} / Cashea 💛`;
-
-                }
-
-            });
-
-        },
-
-        parseProducts(csv) {
-
-            const rows =
-                this.parseCSV(csv);
-
-            if (!rows.length) return;
-
-            App.state.db =
-                rows
-                    .slice(1)
-                    .map(row => {
-
-                        return {
-
-                            id:
-                                String(
-                                    row[0] ?? ''
-                                ).trim(),
-
-                            nombre:
-                                String(
-                                    row[1] ?? ''
-                                ).trim(),
-
-                            precio:
-                                parseFloat(
-                                    row[2]
-                                ) || 0,
-
-                            cat:
-                                String(
-                                    row[3] ?? ''
-                                )
-                                .toLowerCase()
-                                .trim(),
-
-                            promo:
-                                String(
-                                    row[4] ?? ''
-                                ).trim(),
-
-                            img:
-                                String(
-                                    row[5] ?? ''
-                                ).trim(),
-
-                            stock:
-                                parseInt(
-                                    row[6]
-                                ) || 0,
-
-                            desc:
-                                String(
-                                    row[7] ?? ''
-                                ).trim(),
-
-                            colores:
-                                this.parseList(
-                                    row[8]
-                                ),
-
-                            tallas:
-                                this.parseList(
-                                    row[9]
-                                )
-
-                        };
-
-                    })
-                    .filter(product =>
-                        product.nombre
-                    );
-
-        },
-
-        parseList(value) {
-
-            if (!value) return [];
-
-            return String(value)
-                .split(';')
-                .map(item => item.trim())
-                .filter(Boolean);
-
-        },
-
-        /*
-         * Parser CSV básico compatible con:
-         * campos entre comillas
-         * comas dentro de campos
-         * saltos de línea
-         */
-
-        parseCSV(text) {
-
-            const rows = [];
-
-            let row = [];
-            let cell = '';
-            let insideQuotes = false;
-
-            for (
-                let i = 0;
-                i < text.length;
-                i++
-            ) {
-
-                const char = text[i];
-                const next = text[i + 1];
-
-                if (
-                    char === '"' &&
-                    next === '"'
-                ) {
-
-                    cell += '"';
-                    i++;
-                    continue;
-
-                }
-
-                if (char === '"') {
-
-                    insideQuotes =
-                        !insideQuotes;
-
-                    continue;
-
-                }
-
-                if (
-                    char === ',' &&
-                    !insideQuotes
-                ) {
-
-                    row.push(cell);
-                    cell = '';
-
-                    continue;
-
-                }
-
-                if (
-                    (char === '\n' || char === '\r') &&
-                    !insideQuotes
-                ) {
-
-                    if (
-                        char === '\r' &&
-                        next === '\n'
-                    ) {
-                        i++;
-                    }
-
-                    row.push(cell);
-
-                    if (
-                        row.some(
-                            value =>
-                                value.trim() !== ''
-                        )
-                    ) {
-                        rows.push(row);
-                    }
-
-                    row = [];
-                    cell = '';
-
-                    continue;
-
-                }
-
-                cell += char;
-
-            }
-
-            row.push(cell);
-
-            if (
-                row.some(
-                    value =>
-                        value.trim() !== ''
-                )
-            ) {
-
-                rows.push(row);
-
-            }
-
-            return rows;
-
+        if(char === "," && !dentroComillas){
+            fila.push(valor);
+            valor="";
+            continue;
         }
 
-    },
+        if((char === "\n" || char === "\r") && !dentroComillas){
 
-    /* =====================================================
-       PRODUCTOS
-    ===================================================== */
-
-    products: {
-
-        getFiltered() {
-
-            const {
-                db,
-                category,
-                search
-            } = App.state;
-
-            let products =
-                db.filter(product => {
-
-                    const categoryMatch =
-                        category === 'todos' ||
-                        product.cat === category;
-
-                    const searchMatch =
-                        !search ||
-                        product.nombre
-                            .toLowerCase()
-                            .includes(search) ||
-                        product.id
-                            .toLowerCase()
-                            .includes(search);
-
-                    return (
-                        categoryMatch &&
-                        searchMatch
-                    );
-
-                });
-
-            if (
-                category === 'todos' &&
-                !search
-            ) {
-
-                products =
-                    App.utils.shuffle(
-                        products
-                    );
-
+            if(char === "\r" && siguiente === "\n"){
+                i++;
             }
 
-            return products;
+            fila.push(valor);
+            valor="";
 
-        },
-
-        renderCategories() {
-
-            const bar =
-                document.getElementById(
-                    'cat-bar'
-                );
-
-            bar.replaceChildren();
-
-            const categories =
-                [
-                    'todos',
-                    ...new Set(
-                        App.state.db
-                            .map(product => product.cat)
-                            .filter(Boolean)
-                    )
-                ];
-
-            categories.forEach(
-                category => {
-
-                    const pill =
-                        document.createElement('div');
-
-                    pill.className =
-                        'cat-pill';
-
-                    if (
-                        category ===
-                        App.state.category
-                    ) {
-                        pill.classList.add(
-                            'activo'
-                        );
-                    }
-
-                    const button =
-                        document.createElement('button');
-
-                    button.className =
-                        'btn-cat';
-
-                    if (
-                        category ===
-                        App.state.category
-                    ) {
-                        button.classList.add(
-                            'activo'
-                        );
-                    }
-
-                    button.type = 'button';
-
-                    button.textContent =
-                        category === 'todos'
-                            ? 'Todos'
-                            : category
-                                .charAt(0)
-                                .toUpperCase() +
-                              category.slice(1);
-
-                    button.addEventListener(
-                        'click',
-                        () =>
-                            this.selectCategory(
-                                category
-                            )
-                    );
-
-                    const share =
-                        document.createElement('button');
-
-                    share.className =
-                        'share-cat';
-
-                    share.type = 'button';
-
-                    share.textContent = '🔗';
-
-                    share.addEventListener(
-                        'click',
-                        event => {
-
-                            event.stopPropagation();
-
-                            App.share.category(
-                                category
-                            );
-
-                        }
-                    );
-
-                    pill.append(
-                        button,
-                        share
-                    );
-
-                    bar.appendChild(pill);
-
-                }
-            );
-
-        },
-
-        selectCategory(category) {
-
-            App.state.category =
-                category;
-
-            this.renderCategories();
-
-            this.render();
-
-        },
-
-        render() {
-
-            const grid =
-                document.getElementById(
-                    'grid'
-                );
-
-            const products =
-                this.getFiltered();
-
-            grid.replaceChildren();
-
-            if (!products.length) {
-
-                const empty =
-                    document.createElement('div');
-
-                empty.style.gridColumn =
-                    '1 / -1';
-
-                empty.style.textAlign =
-                    'center';
-
-                empty.style.padding =
-                    '40px 15px';
-
-                empty.innerHTML = `
-                    <h3>No encontramos productos.</h3>
-                    <p style="color:#64748b">
-                        Prueba otra búsqueda o categoría.
-                    </p>
-                `;
-
-                grid.appendChild(empty);
-
-                return;
-
+            if(fila.some(x => String(x).trim() !== "")){
+                filas.push(fila);
             }
 
-            const fragment =
-                document.createDocumentFragment();
+            fila=[];
+            continue;
+        }
 
-            products.forEach(
-                product => {
+        valor += char;
+    }
 
-                    fragment.appendChild(
-                        this.createCard(
-                            product
-                        )
-                    );
+    if(valor !== "" || fila.length){
+        fila.push(valor);
 
-                }
-            );
+        if(fila.some(x => String(x).trim() !== "")){
+            filas.push(fila);
+        }
+    }
 
-            grid.appendChild(
-                fragment
-            );
+    return filas;
+}
 
-        },
 
-        createCard(product) {
+/* =====================================================
+   CARGAR CONFIGURACIÓN
+===================================================== */
 
-            const card =
-                document.createElement('div');
+async function cargarConfiguracion(){
 
-            card.className =
-                'producto';
+    const response = await fetch(
+        CONFIG_URL + "&cache=" + Date.now()
+    );
 
-            const imageBox =
-                document.createElement('div');
+    if(!response.ok){
+        throw new Error("No se pudo cargar configuración");
+    }
 
-            imageBox.className =
-                'producto-img-box';
+    const texto = await response.text();
+    const filas = parseCSV(texto);
 
-            if (product.promo) {
+    filas.forEach(fila=>{
 
-                const badge =
-                    document.createElement('div');
+        const key = String(fila[0] || "")
+            .toLowerCase()
+            .trim();
 
-                badge.className =
-                    'badge-promo';
+        const value = String(fila[1] || "").trim();
 
-                badge.textContent =
-                    product.promo;
+        if(!key) return;
 
-                imageBox.appendChild(
-                    badge
-                );
+        if(key.includes("tel")){
+            CONFIG.tel = value;
+            $("f-tel").textContent = value;
+        }
 
+        if(key.includes("logo")){
+            CONFIG.logo = value;
+
+            if(value){
+                $("container-logo").innerHTML = "";
+
+                const img = document.createElement("img");
+
+                img.src = value;
+                img.className = "logo-img";
+                img.alt = "Tu Marka Sport";
+
+                $("container-logo").appendChild(img);
             }
+        }
 
-            const stock =
-                document.createElement('div');
+        if(key.includes("pago")){
+            CONFIG.pago =
+                value.toLowerCase().includes("cashea")
+                ? value
+                : value + " / Cashea 💛";
+        }
 
-            const agotado =
-                product.stock <= 0;
+        if(key.includes("banner") && !key.includes("titulo")){
+            CONFIG.banner = value;
+        }
 
-            stock.className =
-                'stock-badge';
+        if(key.includes("banner") && key.includes("titulo")){
+            CONFIG.bannerTitulo = value;
+        }
+    });
 
-            if (agotado) {
-                stock.classList.add(
-                    'agotado'
-                );
+    $("metodos-pago-box").textContent = CONFIG.pago;
+
+    if(CONFIG.banner){
+
+        $("banner-box").style.display = "flex";
+        $("banner-box").style.backgroundImage =
+            `url("${CONFIG.banner}")`;
+
+        $("banner-titulo").textContent =
+            CONFIG.bannerTitulo || "Tu Marka Sport";
+    }
+}
+
+
+/* =====================================================
+   CARGAR PRODUCTOS
+===================================================== */
+
+async function cargarProductos(){
+
+    const response = await fetch(
+        PRODUCTOS_URL + "&cache=" + Date.now()
+    );
+
+    if(!response.ok){
+        throw new Error("No se pudo cargar catálogo");
+    }
+
+    const texto = await response.text();
+
+    const filas = parseCSV(texto);
+
+    DB = filas
+        .slice(1)
+        .map(c=>({
+
+            id:String(c[0] || "").trim(),
+
+            nombre:String(c[1] || "").trim(),
+
+            precio:parseFloat(
+                String(c[2] || "")
+                .replace(",",".")
+            ) || 0,
+
+            cat:String(c[3] || "")
+                .toLowerCase()
+                .trim(),
+
+            promo:String(c[4] || "").trim(),
+
+            img:String(c[5] || "").trim(),
+
+            stock:parseInt(c[6],10) || 0,
+
+            desc:String(c[7] || "").trim(),
+
+            colores:c[8]
+                ? String(c[8])
+                    .split(";")
+                    .map(x=>x.trim())
+                    .filter(Boolean)
+                : [],
+
+            tallas:c[9]
+                ? String(c[9])
+                    .split(";")
+                    .map(x=>x.trim())
+                    .filter(Boolean)
+                : []
+
+        }))
+        .filter(p=>p.nombre);
+
+    construirCategorias();
+
+    mostrar(
+        mezclarProductos([...DB])
+    );
+}
+
+
+/* =====================================================
+   CARGA PRINCIPAL
+===================================================== */
+
+async function cargar(){
+
+    try{
+
+        await Promise.all([
+            cargarConfiguracion(),
+            cargarProductos()
+        ]);
+
+        restaurarCarrito();
+
+        procesarURL();
+
+        actualizar();
+
+    }catch(error){
+
+        console.error(error);
+
+        $("grid").innerHTML = `
+            <div class="estado">
+                ❌ No fue posible cargar el catálogo.
+                <br><br>
+                <button class="btn-add"
+                    onclick="cargar()"
+                    style="max-width:220px">
+                    Reintentar
+                </button>
+            </div>
+        `;
+    }
+}
+
+
+/* =====================================================
+   CATEGORÍAS
+===================================================== */
+
+function construirCategorias(){
+
+    const bar = $("cat-bar");
+
+    bar.querySelectorAll(
+        ".cat-pill:not(#pill-todos)"
+    ).forEach(x=>x.remove());
+
+    const categorias = [
+        ...new Set(
+            DB
+                .map(p=>p.cat)
+                .filter(Boolean)
+        )
+    ];
+
+    categorias.sort();
+
+    categorias.forEach(c=>{
+
+        const pill = document.createElement("div");
+        pill.className = "cat-pill";
+
+        const btn = document.createElement("button");
+
+        btn.className = "btn-cat";
+        btn.dataset.cat = c;
+        btn.textContent =
+            c.charAt(0).toUpperCase() + c.slice(1);
+
+        btn.addEventListener(
+            "click",
+            ()=>filtrarCat(c,btn)
+        );
+
+        const share = document.createElement("button");
+
+        share.className = "share-cat";
+        share.textContent = "🔗";
+        share.title = "Compartir categoría";
+
+        share.addEventListener(
+            "click",
+            ()=>compartirRuta(c)
+        );
+
+        pill.appendChild(btn);
+        pill.appendChild(share);
+
+        bar.appendChild(pill);
+    });
+
+    document
+        .querySelector('[data-cat="todos"]')
+        ?.addEventListener(
+            "click",
+            function(){
+                filtrarCat("todos",this);
             }
+        );
 
-            stock.textContent =
-                agotado
-                    ? 'Agotado'
-                    : `Stock: ${product.stock}`;
+    document
+        .querySelector('[data-share-cat="todos"]')
+        ?.addEventListener(
+            "click",
+            ()=>compartirRuta("todos")
+        );
+}
 
-            imageBox.appendChild(
-                stock
+
+/* =====================================================
+   MEZCLAR
+===================================================== */
+
+function mezclarProductos(array){
+
+    for(let i=array.length-1;i>0;i--){
+
+        const j =
+            Math.floor(
+                Math.random() * (i+1)
             );
 
-            const img =
-                document.createElement('img');
+        [
+            array[i],
+            array[j]
+        ]=[
+            array[j],
+            array[i]
+        ];
+    }
 
-            img.src =
-                product.img;
+    return array;
+}
 
-            img.alt =
-                product.nombre;
 
-            img.loading =
-                'lazy';
+/* =====================================================
+   RENDER PRODUCTOS
+===================================================== */
 
-            img.addEventListener(
-                'click',
-                () =>
-                    this.open(
-                        product.id
-                    )
-            );
+function mostrar(lista){
 
-            imageBox.appendChild(
-                img
-            );
+    const grid = $("grid");
 
-            const info =
-                document.createElement('div');
+    grid.innerHTML = "";
 
-            info.className =
-                'p-info';
+    if(!lista.length){
 
-            const name =
-                document.createElement('div');
+        grid.innerHTML = `
+            <div class="estado" style="grid-column:1/-1">
+                🔎 No encontramos productos.
+                <br>
+                Prueba otra búsqueda.
+            </div>
+        `;
 
-            name.className =
-                'p-nombre';
+        return;
+    }
 
-            name.textContent =
-                `${product.nombre} (ID: ${product.id})`;
+    const fragment =
+        document.createDocumentFragment();
 
-            const price =
-                document.createElement('div');
+    lista.forEach(p=>{
 
-            price.className =
-                'precio';
+        const card =
+            document.createElement("article");
 
-            price.textContent =
-                `$${product.precio.toFixed(2)}`;
+        card.className = "producto";
 
-            const details =
-                document.createElement('button');
+        const imageBox =
+            document.createElement("div");
 
-            details.className =
-                'btn-ver-mas';
+        imageBox.className =
+            "producto-img-box";
 
-            details.type = 'button';
-
-            details.textContent =
-                'Ver opciones / Detalle';
-
-            details.addEventListener(
-                'click',
-                () =>
-                    this.open(
-                        product.id
-                    )
-            );
-
-            const add =
-                document.createElement('button');
-
-            add.className =
-                'btn-add';
-
-            add.type = 'button';
-
-            add.disabled =
-                agotado;
-
-            add.textContent =
-                agotado
-                    ? 'Agotado'
-                    : 'Añadir';
-
-            add.addEventListener(
-                'click',
-                () =>
-                    this.open(
-                        product.id
-                    )
-            );
-
-            info.append(
-                name,
-                price,
-                details,
-                add
-            );
-
-            card.append(
-                imageBox,
-                info
-            );
-
-            return card;
-
-        },
-
-        open(id) {
-
-            const product =
-                App.state.db.find(
-                    item =>
-                        item.id == id
-                );
-
-            if (!product) return;
-
-            App.state.selectedProduct =
-                product;
-
-            App.state.quantity = 1;
-
-            document
-                .getElementById('m-img')
-                .src =
-                product.img;
-
-            document
-                .getElementById('m-img')
-                .alt =
-                product.nombre;
-
-            document
-                .getElementById('m-nombre')
-                .textContent =
-                `${product.nombre} (ID: ${product.id})`;
-
-            document
-                .getElementById('m-desc')
-                .textContent =
-                product.desc ||
-                'Sin descripción.';
-
-            document
-                .getElementById('m-precio')
-                .textContent =
-                `$${product.precio.toFixed(2)}`;
-
-            document
-                .getElementById('m-qty')
-                .textContent =
-                '1';
-
-            document
-                .getElementById('m-nota')
-                .value = '';
-
-            this.populateSelect(
-                'm-talla',
-                'box-talla',
-                product.tallas
-            );
-
-            this.populateSelect(
-                'm-color',
-                'box-color',
-                product.colores
-            );
-
-            this.updateModalStock();
-
-            document
-                .getElementById(
-                    'm-btn-add'
-                )
-                .onclick =
-                () => {
-
-                    this.addToCart();
-
-                    App.ui.closeModal(
-                        'modalFicha'
-                    );
-
-                };
-
-            document
-                .getElementById(
-                    'm-btn-share'
-                )
-                .onclick =
-                () =>
-                    App.share.product(
-                        product.id,
-                        product.nombre
-                    );
-
-            App.ui.openModal(
-                'modalFicha'
-            );
-
-        },
-
-        populateSelect(
-            selectId,
-            boxId,
-            values
-        ) {
-
-            const select =
-                document.getElementById(
-                    selectId
-                );
-
-            const box =
-                document.getElementById(
-                    boxId
-                );
-
-            select.replaceChildren();
-
-            if (
-                !values ||
-                !values.length
-            ) {
-
-                box.style.display =
-                    'none';
-
-                return;
-
-            }
-
-            values.forEach(
-                value => {
-
-                    const option =
-                        document.createElement(
-                            'option'
-                        );
-
-                    option.value =
-                        value;
-
-                    option.textContent =
-                        value;
-
-                    select.appendChild(
-                        option
-                    );
-
-                }
-            );
-
-            box.style.display =
-                'block';
-
-        },
-
-        updateModalStock() {
-
-            const product =
-                App.state.selectedProduct;
-
-            if (!product) return;
+        if(p.promo){
 
             const badge =
-                document.getElementById(
-                    'm-stock-variant'
-                );
+                document.createElement("div");
 
-            const button =
-                document.getElementById(
-                    'm-btn-add'
-                );
+            badge.className = "badge-promo";
+            badge.textContent = p.promo;
 
-            if (product.stock <= 0) {
-
-                badge.textContent =
-                    'Agotado';
-
-                badge.style.color =
-                    '#991b1b';
-
-                badge.style.background =
-                    '#fee2e2';
-
-                button.disabled =
-                    true;
-
-                button.textContent =
-                    'Sin Stock Disponible';
-
-                return;
-
-            }
-
-            badge.textContent =
-                `Disponible: ${product.stock} unid.`;
-
-            badge.style.color =
-                '#2563eb';
-
-            badge.style.background =
-                '#eff6ff';
-
-            button.disabled =
-                false;
-
-            button.textContent =
-                '🛒 Agregar al Carrito';
-
-        },
-
-        changeQty(value) {
-
-            const product =
-                App.state.selectedProduct;
-
-            if (!product) return;
-
-            const next =
-                App.state.quantity +
-                value;
-
-            if (
-                next >= 1 &&
-                next <= product.stock
-            ) {
-
-                App.state.quantity =
-                    next;
-
-                document
-                    .getElementById(
-                        'm-qty'
-                    )
-                    .textContent =
-                    next;
-
-            }
-
-        },
-
-        addToCart() {
-
-            const product =
-                App.state.selectedProduct;
-
-            if (
-                !product ||
-                product.stock <= 0
-            ) {
-                return;
-            }
-
-            const item = {
-
-                ...product,
-
-                tid:
-                    Date.now() +
-                    Math.random(),
-
-                cantidad:
-                    App.state.quantity,
-
-                talla:
-                    document
-                        .getElementById(
-                            'm-talla'
-                        )
-                        .value || '',
-
-                color:
-                    document
-                        .getElementById(
-                            'm-color'
-                        )
-                        .value || '',
-
-                instruccion:
-                    document
-                        .getElementById(
-                            'm-nota'
-                        )
-                        .value
-                        .trim()
-
-            };
-
-            App.state.cart.push(
-                item
-            );
-
-            App.cart.save();
-
-            App.cart.render();
-
+            imageBox.appendChild(badge);
         }
 
-    },
+        const stockBadge =
+            document.createElement("div");
 
-    /* =====================================================
-       CARRITO
-    ===================================================== */
+        stockBadge.className =
+            "stock-badge";
 
-    cart: {
+        if(p.stock <= 0){
 
-        load() {
+            stockBadge.classList.add("agotado");
+            stockBadge.textContent = "Agotado";
 
-            try {
+        }else if(p.stock <= 3){
 
-                const saved =
-                    localStorage.getItem(
-                        CART_STORAGE_KEY
-                    );
+            stockBadge.classList.add("bajo");
+            stockBadge.textContent =
+                `Últimas ${p.stock}`;
 
-                App.state.cart =
-                    saved
-                        ? JSON.parse(saved)
-                        : [];
+        }else{
 
-            } catch {
-
-                App.state.cart = [];
-
-            }
-
-        },
-
-        save() {
-
-            localStorage.setItem(
-                CART_STORAGE_KEY,
-                JSON.stringify(
-                    App.state.cart
-                )
-            );
-
-        },
-
-        getTotal() {
-
-            return App.state.cart.reduce(
-                (total, item) =>
-                    total +
-                    item.precio *
-                    item.cantidad,
-                0
-            );
-
-        },
-
-        render() {
-
-            const list =
-                document.getElementById(
-                    'c-lista'
-                );
-
-            list.replaceChildren();
-
-            const fragment =
-                document.createDocumentFragment();
-
-            App.state.cart.forEach(
-                item => {
-
-                    const subtotal =
-                        item.precio *
-                        item.cantidad;
-
-                    const row =
-                        document.createElement(
-                            'div'
-                        );
-
-                    row.className =
-                        'item-c';
-
-                    const info =
-                        document.createElement(
-                            'div'
-                        );
-
-                    info.className =
-                        'item-info';
-
-                    const title =
-                        document.createElement(
-                            'b'
-                        );
-
-                    title.textContent =
-                        `${item.cantidad}x ${item.nombre} (ID: ${item.id})`;
-
-                    info.appendChild(
-                        title
-                    );
-
-                    const details = [];
-
-                    if (item.talla) {
-                        details.push(
-                            `Talla: ${item.talla}`
-                        );
-                    }
-
-                    if (item.color) {
-                        details.push(
-                            `Color: ${item.color}`
-                        );
-                    }
-
-                    if (details.length) {
-
-                        const detail =
-                            document.createElement(
-                                'small'
-                            );
-
-                        detail.className =
-                            'item-details';
-
-                        detail.textContent =
-                            details.join(' | ');
-
-                        info.appendChild(
-                            detail
-                        );
-
-                    }
-
-                    if (item.instruccion) {
-
-                        const note =
-                            document.createElement(
-                                'small'
-                            );
-
-                        note.className =
-                            'item-note';
-
-                        note.textContent =
-                            `📝 Nota: ${item.instruccion}`;
-
-                        info.appendChild(
-                            note
-                        );
-
-                    }
-
-                    const right =
-                        document.createElement(
-                            'span'
-                        );
-
-                    right.textContent =
-                        `$${subtotal.toFixed(2)}`;
-
-                    const remove =
-                        document.createElement(
-                            'button'
-                        );
-
-                    remove.className =
-                        'btn-del';
-
-                    remove.type = 'button';
-
-                    remove.textContent =
-                        '✕';
-
-                    remove.addEventListener(
-                        'click',
-                        () =>
-                            this.remove(
-                                item.tid
-                            )
-                    );
-
-                    right.appendChild(
-                        remove
-                    );
-
-                    row.append(
-                        info,
-                        right
-                    );
-
-                    fragment.appendChild(
-                        row
-                    );
-
-                }
-            );
-
-            list.appendChild(
-                fragment
-            );
-
-            const total =
-                this.getTotal();
-
-            document
-                .getElementById(
-                    'n-items'
-                )
-                .textContent =
-                `${App.state.cart.length} ${
-                    App.state.cart.length === 1
-                        ? 'item'
-                        : 'items'
-                }`;
-
-            document
-                .getElementById(
-                    'f-total'
-                )
-                .textContent =
-                `$${total.toFixed(2)}`;
-
-            document
-                .getElementById(
-                    'c-total'
-                )
-                .textContent =
-                `Total: $${total.toFixed(2)}`;
-
-            document
-                .getElementById(
-                    'btn-pedir'
-                )
-                .style.display =
-                App.state.cart.length
-                    ? 'block'
-                    : 'none';
-
-        },
-
-        remove(tid) {
-
-            App.state.cart =
-                App.state.cart.filter(
-                    item =>
-                        item.tid != tid
-                );
-
-            this.save();
-            this.render();
-
-            if (!App.state.cart.length) {
-
-                App.ui.closeModal(
-                    'modalCarrito'
-                );
-
-            }
-
-        },
-
-        open() {
-
-            if (!App.state.cart.length) {
-                return;
-            }
-
-            this.render();
-
-            App.ui.openModal(
-                'modalCarrito'
-            );
-
-        },
-
-        selectDelivery(
-            method,
-            button
-        ) {
-
-            App.state.delivery =
-                method;
-
-            document
-                .querySelectorAll(
-                    '#modalCarrito .btn-opcion'
-                )
-                .forEach(
-                    item =>
-                        item.classList.remove(
-                            'seleccionado'
-                        )
-                );
-
-            button.classList.add(
-                'seleccionado'
-            );
-
-            const address =
-                document.getElementById(
-                    'dir-val'
-                );
-
-            const finalButton =
-                document.getElementById(
-                    'btn-final-wa'
-                );
-
-            address.style.display =
-                method === 'Delivery'
-                    ? 'block'
-                    : 'none';
-
-            finalButton.style.display =
-                'block';
-
+            stockBadge.textContent =
+                `Stock: ${p.stock}`;
         }
 
-    },
+        imageBox.appendChild(stockBadge);
 
-    /* =====================================================
-       WHATSAPP
-    ===================================================== */
+        const img =
+            document.createElement("img");
 
-    whatsapp: {
+        img.src = p.img;
+        img.alt = p.nombre;
+        img.loading = "lazy";
 
-        sendOrder() {
+        img.addEventListener(
+            "click",
+            ()=>abrirFicha(p.id)
+        );
 
-            if (!App.state.cart.length) {
-                return;
-            }
+        imageBox.appendChild(img);
 
-            const delivery =
-                App.state.delivery;
+        const info =
+            document.createElement("div");
 
-            if (!delivery) {
+        info.className = "p-info";
 
-                alert(
-                    'Selecciona cómo deseas recibir tu compra.'
-                );
+        const nombre =
+            document.createElement("div");
 
-                return;
+        nombre.className = "p-nombre";
+        nombre.textContent = p.nombre;
 
-            }
+        const id =
+            document.createElement("div");
 
-            const address =
-                document
-                    .getElementById(
-                        'dir-val'
-                    )
-                    .value
-                    .trim();
+        id.className = "p-id";
+        id.textContent = `ID: ${p.id}`;
 
-            if (
-                delivery === 'Delivery' &&
-                !address
-            ) {
+        const precio =
+            document.createElement("div");
 
-                alert(
-                    'Por favor, ingresa tu dirección.'
-                );
+        precio.className = "precio";
+        precio.textContent =
+            `$${p.precio.toFixed(2)}`;
 
-                return;
+        const ver =
+            document.createElement("button");
 
-            }
+        ver.className = "btn-ver-mas";
+        ver.textContent =
+            "Ver opciones / Detalle";
 
-            const orderId =
-                App.utils.generateOrderId();
+        ver.addEventListener(
+            "click",
+            ()=>abrirFicha(p.id)
+        );
 
-            const total =
-                App.cart.getTotal();
+        const add =
+            document.createElement("button");
 
-            let message =
-                `*¡Hola, Tu Marka! 🙌*\n\n` +
-                `*PEDIDO: ${orderId}*\n\n` +
-                `He armado mi solicitud de compra:\n\n` +
-                `*DETALLE DEL PEDIDO*\n` +
-                `--------------------------------\n`;
+        add.className = "btn-add";
 
-            App.state.cart.forEach(
-                (item, index) => {
+        if(p.stock <= 0){
 
-                    const subtotal =
-                        item.precio *
-                        item.cantidad;
+            add.disabled = true;
+            add.textContent = "Agotado";
 
-                    message +=
-                        `\n${index + 1}. *${item.cantidad}x ${item.nombre}* ` +
-                        `(ID: ${item.id}) - ` +
-                        `$${subtotal.toFixed(2)}\n`;
+        }else{
 
-                    if (item.talla) {
+            add.textContent = "Añadir";
 
-                        message +=
-                            `   📏 _Talla: ${item.talla}_\n`;
-
-                    }
-
-                    if (item.color) {
-
-                        message +=
-                            `   🎨 _Color: ${item.color}_\n`;
-
-                    }
-
-                    if (item.instruccion) {
-
-                        message +=
-                            `   📝 _Nota: ${item.instruccion}_\n`;
-
-                    }
-
-                }
+            add.addEventListener(
+                "click",
+                ()=>abrirFicha(p.id)
             );
-
-            message +=
-                `\n--------------------------------\n` +
-                `💰 *TOTAL: $${total.toFixed(2)}*\n\n` +
-                `💳 *Método de pago:* ${App.state.config.pago}\n` +
-                `📍 *Entrega:* ${delivery}`;
-
-            if (
-                delivery === 'Delivery'
-            ) {
-
-                message +=
-                    `\n🏠 *Dirección:* ${address}`;
-
-            }
-
-            const phone =
-                App.state.config.tel
-                    .replace(/\D/g, '');
-
-            if (!phone) {
-
-                alert(
-                    'No se encontró el número de WhatsApp configurado.'
-                );
-
-                return;
-
-            }
-
-            const url =
-                `https://wa.me/${phone}?text=${
-                    encodeURIComponent(
-                        message
-                    )
-                }`;
-
-            window.open(
-                url,
-                '_blank',
-                'noopener,noreferrer'
-            );
-
-            App.ui.closeModal(
-                'modalCarrito'
-            );
-
         }
 
-    },
+        info.appendChild(nombre);
+        info.appendChild(id);
+        info.appendChild(precio);
+        info.appendChild(ver);
+        info.appendChild(add);
 
-    /* =====================================================
-       ADMINISTRACIÓN
-    ===================================================== */
+        card.appendChild(imageBox);
+        card.appendChild(info);
 
-    admin: {
+        fragment.appendChild(card);
+    });
 
-        open() {
+    grid.appendChild(fragment);
+}
 
-            App.ui.openModal(
-                'modalAdmin'
+
+/* =====================================================
+   FILTRAR CATEGORÍA
+===================================================== */
+
+function filtrarCat(c,btn){
+
+    document
+        .querySelectorAll(".btn-cat")
+        .forEach(x=>x.classList.remove("activo"));
+
+    document
+        .querySelectorAll(".cat-pill")
+        .forEach(x=>x.classList.remove("activo"));
+
+    btn.classList.add("activo");
+    btn.parentElement.classList.add("activo");
+
+    catActual = c;
+
+    const texto =
+        $("buscador").value
+        .toLowerCase()
+        .trim();
+
+    let lista =
+        c === "todos"
+        ? [...DB]
+        : DB.filter(p=>p.cat === c);
+
+    if(texto){
+        lista = lista.filter(
+            p=>p.nombre.toLowerCase().includes(texto)
+        );
+    }
+
+    mostrar(
+        c === "todos"
+        ? mezclarProductos(lista)
+        : lista
+    );
+}
+
+
+/* =====================================================
+   BÚSQUEDA CON DEBOUNCE
+===================================================== */
+
+let searchTimer;
+
+$("buscador").addEventListener(
+    "input",
+    ()=>{
+        clearTimeout(searchTimer);
+
+        searchTimer = setTimeout(
+            filtrar,
+            180
+        );
+    }
+);
+
+function filtrar(){
+
+    const valor =
+        $("buscador")
+            .value
+            .toLowerCase()
+            .trim();
+
+    let lista =
+        DB.filter(p=>{
+
+            const coincideNombre =
+                p.nombre
+                    .toLowerCase()
+                    .includes(valor);
+
+            const coincideId =
+                String(p.id)
+                    .toLowerCase()
+                    .includes(valor);
+
+            const coincideCategoria =
+                !catActual ||
+                catActual === "todos" ||
+                p.cat === catActual;
+
+            return (
+                (coincideNombre || coincideId) &&
+                coincideCategoria
+            );
+        });
+
+    mostrar(lista);
+}
+
+
+/* =====================================================
+   FICHA PRODUCTO
+===================================================== */
+
+function abrirFicha(id){
+
+    selectedProd =
+        DB.find(
+            x=>String(x.id) === String(id)
+        );
+
+    if(!selectedProd) return;
+
+    currentQty = 1;
+
+    $("m-qty").textContent = "1";
+
+    $("m-img").src =
+        selectedProd.img;
+
+    $("m-img").alt =
+        selectedProd.nombre;
+
+    $("m-nombre").textContent =
+        selectedProd.nombre;
+
+    $("m-id").textContent =
+        `ID: ${selectedProd.id}`;
+
+    $("m-desc").textContent =
+        selectedProd.desc ||
+        "Sin descripción.";
+
+    $("m-precio").textContent =
+        `$${selectedProd.precio.toFixed(2)}`;
+
+    $("m-nota").value = "";
+
+    prepararSelect(
+        "m-talla",
+        "box-talla",
+        selectedProd.tallas
+    );
+
+    prepararSelect(
+        "m-color",
+        "box-color",
+        selectedProd.colores
+    );
+
+    actualizarStockModal();
+
+    $("m-btn-share").onclick =
+        ()=>compartirProducto(
+            selectedProd.id,
+            selectedProd.nombre
+        );
+
+    $("m-btn-add").onclick =
+        ()=>{
+            agregarAlCarrito();
+        };
+
+    $("modalFicha").style.display = "flex";
+}
+
+
+/* =====================================================
+   SELECT
+===================================================== */
+
+function prepararSelect(
+    selectId,
+    boxId,
+    valores
+){
+
+    const select = $(selectId);
+
+    select.innerHTML = "";
+
+    if(!valores || !valores.length){
+
+        $(boxId).style.display = "none";
+        return;
+    }
+
+    $(boxId).style.display = "block";
+
+    valores.forEach(valor=>{
+
+        const option =
+            document.createElement("option");
+
+        option.value = valor;
+        option.textContent = valor;
+
+        select.appendChild(option);
+    });
+}
+
+
+/* =====================================================
+   STOCK MODAL
+===================================================== */
+
+function actualizarStockModal(){
+
+    if(!selectedProd) return;
+
+    const badge =
+        $("m-stock-variant");
+
+    const btn =
+        $("m-btn-add");
+
+    if(selectedProd.stock <= 0){
+
+        badge.textContent =
+            "Agotado";
+
+        badge.style.color =
+            "#991b1b";
+
+        badge.style.background =
+            "#fee2e2";
+
+        btn.disabled = true;
+
+        btn.textContent =
+            "Sin Stock Disponible";
+
+        return;
+    }
+
+    badge.textContent =
+        `Disponible: ${selectedProd.stock} unid.`;
+
+    badge.style.color =
+        "#2563eb";
+
+    badge.style.background =
+        "#eff6ff";
+
+    btn.disabled = false;
+
+    btn.textContent =
+        "🛒 Agregar al Carrito";
+}
+
+
+/* =====================================================
+   CANTIDAD
+===================================================== */
+
+function cambiarQty(valor){
+
+    if(!selectedProd) return;
+
+    const nueva =
+        currentQty + valor;
+
+    if(nueva < 1) return;
+
+    if(nueva > selectedProd.stock){
+
+        mostrarToast(
+            "No hay suficiente stock disponible."
+        );
+
+        return;
+    }
+
+    currentQty = nueva;
+
+    $("m-qty").textContent =
+        currentQty;
+}
+
+
+/* =====================================================
+   AGREGAR AL CARRITO
+===================================================== */
+
+function agregarAlCarrito(){
+
+    if(!selectedProd) return;
+
+    const talla =
+        $("m-talla").value || "";
+
+    const color =
+        $("m-color").value || "";
+
+    const instruccion =
+        $("m-nota")
+            .value
+            .trim()
+            .slice(0,500);
+
+    const existente =
+        CART.find(i=>
+            String(i.id) === String(selectedProd.id) &&
+            i.talla === talla &&
+            i.color === color &&
+            i.instruccion === instruccion
+        );
+
+    if(existente){
+
+        if(
+            existente.cantidad + currentQty >
+            selectedProd.stock
+        ){
+
+            mostrarToast(
+                "La cantidad supera el stock disponible."
             );
 
-        },
+            return;
+        }
 
-        login() {
+        existente.cantidad += currentQty;
 
-            const user =
-                document
-                    .getElementById(
-                        'admin-user'
-                    )
-                    .value
-                    .trim();
+    }else{
 
-            const pass =
-                document
-                    .getElementById(
-                        'admin-pass'
-                    )
-                    .value;
+        CART.push({
 
-            if (
-                user ===
-                    App.state.config.user &&
-                pass ===
-                    App.state.config.pass
-            ) {
+            id:selectedProd.id,
 
-                document
-                    .getElementById(
-                        'admin-login-box'
-                    )
-                    .style.display =
-                    'none';
+            nombre:selectedProd.nombre,
 
-                document
-                    .getElementById(
-                        'admin-panel-box'
-                    )
-                    .style.display =
-                    'block';
+            precio:selectedProd.precio,
 
-                this.renderInventory();
+            img:selectedProd.img,
 
-            } else {
+            talla,
+            color,
+            instruccion,
 
-                alert(
-                    'Credenciales incorrectas.'
-                );
+            cantidad:currentQty,
 
-            }
+            tid:crearIdUnico()
+        });
+    }
 
-        },
+    guardarCarrito();
+    actualizar();
 
-        switchTab(tab) {
+    cerrar();
 
-            const auth =
-                tab === 'auth';
+    mostrarToast(
+        "Producto agregado al carrito."
+    );
+}
 
-            document
-                .getElementById(
-                    'tab-btn-auth'
-                )
-                .classList.toggle(
-                    'activo',
-                    auth
-                );
 
-            document
-                .getElementById(
-                    'tab-btn-stock'
-                )
-                .classList.toggle(
-                    'activo',
-                    !auth
-                );
+/* =====================================================
+   ID LOCAL
+===================================================== */
 
-            document
-                .getElementById(
-                    'view-admin-auth'
-                )
-                .style.display =
-                auth
-                    ? 'block'
-                    : 'none';
+function crearIdUnico(){
 
-            document
-                .getElementById(
-                    'view-admin-stock'
-                )
-                .style.display =
-                auth
-                    ? 'none'
-                    : 'block';
+    return (
+        Date.now().toString(36) +
+        Math.random()
+            .toString(36)
+            .substring(2,8)
+    );
+}
 
-        },
 
-        async discountStock() {
+/* =====================================================
+   CARRITO
+===================================================== */
+
+function calcularTotal(){
+
+    return CART.reduce(
+        (total,item)=>
+            total +
+            item.precio *
+            item.cantidad,
+        0
+    );
+}
+
+function actualizar(){
+
+    let total =
+        calcularTotal();
+
+    const lista =
+        $("c-lista");
+
+    lista.innerHTML = "";
+
+    if(!CART.length){
+
+        lista.innerHTML = `
+            <div class="estado">
+                🛒 Tu carrito está vacío.
+            </div>
+        `;
+
+    }else{
+
+        const fragment =
+            document.createDocumentFragment();
+
+        CART.forEach(item=>{
+
+            const row =
+                document.createElement("div");
+
+            row.className = "item-c";
+
+            const info =
+                document.createElement("div");
+
+            info.className = "item-info";
+
+            const nombre =
+                document.createElement("b");
+
+            nombre.textContent =
+                `${item.cantidad}x ${item.nombre}`;
 
             const id =
-                document
-                    .getElementById(
-                        'auth-prod-id'
-                    )
-                    .value
-                    .trim();
+                document.createElement("small");
 
-            const quantity =
-                parseInt(
-                    document
-                        .getElementById(
-                            'auth-prod-cant'
-                        )
-                        .value
-                );
+            id.style.display = "block";
+            id.style.color = "#94a3b8";
+            id.textContent =
+                `ID: ${item.id}`;
 
-            if (
-                !id ||
-                isNaN(quantity) ||
-                quantity <= 0
-            ) {
+            info.appendChild(nombre);
+            info.appendChild(id);
 
-                alert(
-                    'Ingresa un ID válido y una cantidad mayor a cero.'
-                );
+            if(item.talla || item.color){
 
-                return;
+                const detalles =
+                    document.createElement("span");
 
+                detalles.className =
+                    "item-details";
+
+                const partes=[];
+
+                if(item.talla)
+                    partes.push(
+                        `Talla: ${item.talla}`
+                    );
+
+                if(item.color)
+                    partes.push(
+                        `Color: ${item.color}`
+                    );
+
+                detalles.textContent =
+                    partes.join(" | ");
+
+                info.appendChild(detalles);
             }
 
-            const product =
-                App.state.db.find(
-                    item =>
-                        item.id == id
-                );
+            if(item.instruccion){
 
-            if (!product) {
+                const nota =
+                    document.createElement("span");
 
-                alert(
-                    'El ID no coincide con ningún producto.'
-                );
+                nota.className =
+                    "item-note";
 
-                return;
+                nota.textContent =
+                    `📝 ${item.instruccion}`;
 
+                info.appendChild(nota);
             }
 
-            if (
-                quantity >
-                product.stock
-            ) {
+            const precio =
+                document.createElement("span");
 
-                alert(
-                    `Stock insuficiente. Disponible: ${product.stock}.`
-                );
+            precio.className =
+                "item-price";
 
-                return;
+            precio.textContent =
+                `$${(
+                    item.precio *
+                    item.cantidad
+                ).toFixed(2)}`;
 
-            }
+            const eliminar =
+                document.createElement("button");
 
-            const button =
-                document
-                    .getElementById(
-                        'btn-auth-discount'
-                    );
+            eliminar.className =
+                "btn-del";
 
-            button.disabled = true;
-            button.textContent =
-                'Procesando...';
+            eliminar.textContent = "✕";
 
-            try {
+            eliminar.title =
+                "Eliminar producto";
 
-                /*
-                 * IMPORTANTE:
-                 * Se mantiene la llamada actual
-                 * para no romper tu Apps Script.
-                 */
+            eliminar.onclick =
+                ()=>borrar(item.tid);
 
-                await fetch(
-                    API_URL,
-                    {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-                        body:
-                            JSON.stringify({
-                                action:
-                                    'descontar_pedido',
+            precio.appendChild(eliminar);
 
-                                items: [
-                                    {
-                                        id,
-                                        cantidad:
-                                            quantity
-                                    }
-                                ]
-                            })
-                    }
-                );
+            row.appendChild(info);
+            row.appendChild(precio);
 
-                product.stock =
-                    Math.max(
-                        0,
-                        product.stock -
-                        quantity
-                    );
+            fragment.appendChild(row);
+        });
 
-                App.products.render();
+        lista.appendChild(fragment);
+    }
 
-                this.renderInventory();
+    $("n-items").textContent =
+        `${CART.reduce(
+            (s,i)=>s+i.cantidad,
+            0
+        )} productos`;
 
-                alert(
-                    `Pago verificado. Se descontaron ${quantity} unidades del producto ID ${id}.`
-                );
+    $("f-total").textContent =
+        `$${total.toFixed(2)}`;
 
-                document
-                    .getElementById(
-                        'auth-prod-id'
-                    )
-                    .value = '';
+    $("c-total").textContent =
+        `Total: $${total.toFixed(2)}`;
 
-                document
-                    .getElementById(
-                        'auth-prod-cant'
-                    )
-                    .value = '1';
+    $("btn-pedir").style.display =
+        CART.length
+        ? "block"
+        : "none";
+}
 
-            } catch (error) {
 
-                console.error(error);
+/* =====================================================
+   BORRAR
+===================================================== */
 
-                alert(
-                    'No fue posible conectar con Google Sheets.'
-                );
+function borrar(tid){
 
-            } finally {
+    CART =
+        CART.filter(
+            x=>x.tid !== tid
+        );
 
-                button.disabled = false;
+    guardarCarrito();
+    actualizar();
 
-                button.textContent =
-                    '✅ Autorizar y Descontar';
+    if(!CART.length){
+        cerrar();
+    }
+}
 
-            }
 
-        },
+/* =====================================================
+   LOCAL STORAGE
+===================================================== */
 
-        renderInventory() {
+function guardarCarrito(){
 
-            const container =
-                document.getElementById(
-                    'admin-inventory-list'
-                );
+    try{
 
-            container.replaceChildren();
+        localStorage.setItem(
+            "tu_marka_cart_v4",
+            JSON.stringify(CART)
+        );
 
-            const fragment =
-                document.createDocumentFragment();
+    }catch(error){
 
-            App.state.db.forEach(
-                product => {
+        console.warn(
+            "No se pudo guardar carrito",
+            error
+        );
+    }
+}
 
-                    const row =
-                        document.createElement(
-                            'div'
-                        );
+function restaurarCarrito(){
 
-                    row.className =
-                        'admin-item-row';
+    try{
 
-                    const header =
-                        document.createElement(
-                            'div'
-                        );
-
-                    header.className =
-                        'admin-item-header';
-
-                    const name =
-                        document.createElement(
-                            'span'
-                        );
-
-                    const strong =
-                        document.createElement(
-                            'b'
-                        );
-
-                    strong.textContent =
-                        product.nombre;
-
-                    name.append(
-                        strong,
-                        document.createTextNode(
-                            ` (ID: ${product.id})`
-                        )
-                    );
-
-                    const price =
-                        document.createElement(
-                            'span'
-                        );
-
-                    price.style.color =
-                        'var(--petroleo)';
-
-                    price.style.fontWeight =
-                        'bold';
-
-                    price.textContent =
-                        `$${product.precio.toFixed(2)}`;
-
-                    header.append(
-                        name,
-                        price
-                    );
-
-                    const controls =
-                        document.createElement(
-                            'div'
-                        );
-
-                    controls.className =
-                        'admin-stock-control';
-
-                    const label =
-                        document.createElement(
-                            'span'
-                        );
-
-                    label.style.fontSize =
-                        '.75rem';
-
-                    label.textContent =
-                        'Stock actual:';
-
-                    const input =
-                        document.createElement(
-                            'input'
-                        );
-
-                    input.type =
-                        'number';
-
-                    input.min =
-                        '0';
-
-                    input.value =
-                        product.stock;
-
-                    input.className =
-                        'input-stock';
-
-                    input.id =
-                        `input-stock-${product.id}`;
-
-                    const button =
-                        document.createElement(
-                            'button'
-                        );
-
-                    button.className =
-                        'btn-save-stock';
-
-                    button.type =
-                        'button';
-
-                    button.textContent =
-                        'Guardar';
-
-                    button.addEventListener(
-                        'click',
-                        () =>
-                            this.saveStock(
-                                product.id,
-                                input,
-                                button
-                            )
-                    );
-
-                    controls.append(
-                        label,
-                        input,
-                        button
-                    );
-
-                    row.append(
-                        header,
-                        controls
-                    );
-
-                    fragment.appendChild(
-                        row
-                    );
-
-                }
+        const data =
+            localStorage.getItem(
+                "tu_marka_cart_v4"
             );
 
-            container.appendChild(
-                fragment
-            );
+        if(!data) return;
 
-        },
+        const carrito =
+            JSON.parse(data);
 
-        async saveStock(
-            id,
-            input,
-            button
-        ) {
-
-            const newStock =
-                parseInt(
-                    input.value
-                );
-
-            if (
-                isNaN(newStock) ||
-                newStock < 0
-            ) {
-
-                alert(
-                    'Ingresa una cantidad válida.'
-                );
-
-                return;
-
-            }
-
-            button.disabled =
-                true;
-
-            button.textContent =
-                'Guardando...';
-
-            try {
-
-                await fetch(
-                    API_URL,
-                    {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type':
-                                'application/json'
-                        },
-                        body:
-                            JSON.stringify({
-                                action:
-                                    'actualizar_stock',
-                                id,
-                                stock:
-                                    newStock
-                            })
-                    }
-                );
-
-                const product =
-                    App.state.db.find(
-                        item =>
-                            item.id == id
-                    );
-
-                if (product) {
-
-                    product.stock =
-                        newStock;
-
-                }
-
-                App.products.render();
-
-                alert(
-                    `Stock actualizado a ${newStock}.`
-                );
-
-            } catch (error) {
-
-                console.error(error);
-
-                alert(
-                    'Error al actualizar Google Sheets.'
-                );
-
-            } finally {
-
-                button.disabled =
-                    false;
-
-                button.textContent =
-                    'Guardar';
-
-            }
-
-        },
-
-        logout() {
-
-            document
-                .getElementById(
-                    'admin-login-box'
-                )
-                .style.display =
-                'block';
-
-            document
-                .getElementById(
-                    'admin-panel-box'
-                )
-                .style.display =
-                'none';
-
-            document
-                .getElementById(
-                    'admin-user'
-                )
-                .value = '';
-
-            document
-                .getElementById(
-                    'admin-pass'
-                )
-                .value = '';
-
-            App.ui.closeModal(
-                'modalAdmin'
-            );
-
+        if(Array.isArray(carrito)){
+            CART = carrito;
         }
 
-    },
+    }catch(error){
 
-    /* =====================================================
-       UI / MODALES
-    ===================================================== */
+        CART=[];
+    }
+}
 
-    ui: {
 
-        openModal(id) {
+/* =====================================================
+   MODALES
+===================================================== */
 
-            const modal =
-                document.getElementById(id);
+function cerrar(){
 
-            if (!modal) return;
+    document
+        .querySelectorAll(".modal")
+        .forEach(m=>{
+            m.style.display="none";
+        });
+}
 
-            modal.classList.add(
-                'visible'
+function abrirCarrito(){
+
+    if(!CART.length){
+
+        mostrarToast(
+            "Tu carrito está vacío."
+        );
+
+        return;
+    }
+
+    actualizar();
+
+    $("modalCarrito").style.display =
+        "flex";
+}
+
+function abrirModalFAQ(){
+
+    $("modalFAQ").style.display =
+        "flex";
+}
+
+function abrirModalAdmin(){
+
+    comprobarSesionAdmin();
+
+    $("modalAdmin").style.display =
+        "flex";
+}
+
+
+/* =====================================================
+   ENTREGA
+===================================================== */
+
+function selEntrega(metodo,btn){
+
+    entregaM = metodo;
+
+    document
+        .querySelectorAll(
+            "#modalCarrito .btn-opcion"
+        )
+        .forEach(
+            b=>b.classList.remove(
+                "seleccionado"
+            )
+        );
+
+    btn.classList.add(
+        "seleccionado"
+    );
+
+    $("btn-final-wa").style.display =
+        "block";
+
+    $("dir-val").style.display =
+        metodo === "Delivery"
+        ? "block"
+        : "none";
+}
+
+function abrirDelivery(btn){
+
+    selEntrega(
+        "Delivery",
+        btn
+    );
+}
+
+
+/* =====================================================
+   PEDIDO
+===================================================== */
+
+function generarNumeroPedido(){
+
+    const fecha =
+        new Date();
+
+    const fechaParte =
+        fecha
+            .toISOString()
+            .slice(0,10)
+            .replace(/-/g,"");
+
+    const aleatorio =
+        Math.random()
+            .toString(36)
+            .substring(2,7)
+            .toUpperCase();
+
+    return `TM-${fechaParte}-${aleatorio}`;
+}
+
+
+/* =====================================================
+   VALIDAR STOCK LOCAL
+===================================================== */
+
+function validarStockLocal(){
+
+    for(const item of CART){
+
+        const producto =
+            DB.find(
+                p=>String(p.id) ===
+                   String(item.id)
             );
 
-            modal.setAttribute(
-                'aria-hidden',
-                'false'
-            );
+        if(!producto){
 
-            document.body.style.overflow =
-                'hidden';
-
-        },
-
-        closeModal(id) {
-
-            const modal =
-                document.getElementById(id);
-
-            if (!modal) return;
-
-            modal.classList.remove(
-                'visible'
-            );
-
-            modal.setAttribute(
-                'aria-hidden',
-                'true'
-            );
-
-            document.body.style.overflow =
-                '';
-
+            return {
+                ok:false,
+                mensaje:
+                    `El producto ${item.nombre} ya no existe.`
+            };
         }
 
-    },
+        if(
+            item.cantidad >
+            producto.stock
+        ){
 
-    /* =====================================================
-       COMPARTIR
-    ===================================================== */
+            return {
+                ok:false,
+                mensaje:
+                    `El producto "${item.nombre}" solo tiene ${producto.stock} unidades disponibles.`
+            };
+        }
+    }
 
-    share: {
+    return {ok:true};
+}
 
-        async url(
-            url,
-            title
-        ) {
 
-            if (
-                navigator.share
-            ) {
+/* =====================================================
+   REGISTRAR PEDIDO EN BACKEND
+===================================================== */
 
-                try {
+async function registrarPedidoBackend(pedido){
 
-                    await navigator.share({
-                        title,
-                        url
-                    });
+    try{
 
-                    return;
+        const response =
+            await fetch(
+                APPS_SCRIPT_URL,
+                {
+                    method:"POST",
 
-                } catch {
-                    return;
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:JSON.stringify({
+                        action:"registrar_pedido",
+                        pedido
+                    }),
+
+                    redirect:"follow"
                 }
+            );
 
-            }
+        const resultado =
+            await response.json();
 
-            window.prompt(
-                'Copia este enlace:',
+        return resultado;
+
+    }catch(error){
+
+        console.error(
+            "Error registrando pedido:",
+            error
+        );
+
+        return {
+            status:"error",
+            message:error.toString()
+        };
+    }
+}
+
+
+/* =====================================================
+   WHATSAPP
+===================================================== */
+
+async function enviarWA(){
+
+    if(!CART.length){
+
+        mostrarToast(
+            "El carrito está vacío."
+        );
+
+        return;
+    }
+
+    if(
+        entregaM === "Delivery" &&
+        !$("dir-val").value.trim()
+    ){
+
+        alert(
+            "Por favor, ingresa tu dirección."
+        );
+
+        $("dir-val").focus();
+
+        return;
+    }
+
+    const validacion =
+        validarStockLocal();
+
+    if(!validacion.ok){
+
+        alert(validacion.mensaje);
+
+        await cargarProductos();
+
+        return;
+    }
+
+    const numeroPedido =
+        generarNumeroPedido();
+
+    const direccion =
+        $("dir-val")
+            .value
+            .trim();
+
+    const pedido = {
+
+        numero:numeroPedido,
+
+        fecha:new Date().toISOString(),
+
+        items:CART.map(item=>({
+
+            id:item.id,
+
+            nombre:item.nombre,
+
+            cantidad:item.cantidad,
+
+            precio:item.precio,
+
+            talla:item.talla,
+
+            color:item.color,
+
+            instruccion:item.instruccion
+
+        })),
+
+        total:calcularTotal(),
+
+        pago:CONFIG.pago,
+
+        entrega:entregaM,
+
+        direccion
+
+    };
+
+    const boton =
+        $("btn-final-wa");
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Preparando pedido...";
+
+    /*
+       Intentamos registrar el pedido.
+       Si el backend todavía no está actualizado,
+       permitimos igualmente continuar por WhatsApp.
+    */
+
+    const backend =
+        await registrarPedidoBackend(
+            pedido
+        );
+
+    if(
+        backend.status === "error"
+    ){
+
+        console.warn(
+            "Pedido no registrado en backend:",
+            backend
+        );
+    }
+
+    let mensaje =
+        `*¡Hola, Tu Marka!* 🙌\n\n` +
+        `*PEDIDO ${numeroPedido}*\n` +
+        `--------------------------------\n`;
+
+    CART.forEach((item,index)=>{
+
+        mensaje +=
+            `${index+1}. *${item.cantidad}x ${item.nombre}*\n`;
+
+        mensaje +=
+            `ID: ${item.id}\n`;
+
+        mensaje +=
+            `Subtotal: $${(
+                item.precio *
+                item.cantidad
+            ).toFixed(2)}\n`;
+
+        if(item.talla){
+
+            mensaje +=
+                `📏 Talla: ${item.talla}\n`;
+        }
+
+        if(item.color){
+
+            mensaje +=
+                `🎨 Color: ${item.color}\n`;
+        }
+
+        if(item.instruccion){
+
+            mensaje +=
+                `📝 Nota: ${item.instruccion}\n`;
+        }
+
+        mensaje += "\n";
+    });
+
+    mensaje +=
+        `--------------------------------\n`;
+
+    mensaje +=
+        `💰 *TOTAL: $${calcularTotal().toFixed(2)}*\n\n`;
+
+    mensaje +=
+        `💳 *Método de pago:* ${CONFIG.pago}\n`;
+
+    mensaje +=
+        `📍 *Entrega:* ${entregaM}\n`;
+
+    if(entregaM === "Delivery"){
+
+        mensaje +=
+            `🏠 *Dirección:* ${direccion}\n`;
+    }
+
+    mensaje +=
+        `\nGracias por preferir *Tu Marka Sport*. 💙`;
+
+    const telefono =
+        String(CONFIG.tel)
+            .replace(/\D/g,"");
+
+    if(!telefono){
+
+        alert(
+            "El número de WhatsApp no está configurado."
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "🚀 Enviar Pedido por WhatsApp";
+
+        return;
+    }
+
+    const url =
+        `https://wa.me/${telefono}?text=` +
+        encodeURIComponent(mensaje);
+
+    window.open(
+        url,
+        "_blank",
+        "noopener,noreferrer"
+    );
+
+    /*
+       El carrito NO se borra inmediatamente.
+       Así el cliente no pierde el pedido si WhatsApp
+       no llega a abrirse correctamente.
+    */
+
+    localStorage.setItem(
+        "tu_marka_last_order_v4",
+        JSON.stringify(pedido)
+    );
+
+    boton.disabled = false;
+
+    boton.textContent =
+        "🚀 Enviar Pedido por WhatsApp";
+
+    cerrar();
+}
+
+
+/* =====================================================
+   COMPARTIR
+===================================================== */
+
+async function compartirRuta(cat){
+
+    const url =
+        `${window.location.origin}${window.location.pathname}` +
+        `?cat=${encodeURIComponent(cat)}`;
+
+    compartirURL(
+        url,
+        `Tu Marka Sport - ${cat}`
+    );
+}
+
+async function compartirProducto(id,nombre){
+
+    const url =
+        `${window.location.origin}${window.location.pathname}` +
+        `?p=${encodeURIComponent(id)}`;
+
+    compartirURL(
+        url,
+        nombre
+    );
+}
+
+async function compartirURL(url,title){
+
+    if(
+        navigator.share
+    ){
+
+        try{
+
+            await navigator.share({
+                title,
                 url
+            });
+
+            return;
+
+        }catch(error){
+
+            if(error.name === "AbortError"){
+                return;
+            }
+        }
+    }
+
+    try{
+
+        await navigator.clipboard.writeText(url);
+
+        mostrarToast(
+            "Enlace copiado."
+        );
+
+    }catch(error){
+
+        prompt(
+            "Copia el enlace:",
+            url
+        );
+    }
+}
+
+
+/* =====================================================
+   URL COMPARTIDA
+===================================================== */
+
+function procesarURL(){
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const producto =
+        params.get("p");
+
+    const categoria =
+        params.get("cat");
+
+    if(producto){
+
+        setTimeout(
+            ()=>{
+                abrirFicha(producto);
+            },
+            300
+        );
+
+        return;
+    }
+
+    if(categoria){
+
+        const boton =
+            document.querySelector(
+                `[data-cat="${CSS.escape(categoria)}"]`
             );
 
-        },
+        if(boton){
 
-        category(category) {
+            filtrarCat(
+                categoria,
+                boton
+            );
+        }
+    }
+}
 
-            const url =
-                `${window.location.origin}${window.location.pathname}?cat=${encodeURIComponent(category)}`;
 
-            this.url(
-                url,
-                `Tu Marka Sport - ${category}`
+/* =====================================================
+   ADMINISTRACIÓN V4
+===================================================== */
+
+
+/*
+   IMPORTANTE:
+
+   La contraseña NO está aquí.
+
+   El backend de Apps Script será quien valide:
+
+       usuario
+       contraseña
+
+   y devolverá un token temporal.
+*/
+
+function guardarSesionAdmin(){
+
+    try{
+
+        sessionStorage.setItem(
+            "tu_marka_admin_v4",
+            JSON.stringify(adminSession)
+        );
+
+    }catch(error){}
+}
+
+function cargarSesionAdmin(){
+
+    try{
+
+        const data =
+            sessionStorage.getItem(
+                "tu_marka_admin_v4"
             );
 
-        },
+        if(!data) return false;
 
-        product(id, name) {
+        const sesion =
+            JSON.parse(data);
 
-            const url =
-                `${window.location.origin}${window.location.pathname}?p=${encodeURIComponent(id)}`;
+        if(
+            !sesion.token ||
+            !sesion.expires ||
+            Date.now() >= sesion.expires
+        ){
 
-            this.url(
-                url,
-                name
+            sessionStorage.removeItem(
+                "tu_marka_admin_v4"
             );
 
+            return false;
         }
 
-    },
+        adminSession = sesion;
 
-    /* =====================================================
-       URL
-    ===================================================== */
+        return true;
 
-    url: {
+    }catch(error){
 
-        process() {
+        return false;
+    }
+}
 
-            const params =
-                new URLSearchParams(
-                    window.location.search
-                );
+function comprobarSesionAdmin(){
 
-            const productId =
-                params.get('p');
+    if(cargarSesionAdmin()){
 
-            const category =
-                params.get('cat');
+        mostrarPanelAdmin();
 
-            if (category) {
+    }else{
 
-                const exists =
-                    App.state.db.some(
-                        product =>
-                            product.cat ===
-                            category
-                    );
+        mostrarLoginAdmin();
+    }
+}
 
-                if (exists) {
+function mostrarLoginAdmin(){
 
-                    App.state.category =
-                        category;
+    $("admin-login-box").style.display =
+        "block";
 
-                    App.products.renderCategories();
+    $("admin-panel-box").style.display =
+        "none";
+}
 
-                    App.products.render();
+function mostrarPanelAdmin(){
 
+    $("admin-login-box").style.display =
+        "none";
+
+    $("admin-panel-box").style.display =
+        "block";
+}
+
+
+/* =====================================================
+   LOGIN ADMIN
+===================================================== */
+
+async function loginAdmin(){
+
+    const usuario =
+        $("admin-user")
+            .value
+            .trim();
+
+    const password =
+        $("admin-pass")
+            .value;
+
+    if(!usuario || !password){
+
+        alert(
+            "Ingresa usuario y contraseña."
+        );
+
+        return;
+    }
+
+    const boton =
+        document.querySelector(
+            "#admin-login-box .btn-add"
+        );
+
+    boton.disabled = true;
+
+    boton.textContent =
+        "Verificando...";
+
+    try{
+
+        const response =
+            await fetch(
+                APPS_SCRIPT_URL,
+                {
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":
+                            "text/plain;charset=utf-8"
+                    },
+
+                    body:JSON.stringify({
+                        action:"login_admin",
+                        usuario,
+                        password
+                    }),
+
+                    redirect:"follow"
                 }
+            );
 
-            }
+        const resultado =
+            await response.json();
 
-            if (productId) {
+        if(
+            resultado.status !== "success"
+        ){
 
-                setTimeout(
-                    () =>
-                        App.products.open(
-                            productId
-                        ),
-                    100
-                );
-
-            }
-
+            throw new Error(
+                resultado.message ||
+                "Credenciales incorrectas"
+            );
         }
+
+        adminSession = {
+
+            token:resultado.token,
+
+            expires:
+                Date.now() +
+                (
+                    Number(
+                        resultado.expiresIn ||
+                        3600000
+                    )
+                )
+        };
+
+        guardarSesionAdmin();
+
+        $("admin-user").value="";
+        $("admin-pass").value="";
+
+        mostrarPanelAdmin();
+
+        mostrarToast(
+            "Sesión iniciada correctamente."
+        );
+
+        cargarPedidosAdmin();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            error.message ||
+            "No fue posible iniciar sesión."
+        );
+
+    }finally{
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "Ingresar";
+    }
+}
+
+
+/* =====================================================
+   LLAMADA ADMIN SEGURA
+===================================================== */
+
+async function adminRequest(payload){
+
+    if(!cargarSesionAdmin()){
+
+        throw new Error(
+            "La sesión administrativa expiró."
+        );
+    }
+
+    payload.token =
+        adminSession.token;
+
+    const response =
+        await fetch(
+            APPS_SCRIPT_URL,
+            {
+                method:"POST",
+
+                headers:{
+                    "Content-Type":
+                        "text/plain;charset=utf-8"
+                },
+
+                body:JSON.stringify(payload),
+
+                redirect:"follow"
+            }
+        );
+
+    const resultado =
+        await response.json();
+
+    if(
+        resultado.status === "auth_error"
+    ){
+
+        cerrarSesionAdmin();
+
+        throw new Error(
+            "Sesión administrativa expirada."
+        );
+    }
+
+    return resultado;
+}
+
+
+/* =====================================================
+   TABS
+===================================================== */
+
+function switchAdminTab(tab){
+
+    document
+        .querySelectorAll(".tab-admin-btn")
+        .forEach(
+            b=>b.classList.remove("activo")
+        );
+
+    $("view-admin-orders")
+        .style.display="none";
+
+    $("view-admin-stock")
+        .style.display="none";
+
+    $("view-admin-discount")
+        .style.display="none";
+
+    if(tab==="orders"){
+
+        $("tab-btn-orders")
+            .classList.add("activo");
+
+        $("view-admin-orders")
+            .style.display="block";
+
+        cargarPedidosAdmin();
 
     }
 
-};
+    if(tab==="stock"){
 
-/* =========================================================
-   ARRANCAR APLICACIÓN
-========================================================= */
+        $("tab-btn-stock")
+            .classList.add("activo");
+
+        $("view-admin-stock")
+            .style.display="block";
+
+        renderInventarioAdmin();
+
+    }
+
+    if(tab==="discount"){
+
+        $("tab-btn-discount")
+            .classList.add("activo");
+
+        $("view-admin-discount")
+            .style.display="block";
+    }
+}
+
+
+/* =====================================================
+   PEDIDOS ADMIN
+===================================================== */
+
+async function cargarPedidosAdmin(){
+
+    const container =
+        $("admin-orders-list");
+
+    container.innerHTML =
+        `<div class="estado">
+            <div class="spinner"></div>
+            Consultando pedidos...
+        </div>`;
+
+    try{
+
+        const resultado =
+            await adminRequest({
+                action:"listar_pedidos",
+                limit:50
+            });
+
+        if(
+            resultado.status !== "success"
+        ){
+
+            throw new Error(
+                resultado.message ||
+                "No se pudieron cargar pedidos."
+            );
+        }
+
+        const pedidos =
+            resultado.pedidos || [];
+
+        if(!pedidos.length){
+
+            container.innerHTML =
+                `<div class="estado">
+                    📦 No hay pedidos registrados.
+                </div>`;
+
+            return;
+        }
+
+        container.innerHTML="";
+
+        pedidos.forEach(pedido=>{
+
+            const box =
+                document.createElement("div");
+
+            box.style.border =
+                "1px solid #e2e8f0";
+
+            box.style.borderRadius =
+                "10px";
+
+            box.style.padding =
+                "10px";
+
+            box.style.marginBottom =
+                "8px";
+
+            const numero =
+                document.createElement("b");
+
+            numero.textContent =
+                pedido.numero ||
+                pedido.id ||
+                "Pedido";
+
+            const estado =
+                document.createElement("div");
+
+            estado.style.marginTop =
+                "5px";
+
+            estado.style.fontSize =
+                ".75rem";
+
+            estado.textContent =
+                `Estado: ${pedido.estado || "PENDIENTE"}`;
+
+            const total =
+                document.createElement("div");
+
+            total.style.fontWeight =
+                "bold";
+
+            total.textContent =
+                `Total: $${Number(
+                    pedido.total || 0
+                ).toFixed(2)}`;
+
+            box.appendChild(numero);
+            box.appendChild(estado);
+            box.appendChild(total);
+
+            container.appendChild(box);
+        });
+
+    }catch(error){
+
+        console.error(error);
+
+        container.innerHTML =
+            `<div class="estado">
+                ❌ ${escaparHTML(error.message)}
+            </div>`;
+    }
+}
+
+
+/* =====================================================
+   INVENTARIO ADMIN
+===================================================== */
+
+function renderInventarioAdmin(){
+
+    const container =
+        $("admin-inventory-list");
+
+    container.innerHTML="";
+
+    if(!DB.length){
+
+        container.innerHTML =
+            `<div class="estado">
+                No hay productos.
+            </div>`;
+
+        return;
+    }
+
+    const fragment =
+        document.createDocumentFragment();
+
+    DB.forEach(item=>{
+
+        const row =
+            document.createElement("div");
+
+        row.className =
+            "admin-item-row";
+
+        const header =
+            document.createElement("div");
+
+        header.className =
+            "admin-item-header";
+
+        const nombre =
+            document.createElement("span");
+
+        nombre.innerHTML =
+            `<b>${escaparHTML(item.nombre)}</b>`;
+
+        const id =
+            document.createElement("small");
+
+        id.style.display="block";
+        id.style.color="#94a3b8";
+
+        id.textContent =
+            `ID: ${item.id}`;
+
+        nombre.appendChild(id);
+
+        const precio =
+            document.createElement("span");
+
+        precio.style.color =
+            "var(--petroleo)";
+
+        precio.style.fontWeight =
+            "bold";
+
+        precio.textContent =
+            `$${item.precio.toFixed(2)}`;
+
+        header.appendChild(nombre);
+        header.appendChild(precio);
+
+        const control =
+            document.createElement("div");
+
+        control.className =
+            "admin-stock-control";
+
+        const label =
+            document.createElement("span");
+
+        label.style.fontSize=".75rem";
+
+        label.textContent =
+            "Stock:";
+
+        const input =
+            document.createElement("input");
+
+        input.type="number";
+        input.min="0";
+        input.className="input-stock";
+        input.value=item.stock;
+
+        input.dataset.id =
+            item.id;
+
+        const button =
+            document.createElement("button");
+
+        button.className =
+            "btn-save-stock";
+
+        button.textContent =
+            "Guardar";
+
+        button.onclick =
+            ()=>guardarStockAdmin(
+                item.id,
+                input,
+                button
+            );
+
+        control.appendChild(label);
+        control.appendChild(input);
+        control.appendChild(button);
+
+        row.appendChild(header);
+        row.appendChild(control);
+
+        fragment.appendChild(row);
+    });
+
+    container.appendChild(fragment);
+}
+
+
+/* =====================================================
+   GUARDAR STOCK
+===================================================== */
+
+async function guardarStockAdmin(
+    id,
+    input,
+    button
+){
+
+    const stock =
+        parseInt(
+            input.value,
+            10
+        );
+
+    if(
+        isNaN(stock) ||
+        stock < 0
+    ){
+
+        alert(
+            "Ingresa un stock válido."
+        );
+
+        return;
+    }
+
+    const original =
+        button.textContent;
+
+    button.disabled=true;
+
+    button.textContent =
+        "Guardando...";
+
+    try{
+
+        const resultado =
+            await adminRequest({
+                action:"actualizar_stock",
+                id,
+                stock
+            });
+
+        if(
+            resultado.status !== "success"
+        ){
+
+            throw new Error(
+                resultado.message ||
+                "No se pudo actualizar."
+            );
+        }
+
+        const producto =
+            DB.find(
+                p=>String(p.id) === String(id)
+            );
+
+        if(producto){
+            producto.stock=stock;
+        }
+
+        mostrar(
+            catActual === "todos"
+            ? mezclarProductos([...DB])
+            : DB.filter(
+                p=>p.cat===catActual
+            )
+        );
+
+        mostrarToast(
+            "Stock actualizado."
+        );
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(error.message);
+
+    }finally{
+
+        button.disabled=false;
+
+        button.textContent =
+            original;
+    }
+}
+
+
+/* =====================================================
+   PROCESAR PEDIDO
+===================================================== */
+
+async function procesarPedidoAdmin(){
+
+    const numero =
+        $("auth-order-id")
+            .value
+            .trim();
+
+    if(!numero){
+
+        alert(
+            "Ingresa el número de pedido."
+        );
+
+        return;
+    }
+
+    const boton =
+        $("btn-process-order");
+
+    boton.disabled=true;
+
+    boton.textContent =
+        "Verificando...";
+
+    try{
+
+        const resultado =
+            await adminRequest({
+                action:"procesar_pedido",
+                numero
+            });
+
+        if(
+            resultado.status !== "success"
+        ){
+
+            throw new Error(
+                resultado.message ||
+                "No se pudo procesar el pedido."
+            );
+        }
+
+        alert(
+            resultado.message ||
+            "Pedido procesado correctamente."
+        );
+
+        $("auth-order-id").value="";
+
+        await cargarProductos();
+
+        cargarPedidosAdmin();
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(error.message);
+
+    }finally{
+
+        boton.disabled=false;
+
+        boton.textContent =
+            "✅ Verificar pago y procesar";
+    }
+}
+
+
+/* =====================================================
+   CERRAR SESIÓN
+===================================================== */
+
+function cerrarSesionAdmin(){
+
+    adminSession={
+        token:"",
+        expires:0
+    };
+
+    try{
+
+        sessionStorage.removeItem(
+            "tu_marka_admin_v4"
+        );
+
+    }catch(error){}
+
+    mostrarLoginAdmin();
+
+    cerrar();
+
+    mostrarToast(
+        "Sesión cerrada."
+    );
+}
+
+
+/* =====================================================
+   CERRAR MODAL CON ESC
+===================================================== */
 
 document.addEventListener(
-    'DOMContentLoaded',
-    () => App.init()
+    "keydown",
+    event=>{
+
+        if(event.key === "Escape"){
+            cerrar();
+        }
+    }
 );
+
+
+/* =====================================================
+   CERRAR AL TOCAR FONDO
+===================================================== */
+
+document
+    .querySelectorAll(".modal")
+    .forEach(modal=>{
+
+        modal.addEventListener(
+            "click",
+            event=>{
+
+                if(
+                    event.target === modal
+                ){
+                    cerrar();
+                }
+            }
+        );
+    });
+
+
+/* =====================================================
+   INICIO
+===================================================== */
+
+cargar();
 
 </script>
 
 </body>
 </html>
+```
