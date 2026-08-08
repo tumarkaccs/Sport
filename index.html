@@ -697,6 +697,65 @@
     };
 
     cargar();
+
+    // URL de la Web App desplegada
+const GOOGLE_SHEETS_API_URL = 'https://script.google.com/macros/s/AKfycbysMonQMR3BNHF2wg8LgsCDaPsiu6vXYkY1zKbWr-Jr3_KrGTWb9y4253pyh4YQlN7O/exec';
+
+/**
+ * Actualiza el stock de un único producto manualmente desde el panel.
+ * @param {string|number} idProducto - ID ubicado en la Columna A.
+ * @param {number} nuevoStock - Nuevo valor para la Columna G.
+ */
+async function actualizarStockProducto(idProducto, nuevoStock) {
+  try {
+    const response = await fetch(GOOGLE_SHEETS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8', // Evita bloqueos CORS en Apps Script
+      },
+      body: JSON.stringify({
+        action: 'actualizar_stock',
+        id: idProducto,
+        stock: nuevoStock
+      }),
+      redirect: 'follow'
+    });
+
+    const resultado = await response.json();
+    console.log('Respuesta Sheets:', resultado);
+    return resultado;
+  } catch (error) {
+    console.error('Error al actualizar el stock:', error);
+    return { status: 'error', message: error.toString() };
+  }
+}
+
+/**
+ * Descuenta el inventario de múltiples ítems al confirmar un pedido pagado.
+ * @param {Array<{id: string|number, cantidad: number}>} listaProductos
+ */
+async function descontarInventarioPedido(listaProductos) {
+  try {
+    const response = await fetch(GOOGLE_SHEETS_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain;charset=utf-8',
+      },
+      body: JSON.stringify({
+        action: 'descontar_pedido',
+        items: listaProductos // Ejemplo: [{ id: "10", cantidad: 2 }, { id: "15", cantidad: 1 }]
+      }),
+      redirect: 'follow'
+    });
+
+    const resultado = await response.json();
+    console.log('Respuesta descontar pedido:', resultado);
+    return resultado;
+  } catch (error) {
+    console.error('Error al descontar pedido:', error);
+    return { status: 'error', message: error.toString() };
+  }
+}
 </script>
 </body>
 </html>
