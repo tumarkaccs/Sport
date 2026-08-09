@@ -1250,6 +1250,64 @@ header{
             style="text-align:right;font-size:1.4rem;font-weight:900;margin:20px 0"
         >
             Total: $0.00
+
+            <!-- DATOS DEL CLIENTE -->
+
+<div
+    style="
+        margin-top:15px;
+        padding:15px;
+        background:#f8fafc;
+        border-radius:10px;
+        border:1px solid #e2e8f0;
+    "
+>
+
+    <p
+        style="
+            font-weight:900;
+            margin:0 0 10px;
+            color:var(--petroleo);
+        "
+    >
+        👤 Datos del cliente
+    </p>
+
+    <input
+        type="text"
+        id="cliente-nombre"
+        maxlength="100"
+        placeholder="Nombre y apellido"
+        autocomplete="name"
+        style="
+            width:100%;
+            padding:12px;
+            margin-bottom:10px;
+            border-radius:8px;
+            border:1px solid #ddd;
+            box-sizing:border-box;
+        "
+    >
+
+    <input
+        type="tel"
+        id="cliente-telefono"
+        maxlength="30"
+        placeholder="Teléfono / WhatsApp"
+        autocomplete="tel"
+        inputmode="tel"
+        style="
+            width:100%;
+            padding:12px;
+            border-radius:8px;
+            border:1px solid #ddd;
+            box-sizing:border-box;
+        "
+    >
+
+</div>
+```
+
         </div>
 
         <p style="font-weight:bold;margin-bottom:5px">
@@ -3015,8 +3073,24 @@ async function registrarPedidoBackend(pedido){
                     },
 
                     body:JSON.stringify({
-                        action:"registrar_pedido",
-                        pedido
+
+                        action:"crear_pedido",
+
+                        cliente:
+                            pedido.cliente || "",
+
+                        telefono:
+                            pedido.telefono || "",
+
+                        entrega:
+                            pedido.entrega || "",
+
+                        direccion:
+                            pedido.direccion || "",
+
+                        items:
+                            pedido.items
+
                     }),
 
                     redirect:"follow"
@@ -3025,6 +3099,11 @@ async function registrarPedidoBackend(pedido){
 
         const resultado =
             await response.json();
+
+        console.log(
+            "Respuesta Apps Script:",
+            resultado
+        );
 
         return resultado;
 
@@ -3036,18 +3115,27 @@ async function registrarPedidoBackend(pedido){
         );
 
         return {
-            status:"error",
-            message:error.toString()
-        };
-    }
-}
 
+            status:"error",
+
+            message:
+                error.toString()
+
+        };
+
+    }
+
+}
 
 /* =====================================================
    WHATSAPP
 ===================================================== */
 
 async function enviarWA(){
+
+    /* =====================================================
+       VALIDAR CARRITO
+       ===================================================== */
 
     if(!CART.length){
 
@@ -3057,6 +3145,50 @@ async function enviarWA(){
 
         return;
     }
+
+
+    /* =====================================================
+       DATOS DEL CLIENTE
+       ===================================================== */
+
+    const cliente =
+        $("cliente-nombre")
+            .value
+            .trim();
+
+    const telefonoCliente =
+        $("cliente-telefono")
+            .value
+            .trim();
+
+
+    if(!cliente){
+
+        alert(
+            "Por favor, ingresa tu nombre y apellido."
+        );
+
+        $("cliente-nombre").focus();
+
+        return;
+    }
+
+
+    if(!telefonoCliente){
+
+        alert(
+            "Por favor, ingresa tu teléfono o WhatsApp."
+        );
+
+        $("cliente-telefono").focus();
+
+        return;
+    }
+
+
+    /* =====================================================
+       VALIDAR DELIVERY
+       ===================================================== */
 
     if(
         entregaM === "Delivery" &&
@@ -3072,59 +3204,53 @@ async function enviarWA(){
         return;
     }
 
+
+    /* =====================================================
+       VALIDAR MÉTODO DE ENTREGA
+       ===================================================== */
+
+    if(!entregaM){
+
+        alert(
+            "Por favor, selecciona cómo deseas recibir tu compra."
+        );
+
+        return;
+    }
+
+
+    /* =====================================================
+       VALIDAR STOCK LOCAL
+       ===================================================== */
+
     const validacion =
         validarStockLocal();
 
     if(!validacion.ok){
 
-        alert(validacion.mensaje);
+        alert(
+            validacion.mensaje
+        );
 
         await cargarProductos();
 
         return;
     }
 
-    const numeroPedido =
-        generarNumeroPedido();
+
+    /* =====================================================
+       DIRECCIÓN
+       ===================================================== */
 
     const direccion =
         $("dir-val")
             .value
             .trim();
 
-    const pedido = {
 
-        numero:numeroPedido,
-
-        fecha:new Date().toISOString(),
-
-        items:CART.map(item=>({
-
-            id:item.id,
-
-            nombre:item.nombre,
-
-            cantidad:item.cantidad,
-
-            precio:item.precio,
-
-            talla:item.talla,
-
-            color:item.color,
-
-            instruccion:item.instruccion
-
-        })),
-
-        total:calcularTotal(),
-
-        pago:CONFIG.pago,
-
-        entrega:entregaM,
-
-        direccion
-
-    };
+    /* =====================================================
+       BOTÓN
+       ===================================================== */
 
     const boton =
         $("btn-final-wa");
@@ -3132,33 +3258,159 @@ async function enviarWA(){
     boton.disabled = true;
 
     boton.textContent =
-        "Preparando pedido...";
+        "Registrando pedido...";
 
-    /*
-       Intentamos registrar el pedido.
-       Si el backend todavía no está actualizado,
-       permitimos igualmente continuar por WhatsApp.
-    */
+
+    /* =====================================================
+       CREAR PEDIDO
+       ===================================================== */
+
+    const pedido = {
+
+        fecha:
+            new Date().toISOString(),
+
+        cliente:
+            cliente,
+
+        telefono:
+            telefonoCliente,
+
+        items:
+
+            CART.map(item=>({
+
+                id:
+                    item.id,
+
+                nombre:
+                    item.nombre,
+
+                cantidad:
+                    item.cantidad,
+
+                precio:
+                    item.precio,
+
+                talla:
+                    item.talla || "",
+
+                color:
+                    item.color || "",
+
+                instruccion:
+                    item.instruccion || ""
+
+            })),
+
+        total:
+            calcularTotal(),
+
+        pago:
+            CONFIG.pago,
+
+        entrega:
+            entregaM,
+
+        direccion:
+            direccion
+
+    };
+
+
+    /* =====================================================
+       REGISTRAR EN GOOGLE SHEETS
+       ===================================================== */
 
     const backend =
         await registrarPedidoBackend(
             pedido
         );
 
+
+    console.log(
+        "Resultado registro:",
+        backend
+    );
+
+
+    /* =====================================================
+       SI FALLÓ EL REGISTRO
+       ===================================================== */
+
     if(
-        backend.status === "error"
+        !backend ||
+        backend.status !== "success"
     ){
 
-        console.warn(
-            "Pedido no registrado en backend:",
+        console.error(
+            "No se pudo registrar el pedido:",
             backend
         );
+
+        alert(
+            "No se pudo registrar el pedido en el sistema.\n\n" +
+            "El pedido NO fue enviado por WhatsApp.\n\n" +
+            "Por favor, intenta nuevamente."
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "🚀 Enviar Pedido por WhatsApp";
+
+        return;
     }
+
+
+    /* =====================================================
+       NÚMERO OFICIAL DEL PEDIDO
+       ===================================================== */
+
+    const numeroPedido =
+        backend.pedidoId;
+
+
+    if(!numeroPedido){
+
+        console.error(
+            "Apps Script no devolvió pedidoId:",
+            backend
+        );
+
+        alert(
+            "El pedido fue procesado pero no se recibió " +
+            "el número de pedido. No se abrirá WhatsApp."
+        );
+
+        boton.disabled = false;
+
+        boton.textContent =
+            "🚀 Enviar Pedido por WhatsApp";
+
+        return;
+    }
+
+
+    /* =====================================================
+       CREAR MENSAJE WHATSAPP
+       ===================================================== */
+
+    boton.textContent =
+        "Abriendo WhatsApp...";
+
 
     let mensaje =
         `*¡Hola, Tu Marka!* 🙌\n\n` +
+
         `*PEDIDO ${numeroPedido}*\n` +
-        `--------------------------------\n`;
+
+        `--------------------------------\n` +
+
+        `👤 *Cliente:* ${cliente}\n` +
+
+        `📱 *Teléfono:* ${telefonoCliente}\n\n`;
+
 
     CART.forEach((item,index)=>{
 
@@ -3174,11 +3426,13 @@ async function enviarWA(){
                 item.cantidad
             ).toFixed(2)}\n`;
 
+
         if(item.talla){
 
             mensaje +=
                 `📏 Talla: ${item.talla}\n`;
         }
+
 
         if(item.color){
 
@@ -3186,44 +3440,61 @@ async function enviarWA(){
                 `🎨 Color: ${item.color}\n`;
         }
 
+
         if(item.instruccion){
 
             mensaje +=
                 `📝 Nota: ${item.instruccion}\n`;
         }
 
+
         mensaje += "\n";
+
     });
+
 
     mensaje +=
         `--------------------------------\n`;
 
+
     mensaje +=
         `💰 *TOTAL: $${calcularTotal().toFixed(2)}*\n\n`;
+
 
     mensaje +=
         `💳 *Método de pago:* ${CONFIG.pago}\n`;
 
+
     mensaje +=
         `📍 *Entrega:* ${entregaM}\n`;
+
 
     if(entregaM === "Delivery"){
 
         mensaje +=
             `🏠 *Dirección:* ${direccion}\n`;
+
     }
+
 
     mensaje +=
         `\nGracias por preferir *Tu Marka Sport*. 💙`;
 
-    const telefono =
+
+    /* =====================================================
+       TELÉFONO DEL NEGOCIO
+       ===================================================== */
+
+    const telefonoNegocio =
         String(CONFIG.tel)
             .replace(/\D/g,"");
 
-    if(!telefono){
+
+    if(!telefonoNegocio){
 
         alert(
-            "El número de WhatsApp no está configurado."
+            "El número de WhatsApp del negocio " +
+            "no está configurado."
         );
 
         boton.disabled = false;
@@ -3234,9 +3505,31 @@ async function enviarWA(){
         return;
     }
 
+
+    /* =====================================================
+       GUARDAR ÚLTIMO PEDIDO
+       ===================================================== */
+
+    pedido.numero =
+        numeroPedido;
+
+
+    localStorage.setItem(
+        "tu_marka_last_order_v4",
+        JSON.stringify(pedido)
+    );
+
+
+    /* =====================================================
+       ABRIR WHATSAPP
+       ===================================================== */
+
     const url =
-        `https://wa.me/${telefono}?text=` +
-        encodeURIComponent(mensaje);
+        `https://wa.me/${telefonoNegocio}?text=` +
+        encodeURIComponent(
+            mensaje
+        );
+
 
     window.open(
         url,
@@ -3244,26 +3537,20 @@ async function enviarWA(){
         "noopener,noreferrer"
     );
 
-    /*
-       El carrito NO se borra inmediatamente.
-       Así el cliente no pierde el pedido si WhatsApp
-       no llega a abrirse correctamente.
-    */
 
-    localStorage.setItem(
-        "tu_marka_last_order_v4",
-        JSON.stringify(pedido)
-    );
+    /* =====================================================
+       FINALIZAR
+       ===================================================== */
 
     boton.disabled = false;
 
     boton.textContent =
         "🚀 Enviar Pedido por WhatsApp";
 
+
     cerrar();
+
 }
-
-
 /* =====================================================
    COMPARTIR
 ===================================================== */
