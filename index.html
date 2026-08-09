@@ -3489,11 +3489,11 @@ async function loginAdmin(){
             .value
             .trim();
 
-    const contraseña =
+    const password =
         $("admin-pass")
             .value;
 
-    if(!usuario || !contraseña){
+    if(!usuario || !password){
 
         alert(
             "Ingresa usuario y contraseña."
@@ -3514,112 +3514,65 @@ async function loginAdmin(){
 
     try{
 
-        const response =
-            await fetch(
-                APPS_SCRIPT_URL,
-                {
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body: JSON.stringify({
-
-                        action: "login",
-
-                        usuario: usuario,
-
-                        contraseña: contraseña
-
-                    }),
-
-                    redirect: "follow"
-                }
-            );
+        const response = await fetch(
+    APPS_SCRIPT_URL,
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+            action: "login",
+            usuario: usuario,
+            contraseña: password
+        }),
+        redirect: "follow"
+    }
+);
 
         const resultado =
             await response.json();
 
-        console.log(
-            "Respuesta login:",
-            resultado
-        );
-
         if(
-            resultado.status !==
-            "success"
+            resultado.status !== "success"
         ){
 
             throw new Error(
                 resultado.message ||
-                "Credenciales incorrectas."
+                "Credenciales incorrectas"
             );
         }
 
-        /*
-         * GUARDAR SESIÓN
-         */
-
         adminSession = {
 
-            token:
-                resultado.token,
+            token:resultado.token,
 
             expires:
                 Date.now() +
                 (
                     Number(
                         resultado.expiresIn ||
-                        21600000
+                        3600000
                     )
                 )
         };
 
         guardarSesionAdmin();
 
-        /*
-         * LIMPIAR CAMPOS
-         */
-
-        $("admin-user").value = "";
-
-        $("admin-pass").value = "";
-
-        /*
-         * MOSTRAR PANEL
-         */
+        $("admin-user").value="";
+        $("admin-pass").value="";
 
         mostrarPanelAdmin();
-
-        /*
-         * AVISO
-         */
 
         mostrarToast(
             "Sesión iniciada correctamente."
         );
 
-        /*
-         * CARGAR INFORMACIÓN ADMIN
-         */
-
-        if(
-            typeof cargarPedidosAdmin ===
-            "function"
-        ){
-
-            cargarPedidosAdmin();
-
-        }
+        cargarPedidosAdmin();
 
     }catch(error){
 
-        console.error(
-            "Error login:",
-            error
-        );
+        console.error(error);
 
         alert(
             error.message ||
@@ -3633,6 +3586,8 @@ async function loginAdmin(){
         boton.textContent =
             "Ingresar";
     }
+}
+
 
 /* =====================================================
    LLAMADA ADMIN SEGURA
