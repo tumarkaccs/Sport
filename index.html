@@ -208,24 +208,21 @@ header{
     width:100%;
     min-height:130px;
     max-height:250px;
-    background:var(--petroleo);
-    color:#fff;
+    background:#fff;
     display:flex;
     align-items:center;
     justify-content:center;
-    text-align:center;
-    background-size:cover;
-    background-position:center;
     border-radius:15px;
     margin-bottom:15px;
     overflow:hidden;
     position:relative;
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size:contain;
 }
 
 .banner-overlay{
-    background:rgba(0,0,0,.45);
-    width:100%;
-    padding:30px 15px;
+    display:none!important;
 }
 
 /* =========================
@@ -798,7 +795,7 @@ header{
 
 .faq-pregunta{
     font-weight:bold;
-    color:var(--petroleo);
+    color:#000;
 }
 
 .faq-respuesta{
@@ -1189,7 +1186,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .admin-overdue-note{display:inline-block;margin-top:6px;padding:4px 7px;border-radius:7px;background:#fff7ed;color:#c2410c;font-size:.65rem;font-weight:900}
 
 /* =========================================================
-   AJUSTES V14 — ADMIN / CONTABILIDAD / COSTOS POR VARIANTE
+   AJUSTES V15 — ADMIN / CONTABILIDAD / COSTOS POR VARIANTE
 ========================================================= */
 .tab-admin-bar{
     display:grid!important;
@@ -1227,12 +1224,13 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .admin-variant-field{min-width:0}.admin-variant-field label{display:block;font-size:.62rem;font-weight:900;color:#6C7075;margin:0 0 3px}.admin-variant-field input,.admin-variant-field select{width:100%;box-sizing:border-box;padding:8px;border:1px solid #CBD5E1;border-radius:8px;font:inherit;min-width:0}
 .admin-accounting-period-display{background:#F7F8F8;border:1px solid #E2E4E5;border-radius:9px;padding:9px 10px;margin:-1px 0 10px;font-size:.72rem;font-weight:900;color:#2A2D32}
 .badge-promo{background:#6C7075!important;color:#D2EC00!important}
-.catalogo-disponibilidad-titulo{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.catalogo-disponibilidad-titulo{white-space:nowrap;overflow:hidden;text-overflow:clip;font-size:clamp(.52rem,.85vw,.68rem);letter-spacing:clamp(.15px,.04vw,.45px);line-height:1.15;width:100%;}
 .p-nombre{margin-bottom:3px!important;min-height:2.5em!important}.producto:not(:has(.catalogo-disponibilidad)) .p-nombre{min-height:0!important}
 .precio{margin-bottom:6px!important}
 .producto:not(:has(.catalogo-disponibilidad)) .p-info{padding-top:9px!important}
 .producto:not(:has(.catalogo-disponibilidad)) .precio{margin-top:-1px!important}
 @media(max-width:720px){
+    .catalogo-disponibilidad-titulo{font-size:clamp(.48rem,2.15vw,.62rem);letter-spacing:.15px;}
     .tab-admin-bar{grid-template-columns:repeat(2,minmax(0,1fr))!important}
     .tab-admin-btn{min-height:52px;font-size:.72rem!important}
     .admin-variant-row{grid-template-columns:1fr 1fr!important;padding:8px;background:#F7F8F8;border-radius:9px}
@@ -1241,6 +1239,42 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 @media(max-width:420px){
     .tab-admin-bar{gap:5px!important}
     .tab-admin-btn{min-height:48px;font-size:.66rem!important;padding:6px 4px!important}
+}
+
+
+/* =====================================================
+   VENTA DIRECTA ADMIN + COMPROBANTES
+===================================================== */
+.admin-sale-box{display:grid;gap:10px;margin-top:10px}
+.admin-sale-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.admin-sale-grid input,.admin-sale-grid select,.admin-sale-box input,.admin-sale-box select,.admin-sale-box textarea{width:100%;box-sizing:border-box;padding:10px;border:1px solid #d8dde3;border-radius:9px;background:#fff;font:inherit}
+.admin-sale-product-row{display:grid;grid-template-columns:1.7fr .8fr .8fr .7fr 1.2fr auto;gap:7px;align-items:end;padding:9px;border:1px solid #e2e4e5;border-radius:10px;background:#fff}
+.admin-sale-product-row .admin-field label{display:block;font-size:.68rem;font-weight:800;color:#2A2D32;margin-bottom:4px}
+.admin-sale-items{display:grid;gap:7px;max-height:260px;overflow:auto}
+.admin-sale-summary{background:#f8fafb;border:1px solid #e2e4e5;border-radius:10px;padding:10px}
+.admin-sale-summary-row{display:flex;justify-content:space-between;gap:10px;padding:3px 0;font-size:.82rem}
+.admin-sale-payment{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.admin-sale-payment label{display:block;font-size:.72rem;font-weight:800;margin-bottom:4px;color:#2A2D32}
+.admin-sale-payment .sale-mode{grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap}
+.admin-sale-payment .sale-mode label{margin:0;display:flex;align-items:center;gap:5px;border:1px solid #d8dde3;border-radius:9px;padding:8px 10px;background:#fff;cursor:pointer}
+.admin-sale-actions{display:flex;gap:8px;flex-wrap:wrap}
+.admin-sale-actions .btn-add,.admin-sale-actions .btn-opcion{flex:1;min-width:170px}
+.admin-sale-result{margin-top:10px;padding:12px;border-radius:10px;border:1px solid #D2EC00;background:#f8fbdf}
+.admin-sale-result-buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.admin-sale-result-buttons button{flex:1;min-width:150px}
+.admin-order-actions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.admin-order-actions button{font-size:.72rem;padding:7px 9px}
+.admin-order-items{margin-top:8px;padding:8px;border-radius:8px;background:#f8fafb;font-size:.75rem}
+.admin-order-item-line{padding:3px 0;border-bottom:1px dashed #e2e4e5}
+.admin-order-item-line:last-child{border-bottom:0}
+@media(max-width:680px){
+ .admin-sale-grid,.admin-sale-payment{grid-template-columns:1fr}
+ .admin-sale-product-row{grid-template-columns:1fr 1fr}
+ .admin-sale-product-row .admin-field:first-child{grid-column:1/-1}
+ .admin-sale-product-row .admin-field:nth-child(5){grid-column:1/-1}
+ .admin-sale-product-row .sale-add-item{grid-column:1/-1}
+ .admin-sale-actions{flex-direction:column}
+ .admin-sale-actions .btn-add,.admin-sale-actions .btn-opcion{width:100%}
 }
 
 </style>
@@ -1690,8 +1724,9 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
             </div>
 
             <div class="faq-respuesta">
-                Sí, realizamos envíos nacionales cobro en destino
-                a través de MRW y delivery motorizado en la zona urbana.
+                Sí, realizamos envíos nacionales con cobro en destino
+                a través de MRW. También contamos con delivery motorizado,
+                disponible únicamente en Caracas.
             </div>
 
         </div>
@@ -1703,8 +1738,8 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
             </div>
 
             <div class="faq-respuesta">
-                Aceptamos Pago Móvil, Cashea, Zelle, efectivo
-                en bolívares/divisas y los métodos indicados en el catálogo.
+                Aceptamos Pago Móvil, Cashea (ciertas condiciones aplican), Binance,
+                AirTM, Zinli, Punto de Venta y efectivo en bolívares/divisas.
             </div>
 
         </div>
@@ -1828,6 +1863,14 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
                     📈 Contabilidad
                 </button>
 
+                <button
+                    class="tab-admin-btn"
+                    id="tab-btn-sale"
+                    onclick="switchAdminTab('sale')"
+                >
+                    🧾 Nueva venta
+                </button>
+
             </div>
 
             <!-- PEDIDOS -->
@@ -1947,6 +1990,52 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 
                 <div id="accounting-top-products" class="admin-top-products"></div>
                 <div id="accounting-detail-note" style="font-size:.68rem;color:#6C7075;line-height:1.4;margin-top:8px">La utilidad mostrada es utilidad bruta: ventas menos costo de fabricación. No incluye delivery, publicidad, nómina, alquiler u otros gastos operativos.</div>
+            </div>
+
+            <!-- NUEVA VENTA -->
+            <div id="view-admin-sale" style="display:none">
+                <div class="admin-sale-box">
+                    <div class="admin-sale-grid">
+                        <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Cliente</label><input id="admin-sale-client" placeholder="Nombre y apellido"></div>
+                        <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Teléfono / WhatsApp</label><input id="admin-sale-phone" placeholder="0412-000-0000" inputmode="tel"></div>
+                        <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Forma de entrega</label><select id="admin-sale-delivery"><option value="Retiro en Tienda">Retiro en Tienda</option><option value="Delivery">Delivery</option><option value="Envíos Nacionales">Envíos Nacionales</option></select></div>
+                        <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Dirección / referencia</label><input id="admin-sale-address" placeholder="Solo si aplica"></div>
+                    </div>
+
+                    <div style="font-weight:900;color:var(--petroleo);margin-top:4px">Agregar productos</div>
+                    <div class="admin-sale-product-row">
+                        <div class="admin-field"><label>Producto</label><select id="admin-sale-product"></select></div>
+                        <div class="admin-field"><label>Talla</label><select id="admin-sale-size"><option value="">—</option></select></div>
+                        <div class="admin-field"><label>Color</label><select id="admin-sale-color"><option value="">—</option></select></div>
+                        <div class="admin-field"><label>Cantidad</label><input id="admin-sale-qty" type="number" min="1" step="1" value="1"></div>
+                        <div class="admin-field"><label>Nota</label><input id="admin-sale-note" placeholder="Opcional"></div>
+                        <button class="btn-add sale-add-item" type="button" onclick="tmAdminSaleAgregarItem()">➕ Agregar</button>
+                    </div>
+                    <div id="admin-sale-items" class="admin-sale-items"></div>
+
+                    <div class="admin-sale-summary">
+                        <div class="admin-sale-summary-row"><span>Productos</span><b id="admin-sale-count">0</b></div>
+                        <div class="admin-sale-summary-row"><span>Total de la venta</span><b id="admin-sale-total">$0.00</b></div>
+                    </div>
+
+                    <div style="font-weight:900;color:var(--petroleo);margin-top:4px">Pago</div>
+                    <div class="admin-sale-payment">
+                        <div class="sale-mode">
+                            <label><input type="radio" name="admin-sale-mode" value="pendiente" checked onchange="tmAdminSaleActualizarPago()"> Pago pendiente</label>
+                            <label><input type="radio" name="admin-sale-mode" value="parcial" onchange="tmAdminSaleActualizarPago()"> Pago parcial</label>
+                            <label><input type="radio" name="admin-sale-mode" value="completo" onchange="tmAdminSaleActualizarPago()"> Pago completo</label>
+                        </div>
+                        <div><label>Monto del pago</label><input id="admin-sale-payment-amount" type="number" min="0" step="0.01" placeholder="0.00" disabled></div>
+                        <div><label>Método de pago</label><select id="admin-sale-payment-method"><option value="">Método de pago</option></select></div>
+                    </div>
+                    <div style="font-size:.7rem;color:#6C7075">Si registras un abono o pago completo, el inventario se descuenta inmediatamente con la misma regla de primer abono que usamos en los pedidos web.</div>
+
+                    <div class="admin-sale-actions">
+                        <button class="btn-add" id="btn-admin-create-sale" type="button" onclick="tmAdminCrearVenta()">🧾 Registrar venta</button>
+                        <button class="btn-opcion" type="button" onclick="tmAdminSaleLimpiar()">Limpiar</button>
+                    </div>
+                    <div id="admin-sale-result" class="admin-sale-result" style="display:none"></div>
+                </div>
             </div>
 
             <!-- PAGOS -->
@@ -2406,8 +2495,7 @@ async function cargarConfiguracion(){
         $("banner-box").style.backgroundImage =
             `url("${CONFIG.banner}")`;
 
-        $("banner-titulo").textContent =
-            CONFIG.bannerTitulo || "Tu Marka Sport";
+        $("banner-titulo").textContent = "";
     }
 }
 
@@ -5312,10 +5400,9 @@ function filtrarCat(c,btn){
         todos?.parentElement?.classList.add("activo");
         renderCatalogoCompleto();
 
-        // "Todos" funciona como botón de inicio: vuelve al comienzo del catálogo.
+        // "Todos" vuelve al inicio real del catálogo, sin depender del banner.
         requestAnimationFrame(()=>{
-            const destino=$("banner-box") || $("container-logo") || document.body;
-            destino?.scrollIntoView({behavior:"smooth",block:"start"});
+            window.scrollTo({top:0,behavior:"smooth"});
         });
         return;
     }
@@ -5563,11 +5650,12 @@ async function cargarContabilidadAdmin(){
 const tmSwitchAdminTabV13=switchAdminTab;
 switchAdminTab=function(tab){
     document.querySelectorAll(".tab-admin-btn").forEach(b=>b.classList.remove("activo"));
-    ["view-admin-orders","view-admin-stock","view-admin-discount","view-admin-accounting"].forEach(id=>{if($(id))$(id).style.display="none";});
-    if(tab==="orders"){$("tab-btn-orders")?.classList.add("activo");$("view-admin-orders")&&( $("view-admin-orders").style.display="block" );cargarPedidosAdmin();return;}
-    if(tab==="stock"){$("tab-btn-stock")?.classList.add("activo");$("view-admin-stock")&&( $("view-admin-stock").style.display="block" );renderInventarioAdmin();return;}
-    if(tab==="discount"){$("tab-btn-discount")?.classList.add("activo");$("view-admin-discount")&&( $("view-admin-discount").style.display="block" );return;}
-    if(tab==="accounting"){$("tab-btn-accounting")?.classList.add("activo");$("view-admin-accounting")&&( $("view-admin-accounting").style.display="block" );tmActualizarFiltroContabilidad();cargarContabilidadAdmin();return;}
+    ["view-admin-orders","view-admin-stock","view-admin-discount","view-admin-accounting","view-admin-sale"].forEach(id=>{if($(id))$(id).style.display="none";});
+    if(tab==="orders"){$("tab-btn-orders")?.classList.add("activo");$("view-admin-orders")&&($("view-admin-orders").style.display="block");cargarPedidosAdmin();return;}
+    if(tab==="stock"){$("tab-btn-stock")?.classList.add("activo");$("view-admin-stock")&&($("view-admin-stock").style.display="block");renderInventarioAdmin();return;}
+    if(tab==="discount"){$("tab-btn-discount")?.classList.add("activo");$("view-admin-discount")&&($("view-admin-discount").style.display="block");return;}
+    if(tab==="accounting"){$("tab-btn-accounting")?.classList.add("activo");$("view-admin-accounting")&&($("view-admin-accounting").style.display="block");tmActualizarFiltroContabilidad();cargarContabilidadAdmin();return;}
+    if(tab==="sale"){$("tab-btn-sale")?.classList.add("activo");$("view-admin-sale")&&($("view-admin-sale").style.display="block");tmAdminSaleInicializar();return;}
     tmSwitchAdminTabV13(tab);
 };
 $("accounting-period")?.addEventListener("change",()=>{
@@ -5617,6 +5705,135 @@ function mensajeRecordatorioPago(pedido){
     return `Hola ${nombre}, somos Tu Marka Sport. 😊\n\nTe recordamos que tienes un pago pendiente correspondiente a tu pedido ${pedido.pedidoId}.\n\n📋 DETALLE DEL PEDIDO\nFecha: ${pedido.fecha||""}\nEntrega: ${pedido.entrega||"No indicada"}${pedido.direccion?`\nDirección: ${pedido.direccion}`:""}\nMétodo de pago: ${pedido.metodoPago||"No indicado"}\n\n🛍️ PRODUCTOS\n${detalle||"Sin detalle"}💰 RESUMEN DE PAGO\nTotal del pedido: $${Number(pedido.total||0).toFixed(2)}\nTotal abonado: $${Number(pedido.montoPagado||0).toFixed(2)}\nSaldo pendiente: $${Number(pedido.saldoPendiente||0).toFixed(2)}\n\nSi deseas continuar con tu pedido, por favor realiza el pago correspondiente y notifícalo por esta vía.\n\n¡Gracias por tu preferencia! 💚`;
 }
 
+
+/* =====================================================
+   TU MARKA SPORT — VENTA DIRECTA ADMIN + IMPRESION
+===================================================== */
+let TM_ADMIN_SALE_ITEMS=[];
+let TM_ADMIN_SALE_INIT=false;
+let TM_ADMIN_LAST_SALE=null;
+
+function tmAdminSaleMetodos(){
+    const s=$("admin-sale-payment-method"); if(!s)return;
+    s.innerHTML='<option value="">Método de pago</option>';
+    (CONFIG.pagos||[]).forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;s.appendChild(o);});
+}
+function tmAdminSaleInicializar(){
+    if(!$("admin-sale-product"))return;
+    tmAdminSaleMetodos();
+    const s=$("admin-sale-product");
+    if(!TM_ADMIN_SALE_INIT){
+        s.innerHTML='<option value="">Selecciona un producto</option>'+(DB||[]).map(p=>`<option value="${escaparHTML(p.id)}">${escaparHTML(p.nombre)} — $${Number(p.precio||0).toFixed(2)}</option>`).join("");
+        s.addEventListener("change",tmAdminSaleCargarVariantes);
+        TM_ADMIN_SALE_INIT=true;
+    }
+    tmAdminSaleCargarVariantes();
+    tmAdminSaleRender();
+}
+function tmAdminSaleCargarVariantes(){
+    const p=DB.find(x=>String(x.id)===String($("admin-sale-product")?.value||""));
+    const size=$("admin-sale-size"), color=$("admin-sale-color"); if(!size||!color)return;
+    const vs=(p?.variantes||[]).filter(v=>v.activo!==false&&Number(v.stock||0)>0);
+    const sizes=[...new Set(vs.map(v=>String(v.talla||"").trim()).filter(Boolean))];
+    const colors=[...new Set(vs.map(v=>String(v.color||"").trim()).filter(Boolean))];
+    size.innerHTML='<option value="">—</option>'+sizes.map(x=>`<option value="${escaparHTML(x)}">${escaparHTML(x)}</option>`).join("");
+    color.innerHTML='<option value="">—</option>'+colors.map(x=>`<option value="${escaparHTML(x)}">${escaparHTML(x)}</option>`).join("");
+    if(!vs.length){size.innerHTML='<option value="">Sin variantes</option>';color.innerHTML='<option value="">Sin variantes</option>';}
+}
+function tmAdminSaleAgregarItem(){
+    const id=$("admin-sale-product")?.value; const p=DB.find(x=>String(x.id)===String(id));
+    if(!p){alert("Selecciona un producto.");return;}
+    const cantidad=parseInt($("admin-sale-qty")?.value,10)||0; if(cantidad<1){alert("La cantidad debe ser mayor que cero.");return;}
+    const talla=$("admin-sale-size")?.value||"", color=$("admin-sale-color")?.value||"", nota=$("admin-sale-note")?.value.trim()||"";
+    const vs=(p.variantes||[]).filter(v=>v.activo!==false);
+    let variante=null;
+    if(vs.length){
+        if(!talla||!color){alert("Selecciona talla y color para este producto.");return;}
+        variante=vs.find(v=>String(v.talla).toLowerCase()===talla.toLowerCase()&&String(v.color).toLowerCase()===color.toLowerCase());
+        if(!variante){alert("No existe esa combinación de talla y color.");return;}
+        if(cantidad>Number(variante.stock||0)){alert(`Stock disponible: ${variante.stock}`);return;}
+    }else if(cantidad>Number(p.stock||0)){alert(`Stock disponible: ${p.stock}`);return;}
+    const key=[p.id,talla,color].join("|"); const existente=TM_ADMIN_SALE_ITEMS.find(x=>x.key===key);
+    if(existente){existente.cantidad+=cantidad;if(nota)existente.nota=nota;}
+    else TM_ADMIN_SALE_ITEMS.push({key,id:p.id,nombre:p.nombre,precio:Number(p.precio||0),cantidad,talla,color,nota,stock:variante?Number(variante.stock||0):Number(p.stock||0)});
+    $("admin-sale-qty").value=1;if($("admin-sale-note"))$("admin-sale-note").value=""; tmAdminSaleRender();
+}
+function tmAdminSaleEliminarItem(key){TM_ADMIN_SALE_ITEMS=TM_ADMIN_SALE_ITEMS.filter(x=>x.key!==key);tmAdminSaleRender();}
+function tmAdminSaleTotal(){return TM_ADMIN_SALE_ITEMS.reduce((s,x)=>s+Number(x.precio||0)*Number(x.cantidad||0),0);}
+function tmAdminSaleRender(){
+    const box=$("admin-sale-items"), total=tmAdminSaleTotal(); if(!box)return;
+    box.innerHTML=TM_ADMIN_SALE_ITEMS.length?TM_ADMIN_SALE_ITEMS.map(x=>`<div class="admin-sale-summary-row" style="border-bottom:1px solid #e2e4e5;padding:7px 0"><span><b>${escaparHTML(x.cantidad+"x "+x.nombre)}</b>${x.talla?` · Talla ${escaparHTML(x.talla)}`:""}${x.color?` · ${escaparHTML(x.color)}`:""}<small style="display:block;color:#6C7075">$${Number(x.precio).toFixed(2)} c/u</small></span><span><b>$${(x.precio*x.cantidad).toFixed(2)}</b><br><button type="button" class="btn-opcion" style="padding:3px 7px;margin-top:3px" onclick="tmAdminSaleEliminarItem('${escaparHTML(x.key)}')">Quitar</button></span></div>`).join(""):'<div style="font-size:.78rem;color:#6C7075">No hay productos agregados.</div>';
+    if($("admin-sale-count"))$("admin-sale-count").textContent=TM_ADMIN_SALE_ITEMS.reduce((s,x)=>s+x.cantidad,0);
+    if($("admin-sale-total"))$("admin-sale-total").textContent=`$${total.toFixed(2)}`;
+    tmAdminSaleActualizarPago();
+}
+function tmAdminSaleModo(){return document.querySelector('input[name="admin-sale-mode"]:checked')?.value||"pendiente";}
+function tmAdminSaleActualizarPago(){
+    const modo=tmAdminSaleModo(), input=$("admin-sale-payment-amount"), total=tmAdminSaleTotal(); if(!input)return;
+    input.disabled=modo==="pendiente";
+    input.readOnly=modo==="completo";
+    input.value=modo==="completo"?total.toFixed(2):(modo==="pendiente"?"":input.value);
+    if(modo==="parcial"&&Number(input.value)>=total&&total>0)input.value=Math.max(0,total-0.01).toFixed(2);
+    if($("admin-sale-payment-method"))$("admin-sale-payment-method").disabled=modo==="pendiente";
+}
+function tmAdminSaleLimpiar(){
+    TM_ADMIN_SALE_ITEMS=[]; TM_ADMIN_LAST_SALE=null;
+    ["admin-sale-client","admin-sale-phone","admin-sale-address"].forEach(id=>{if($(id))$(id).value="";});
+    if($("admin-sale-delivery"))$("admin-sale-delivery").value="Retiro en Tienda";
+    if($("admin-sale-payment-method"))$("admin-sale-payment-method").value="";
+    const r=document.querySelector('input[name="admin-sale-mode"][value="pendiente"]');if(r)r.checked=true;
+    if($("admin-sale-result")){ $("admin-sale-result").style.display="none";$("admin-sale-result").innerHTML=""; }
+    tmAdminSaleCargarVariantes();tmAdminSaleRender();
+}
+function tmFacturaFecha(fecha){const d=new Date(String(fecha||"").replace(" ","T"));return isNaN(d.getTime())?String(fecha||""):d.toLocaleString("es-VE",{dateStyle:"short",timeStyle:"short"});}
+function tmFacturaHTML(pedido,items,tipo){
+    const thermal=tipo==="thermal"; const rows=(items||[]).map(it=>`<tr><td>${Number(it.cantidad||0)}x ${escaparHTML(it.nombre||"")}<small>${it.talla?`Talla: ${escaparHTML(it.talla)} `:""}${it.color?`Color: ${escaparHTML(it.color)}`:""}${it.nota?`<br>Nota: ${escaparHTML(it.nota)}`:""}</small></td><td>$${Number(it.subtotal||0).toFixed(2)}</td></tr>`).join("");
+    return `<!doctype html><html><head><meta charset="utf-8"><title>Comprobante ${escaparHTML(pedido.pedidoId||"")}</title><style>
+    *{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;color:#181A1C;background:#fff}.sheet{margin:0 auto;padding:${thermal?'8px':'18px'};width:${thermal?'58mm':'5.5in'};font-size:${thermal? '11px':'11px'};line-height:1.35}.brand{text-align:center;border-bottom:2px solid #2A2D32;padding-bottom:8px;margin-bottom:10px}.brand h1{font-size:${thermal?'17px':'21px'};margin:0}.brand p{margin:2px 0;font-size:9px;color:#6C7075}.meta{display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;margin-bottom:10px}.meta div{padding:2px 0}.meta b{font-size:9px}.items{width:100%;border-collapse:collapse;margin-top:7px}.items th{text-align:left;border-bottom:1px solid #181A1C;padding:4px 0;font-size:9px}.items td{vertical-align:top;padding:5px 0;border-bottom:1px dashed #b8bcc0}.items td:last-child{text-align:right;white-space:nowrap}.items small{display:block;color:#6C7075;font-size:8px}.totals{margin-top:9px;border-top:1px solid #181A1C;padding-top:7px}.total{font-size:${thermal?'15px':'16px'};font-weight:900}.note{margin-top:10px;padding-top:7px;border-top:1px solid #e2e4e5;font-size:8px;color:#6C7075}.status{margin-top:8px;font-weight:800}.print{margin-top:10px;font-size:8px;color:#6C7075}@media print{@page{size:${thermal?'58mm auto':'letter'};margin:${thermal?'0':'0.25in'};}.sheet{width:${thermal?'58mm':'5.5in'};padding:${thermal?'6px':'0'} } .print{display:none}}</style></head><body><main class="sheet"><div class="brand"><h1>TU MARKA SPORT</h1><p>Comprobante de compra</p></div><div class="meta"><div><b>Pedido:</b> ${escaparHTML(pedido.pedidoId||"")}</div><div><b>Fecha:</b> ${tmFacturaFecha(pedido.fecha)}</div><div><b>Cliente:</b> ${escaparHTML(pedido.cliente||"")}</div><div><b>Teléfono:</b> ${escaparHTML(pedido.telefono||"")}</div><div><b>Entrega:</b> ${escaparHTML(pedido.entrega||"")}</div><div><b>Pago:</b> ${escaparHTML(pedido.metodoPago||"Pendiente")}</div></div><table class="items"><thead><tr><th>Detalle</th><th>Importe</th></tr></thead><tbody>${rows}</tbody></table><div class="totals"><div>Total: <span class="total">$${Number(pedido.total||0).toFixed(2)}</span></div><div>Pagado: $${Number(pedido.montoPagado||0).toFixed(2)}</div><div>Saldo pendiente: $${Number(pedido.saldoPendiente||0).toFixed(2)}</div><div class="status">Estado: ${escaparHTML(pedido.estado||"")}</div></div>${pedido.direccion?`<div class="note"><b>Dirección:</b> ${escaparHTML(pedido.direccion)}</div>`:""}<div class="note">Este documento es un comprobante interno de compra y no sustituye una factura fiscal cuando esta sea legalmente exigible.</div><div class="print">Tu Marka Sport · Gracias por su compra.</div></main></body></html>`;
+}
+function tmImprimirComprobante(pedido,items,tipo){
+    const w=window.open("","_blank","width=700,height=850"); if(!w){alert("El navegador bloqueó la ventana de impresión. Permite ventanas emergentes para este sitio.");return;} w.document.open();w.document.write(tmFacturaHTML(pedido,items,tipo));w.document.close();w.focus();setTimeout(()=>{w.print();},250);
+}
+async function tmImprimirPedidoAdmin(pedidoId,tipo){
+    try{const r=await consultarPedidoAdmin(pedidoId);if(r.status!=="success")throw new Error(r.message||"No se pudo consultar el pedido.");tmImprimirComprobante(r.pedido,r.items||[],tipo);}catch(e){alert(e.message);}
+}
+function tmAdminSaleResultado(r){
+    const box=$("admin-sale-result");if(!box)return;TM_ADMIN_LAST_SALE=r;const p=r.pedido||{};
+    box.style.display="block";box.innerHTML=`<b>Venta registrada: ${escaparHTML(p.pedidoId||r.pedidoId||"")}</b><br>Cliente: ${escaparHTML(p.cliente||"")}<br>Total: <b>$${Number(p.total||0).toFixed(2)}</b> · Pagado: <b>$${Number(p.montoPagado||0).toFixed(2)}</b> · Saldo: <b>$${Number(p.saldoPendiente||0).toFixed(2)}</b><div class="admin-sale-result-buttons"><button class="btn-opcion" type="button" onclick="tmImprimirComprobante(TM_ADMIN_LAST_SALE.pedido,TM_ADMIN_LAST_SALE.items||[],'letter')">🖨 Carta / media hoja</button><button class="btn-opcion" type="button" onclick="tmImprimirComprobante(TM_ADMIN_LAST_SALE.pedido,TM_ADMIN_LAST_SALE.items||[],'thermal')">🧾 Térmica 58 mm</button>${r.whatsappUrl?`<button class="btn-add" type="button" onclick="window.open('${r.whatsappUrl.replace(/'/g,"%27")}','_blank','noopener,noreferrer')">WhatsApp</button>`:""}</div>`;
+}
+async function tmAdminCrearVenta(){
+    if(!TM_ADMIN_SALE_ITEMS.length){alert("Agrega al menos un producto.");return;}
+    const cliente=$("admin-sale-client").value.trim();if(!cliente){alert("Ingresa el nombre del cliente.");return;}
+    const modo=tmAdminSaleModo(), total=tmAdminSaleTotal(), metodo=$("admin-sale-payment-method").value.trim();
+    let monto=Number($("admin-sale-payment-amount").value||0);
+    if(modo!=="pendiente"&&!metodo){alert("Selecciona el método de pago.");return;}
+    if(modo==="parcial"&&(monto<=0||monto>=total)){alert("El pago parcial debe ser mayor que cero y menor que el total.");return;}
+    if(modo==="completo")monto=total;
+    const btn=$("btn-admin-create-sale");btn.disabled=true;btn.textContent="Registrando...";
+    try{
+        const r=await adminRequest({action:"crear_venta_admin",cliente,telefono:$("admin-sale-phone").value.trim(),entrega:$("admin-sale-delivery").value,direccion:$("admin-sale-address").value.trim(),metodoPago:metodo,modalidadPago:modo,montoPago:monto,items:TM_ADMIN_SALE_ITEMS.map(x=>({id:x.id,nombre:x.nombre,precio:x.precio,cantidad:x.cantidad,talla:x.talla,color:x.color,nota:x.nota}))});
+        if(r.status!=="success")throw new Error(r.message||"No se pudo registrar la venta.");
+        tmAdminSaleResultado(r);
+        if(r.whatsappUrl)window.open(r.whatsappUrl,"_blank","noopener,noreferrer");
+        await cargarProductos();await cargarPedidosAdmin();
+        TM_ADMIN_SALE_ITEMS=[];tmAdminSaleRender();
+    }catch(e){console.error(e);alert(e.message);}finally{btn.disabled=false;btn.textContent="🧾 Registrar venta";}
+}
+
+/* Agrega acciones de impresión a cada pedido sin reemplazar el render existente. */
+const tmCargarPedidosBase=window.cargarPedidosAdmin;
+window.cargarPedidosAdmin=async function(){
+    await tmCargarPedidosBase();
+    const list=$("admin-orders-list");if(!list)return;
+    list.querySelectorAll(".admin-order-print-tools").forEach(x=>x.remove());
+    const cards=list.children;
+    Array.from(cards).forEach(card=>{
+        const text=card.textContent||"";const m=text.match(/TM-[A-Z0-9-]+/);if(!m)return;
+        const id=m[0];const tools=document.createElement("div");tools.className="admin-order-print-tools admin-order-actions";
+        tools.innerHTML=`<button class="btn-opcion" type="button">🖨 Carta</button><button class="btn-opcion" type="button">🧾 Térmica</button>`;
+        tools.children[0].onclick=()=>tmImprimirPedidoAdmin(id,"letter");tools.children[1].onclick=()=>tmImprimirPedidoAdmin(id,"thermal");card.appendChild(tools);
+    });
+};
 </script>
 
 <a id="whatsapp-float" class="whatsapp-float" href="#" aria-label="Iniciar conversación por WhatsApp" title="Escríbenos por WhatsApp">
