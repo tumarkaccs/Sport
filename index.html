@@ -1102,7 +1102,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .producto img{height:230px;width:100%;object-fit:contain;background:#fff;padding:12px;display:block}
 @media(max-width:600px){.producto img{height:190px}}
 .producto .stock-badge{display:none!important}
-.producto-tools{position:absolute;right:8px;top:8px;display:flex;gap:5px;z-index:20}
+.producto-tools{position:absolute;right:8px;top:150px;display:flex;gap:5px;z-index:20}
 .producto-tool{width:30px;height:30px;border:1px solid #D8DCDD;border-radius:50%;background:rgba(255,255,255,.95);display:flex;align-items:center;justify-content:center;font-size:.85rem;box-shadow:0 2px 6px rgba(0,0,0,.08);color:var(--tm-negro)}
 .producto-tool.favorito-activo{background:var(--tm-lima);border-color:var(--tm-lima)}
 .catalogo-disponibilidad{padding:8px 9px 4px;border-top:1px solid #EEF0F1;margin-top:2px;background:#fff}
@@ -1157,6 +1157,14 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .btn-cat.activo{background:var(--tm-lima)!important;color:var(--tm-negro)!important}
 .share-cat{border-radius:50%!important;width:28px;height:28px;padding:0!important;margin-right:4px;align-self:center;background:#F1F3F3!important}
 
+
+/* =========================================================
+   TU MARKA SPORT V12 — AJUSTES FINALES
+========================================================= */
+.producto-tools{top:150px!important;bottom:auto!important}
+@media(max-width:600px){.producto-tools{top:145px!important}}
+.catalogo-color-option .color-dot{cursor:pointer}
+.admin-overdue-note{display:inline-block;margin-top:6px;padding:4px 7px;border-radius:7px;background:#fff7ed;color:#c2410c;font-size:.65rem;font-weight:900}
 </style>
 </head>
 
@@ -1183,7 +1191,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
         <span>Envíos Nacionales</span>
 
         <img
-            src="https://w7.pngwing.com/pngs/379/910/png-transparent-mrw-hd-logo-thumbnail.png"
+            src="https://i.ibb.co/Y41VMZ23/pngegg-2.png"
             class="icon-mrw"
             alt="MRW"
         >
@@ -1768,7 +1776,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 
                 <div id="admin-stats" class="admin-stats-grid">
                     <div class="admin-stat-card"><strong id="stat-visitas">0</strong><span>Visitas</span></div>
-                    <div class="admin-stat-card"><strong id="stat-productos-vistos">0</strong><span>Productos vistos</span></div>
+                    <div class="admin-stat-card"><strong id="stat-productos-vistos">0</strong><span>Vistas de productos</span></div>
                     <div class="admin-stat-card"><strong id="stat-unidades-vendidas">0</strong><span>Unidades vendidas</span></div>
                     <div class="admin-stat-card"><strong id="stat-pedidos">0</strong><span>Pedidos</span></div>
                 </div>
@@ -4324,6 +4332,21 @@ async function cargarPedidosAdminOriginal(){
             );
             box.appendChild(whatsappBtn);
 
+            const diasPedido=tmDiasDesdePedido(pedido.fecha);
+            if(estado !== "CANCELADO" && estado !== "PAGADO" && diasPedido > 2 && saldo > 0){
+                const overdueNote=document.createElement("div");
+                overdueNote.className="admin-overdue-note";
+                overdueNote.textContent=`⏰ ${diasPedido} días pendiente de pago`;
+                box.appendChild(overdueNote);
+
+                const reminderBtn=document.createElement("button");
+                reminderBtn.className="btn-opcion";
+                reminderBtn.style.cssText="margin:7px 0 0;background:#fff7ed;color:#c2410c;border-color:#fed7aa";
+                reminderBtn.textContent="⏰ Recordar pago por WhatsApp";
+                reminderBtn.onclick=()=>abrirWhatsAppCliente(pedido.telefono,mensajeRecordatorioPago(pedido));
+                box.appendChild(reminderBtn);
+            }
+
             if(estado !== "CANCELADO" && estado !== "PAGADO"){
 
                 const acciones = document.createElement("div");
@@ -5070,25 +5093,46 @@ function tmProductoCard(p){
     const card=document.createElement("article");card.className="producto";
     const imageBox=document.createElement("div");imageBox.className="producto-img-box";
     if(p.promo){const badge=document.createElement("div");badge.className="badge-promo";badge.textContent=p.promo;imageBox.appendChild(badge);}
+    const variantes=(p.variantes||[]).filter(v=>v.activo!==false);
+    const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
+    const img=document.createElement("img");img.src=p.img||"";img.alt=p.nombre||"Producto";img.loading="lazy";img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
+
     const tools=document.createElement("div");tools.className="producto-tools";
-    const share=document.createElement("button");share.type="button";share.className="producto-tool";share.textContent="↗";share.title="Compartir producto";share.onclick=e=>{e.stopPropagation();compartirProducto(p.id,p.nombre);};
-    const fav=document.createElement("button");fav.type="button";fav.className="producto-tool";fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.title="Favoritos";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);};tools.appendChild(share);tools.appendChild(fav);imageBox.appendChild(tools);
-    const img=document.createElement("img");img.src=p.img||"";img.alt=p.nombre;img.loading="lazy";img.onerror=()=>{img.style.visibility="hidden"};img.onclick=()=>abrirFicha(p.id);imageBox.appendChild(img);
-    const variantes=(p.variantes||[]).filter(v=>v.activo!==false&&Number(v.stock||0)>0);
+    const fav=document.createElement("button");fav.type="button";fav.className="producto-tool";fav.title="Agregar a favoritos";fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));};tools.appendChild(fav);
+    const share=document.createElement("button");share.type="button";share.className="producto-tool";share.title="Compartir producto";share.textContent="↗";share.onclick=e=>{e.stopPropagation();compartirProducto(p.id,p.nombre);};tools.appendChild(share);imageBox.appendChild(tools);
+
     if(variantes.length){
         const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";
         const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y colores disponibles";disponibilidad.appendChild(titulo);
-        const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort(tmOrdenTallas);
+        const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};
+        const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));
         tallas.forEach(talla=>{
-            const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase());if(!porTalla.length)return;
-            const row=document.createElement("div");row.className="catalogo-talla-row";const tb=document.createElement("div");tb.className="catalogo-talla-box";tb.textContent=talla;row.appendChild(tb);const cb=document.createElement("div");cb.className="catalogo-colores-por-talla";
-            Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{const button=document.createElement("button");button.type="button";button.className="catalogo-color-option";button.title=`${talla} / ${color}`;const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",colorToCSS(color));dot.style.setProperty("--color-border",tmColorBorder(color));button.appendChild(dot);button.onclick=e=>{e.stopPropagation();abrirFicha(p.id);setTimeout(()=>{tmSetHiddenSelect("m-talla",talla);actualizarOpcionesVariantesFicha();tmSetHiddenSelect("m-color",color);actualizarOpcionesColoresSolo();const v=obtenerVarianteSeleccionadaLocal();tmSetFichaImage(v);actualizarStockModal();},0);};cb.appendChild(button);});
-            row.appendChild(cb);disponibilidad.appendChild(row);
+            const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;
+            const row=document.createElement("div");row.className="catalogo-talla-row";
+            const tallaBox=document.createElement("div");tallaBox.className="catalogo-talla-box";tallaBox.textContent=talla;tallaBox.title=`Talla ${talla}`;row.appendChild(tallaBox);
+            const coloresBox=document.createElement("div");coloresBox.className="catalogo-colores-por-talla";
+            Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{
+                const variantesColor=porTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());
+                const cantidad=variantesColor.reduce((sum,v)=>sum+Number(v.stock||0),0);if(cantidad<=0)return;
+                const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;boton.setAttribute("aria-label",`Color ${color}, talla ${talla}`);
+                const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;
+                const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);
+                boton.onclick=event=>{event.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);img.src=v?.imagen||p.img||"";};
+                coloresBox.appendChild(boton);
+            });
+            if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}
         });
         imageBox.appendChild(disponibilidad);
     }
-    const info=document.createElement("div");info.className="p-info";const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre;const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.onclick=()=>abrirFicha(p.id);const add=document.createElement("button");add.className="btn-add";const stock=(p.variantes||[]).length?(p.variantes||[]).reduce((s,v)=>s+(v.activo!==false?Number(v.stock||0):0),0):Number(p.stock||0);add.disabled=stock<=0;add.textContent=stock>0?"Añadir":"Agotado";if(stock>0)add.onclick=()=>abrirFicha(p.id);info.append(nombre,precio,ver,add);card.append(imageBox,info);return card;
+
+    const info=document.createElement("div");info.className="p-info";
+    const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre||"Producto";
+    const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;
+    const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.addEventListener("click",()=>abrirFicha(p.id));
+    const add=document.createElement("button");add.className="btn-add";add.disabled=stockCatalogo<=0;add.textContent=stockCatalogo>0?"Añadir":"Agotado";if(stockCatalogo>0)add.addEventListener("click",()=>abrirFicha(p.id));
+    info.append(nombre,precio,ver,add);card.append(imageBox,info);return card;
 }
+
 function tmRenderGrid(id,lista){const grid=$(id);if(!grid)return;grid.innerHTML="";if(!lista.length){grid.innerHTML='<div class="estado" style="grid-column:1/-1">No hay productos disponibles.</div>';return;}const f=document.createDocumentFragment();lista.forEach(p=>f.appendChild(tmProductoCard(p)));grid.appendChild(f);}
 function tmOrdenNuevos(){
     const withFlag=DB.filter(p=>p.nuevo);const base=withFlag.length?withFlag:DB;return [...base].sort((a,b)=>Number(b.nuevo)-Number(a.nuevo)).slice(0,4);
@@ -5158,6 +5202,51 @@ async function cargarEstadisticasAdmin(){
 }
 async function cargarPedidosAdmin(){await cargarPedidosAdminOriginal();await cargarEstadisticasAdmin();}
 
+/* =========================================================
+   TU MARKA SPORT V12 — ESTADÍSTICAS GLOBALES
+========================================================= */
+async function tmRegistrarVisita(){
+    try{
+        if(!sessionStorage.getItem("tm_visit_v12")){
+            sessionStorage.setItem("tm_visit_v12","1");
+            await fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"registrar_visita"})});
+        }
+    }catch(e){console.warn("No se pudo registrar visita global",e);}
+}
+async function tmRegistrarVista(id){
+    const sid=String(id||"");if(!sid)return;
+    try{
+        const key="tm_viewed_v12_"+sid;
+        if(sessionStorage.getItem(key))return;
+        sessionStorage.setItem(key,"1");
+        const r=await fetch(APPS_SCRIPT_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify({action:"registrar_vista",productoId:sid})});
+        const data=await r.json();
+        if(data.status!=="success")console.warn(data.message||"No se registró la vista");
+    }catch(e){console.warn("No se pudo registrar vista global",e);}
+}
+async function cargarEstadisticasAdmin(){
+    try{
+        const r=await adminRequest({action:"estadisticas_globales"});
+        if(r.status!=="success")throw new Error(r.message||"No se pudieron cargar estadísticas.");
+        if($("stat-visitas"))$("stat-visitas").textContent=Number(r.visitas||0);
+        if($("stat-productos-vistos"))$("stat-productos-vistos").textContent=Number(r.vistasTotales||0);
+        if($("stat-unidades-vendidas"))$("stat-unidades-vendidas").textContent=Number(r.unidadesVendidas||0);
+        if($("stat-pedidos"))$("stat-pedidos").textContent=Number(r.pedidos||0);
+        const box=$("admin-top-products");
+        if(box){
+            const vendidos=r.topVendidos||[], vistos=r.topVistos||[];
+            box.innerHTML=`<div class='admin-top-products-title'>🏆 Productos más vendidos</div>`+(vendidos.length?vendidos.map(x=>`<div class='admin-top-product-row'><span>${escaparHTML(x.nombre||x.productoId)}</span><b>${Number(x.cantidad||0)} un.</b></div>`).join(""):"<div style='color:#6C7075'>Aún no hay ventas registradas.</div>")+`<div class='admin-top-products-title' style='margin-top:10px'>👁 Productos más vistos</div>`+(vistos.length?vistos.map(x=>`<div class='admin-top-product-row'><span>${escaparHTML(x.nombre||x.productoId)}</span><b>${Number(x.vistas||0)}</b></div>`).join(""):"<div style='color:#6C7075'>Aún no hay vistas registradas.</div>");
+        }
+    }catch(e){console.warn("No se pudieron cargar estadísticas globales",e);if($("stat-visitas"))$("stat-visitas").textContent="—";if($("stat-productos-vistos"))$("stat-productos-vistos").textContent="—";if($("stat-unidades-vendidas"))$("stat-unidades-vendidas").textContent="—";if($("stat-pedidos"))$("stat-pedidos").textContent="—";}
+}
+function tmDiasDesdePedido(fecha){
+    const d=new Date(String(fecha||"").replace(" ","T"));if(isNaN(d.getTime()))return 0;return Math.floor((Date.now()-d.getTime())/86400000);
+}
+function mensajeRecordatorioPago(pedido){
+    const nombre=pedido.cliente||"Cliente";const saldo=Number(pedido.saldoPendiente||0).toFixed(2);
+    return `Hola ${nombre}, somos Tu Marka Sport. 😊\n\nTe recordamos que el pedido ${pedido.pedidoId} tiene un saldo pendiente de $${saldo}.\n\nSi deseas continuar con tu pedido, puedes indicarnos cuando realizarás el pago.\n\n¡Gracias por tu preferencia! 💚`;
+}
+
 /* ---------- Inicialización V11 ---------- */
 (function(){
     tmRegistrarVisita();
@@ -5178,4 +5267,3 @@ async function cargarPedidosAdmin(){await cargarPedidosAdminOriginal();await car
 
 </body>
 </html>
-```
