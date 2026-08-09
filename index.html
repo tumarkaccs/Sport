@@ -741,7 +741,7 @@ header{
 .admin-product-grid textarea{grid-column:1/-1;resize:vertical}
 .admin-variant-row{
     display:grid;
-    grid-template-columns:1fr 1fr 90px 70px auto;
+    grid-template-columns:1fr 1fr 90px 70px minmax(150px,1fr) auto;
     gap:6px;
     align-items:center;
     margin-bottom:6px;
@@ -752,6 +752,16 @@ header{
     border-radius:8px;
     box-sizing:border-box;
     min-width:0;
+}
+.catalog-colors-wrap{
+    padding:7px 8px 0;
+    text-align:center;
+}
+.catalog-colors-title{
+    font-size:.68rem;
+    font-weight:800;
+    color:var(--texto);
+    margin-bottom:5px;
 }
 .catalog-colors{
     display:flex;
@@ -1843,7 +1853,7 @@ header{
         </div>
 
         <div style="margin-top:12px">
-            <div style="font-weight:900;margin-bottom:6px">Variantes por talla/color</div>
+            <div style="font-weight:900;margin-bottom:6px">Variantes por talla / color / stock / imagen</div>
             <div id="admin-variants-list"></div>
             <button class="btn-opcion" style="margin-top:8px" onclick="agregarFilaVarianteAdmin()">➕ Agregar variante</button>
         </div>
@@ -2551,17 +2561,50 @@ function mostrar(lista){
 
         imageBox.appendChild(img);
 
-        if(p.colores && p.colores.length){
+        if((p.colores && p.colores.length) || (p.variantes && p.variantes.length)){
+            const colorsWrap = document.createElement("div");
+            colorsWrap.className = "catalog-colors-wrap";
+            const colorsTitle = document.createElement("div");
+            colorsTitle.className = "catalog-colors-title";
+            colorsTitle.textContent = "Colores disponibles";
+            colorsWrap.appendChild(colorsTitle);
+
             const colorsBox = document.createElement("div");
             colorsBox.className = "catalog-colors";
             const variantesPorColor = {};
             (p.variantes || []).forEach(v=>{
-                variantesPorColor[v.color] = (variantesPorColor[v.color] || 0) + Number(v.stock || 0);
+                const key = String(v.color || "").trim();
+                if(!key) return;
+                if(!variantesPorColor[key]) variantesPorColor[key] = [];
+                variantesPorColor[key].push(v);
             });
-            Array.from(new Set(p.colores)).forEach(color=>{
-                colorsBox.insertAdjacentHTML("beforeend", colorCircleHTML(color, !p.variantes.length || (variantesPorColor[color] || 0) > 0));
+            const coloresCatalogo = Array.from(new Set([...(p.colores || []), ...Object.keys(variantesPorColor)]));
+            coloresCatalogo.forEach(color=>{
+                const variantesColor = variantesPorColor[color] || [];
+                const disponible = !p.variantes.length || variantesColor.some(v=>Number(v.stock||0)>0);
+                const botonColor = document.createElement("button");
+                botonColor.type = "button";
+                botonColor.className = "color-dot " + (disponible ? "" : "agotado");
+                botonColor.title = disponible ? color : color + " - Agotado";
+                const bg = colorToCSS(color);
+                const borde = String(color).toLowerCase().includes("blanc") || bg === "#ffffff" ? "#94a3b8" : bg;
+                botonColor.style.setProperty("--color-dot", bg);
+                botonColor.style.setProperty("--color-border", borde);
+                botonColor.disabled = !disponible;
+                botonColor.setAttribute("aria-label", color);
+                botonColor.onclick = (event)=>{
+                    event.stopPropagation();
+                    const varianteConImagen = variantesColor.find(v=>Number(v.stock||0)>0 && v.imagen);
+                    if(varianteConImagen && varianteConImagen.imagen){
+                        img.src = varianteConImagen.imagen;
+                    } else {
+                        img.src = p.img;
+                    }
+                };
+                colorsBox.appendChild(botonColor);
             });
-            imageBox.appendChild(colorsBox);
+            colorsWrap.appendChild(colorsBox);
+            imageBox.appendChild(colorsWrap);
         }
 
         const info =
@@ -4474,7 +4517,7 @@ async function guardarVarianteStockAdmin(varianteId,input,button){
 function agregarFilaVarianteAdmin(data={}){
     const box=$("admin-variants-list");
     const row=document.createElement("div"); row.className="admin-variant-row";
-    row.innerHTML=`<input class="variant-talla" placeholder="Talla" value="${escaparHTML(data.talla||"")}"><input class="variant-color" placeholder="Color" value="${escaparHTML(data.color||"")}"><input class="variant-stock" type="number" min="0" value="${Number(data.stock||0)}"><select class="variant-activo"><option value="SI" ${data.activo===false?"":"selected"}>Activo</option><option value="NO" ${data.activo===false?"selected":""}>Inactivo</option></select><button class="btn-opcion" style="margin:0;color:#b91c1c" onclick="this.parentElement.remove()">✕</button>`;
+    row.innerHTML=`<input class="variant-talla" placeholder="Talla" value="${escaparHTML(data.talla||"")}"><input class="variant-color" placeholder="Color" value="${escaparHTML(data.color||"")}"><input class="variant-stock" type="number" min="0" value="${Number(data.stock||0)}"><input class="variant-imagen" placeholder="URL imagen variante" value="${escaparHTML(data.imagen||"")}"><select class="variant-activo"><option value="SI" ${data.activo===false?"":"selected"}>Activo</option><option value="NO" ${data.activo===false?"selected":""}>Inactivo</option></select><button class="btn-opcion" style="margin:0;color:#b91c1c" onclick="this.parentElement.remove()">✕</button>`;
     row.dataset.varianteId=data.varianteId||"";
     box.appendChild(row);
 }
@@ -4509,7 +4552,7 @@ async function guardarProductoAdminFrontend(){
         colores:$("admin-product-colors").value.split(";").map(x=>x.trim()).filter(Boolean), tallas:$("admin-product-sizes").value.split(";").map(x=>x.trim()).filter(Boolean), desc:$("admin-product-desc").value.trim(), variantes:[]
     };
     document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>{
-        data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,activo:row.querySelector(".variant-activo").value!=="NO"});
+        data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),activo:row.querySelector(".variant-activo").value!=="NO"});
     });
     if(!id||!data.nombre){alert("ID y nombre son obligatorios.");return;}
     const btn=$("btn-save-product-admin"); btn.disabled=true; btn.textContent="Guardando...";
