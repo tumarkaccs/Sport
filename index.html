@@ -1181,6 +1181,62 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 @media(max-width:600px){.producto-tools{top:145px!important}}
 .catalogo-color-option .color-dot{cursor:pointer}
 .admin-overdue-note{display:inline-block;margin-top:6px;padding:4px 7px;border-radius:7px;background:#fff7ed;color:#c2410c;font-size:.65rem;font-weight:900}
+
+/* =========================================================
+   AJUSTES V14 — ADMIN / CONTABILIDAD / COSTOS POR VARIANTE
+========================================================= */
+.tab-admin-bar{
+    display:grid!important;
+    grid-template-columns:repeat(4,minmax(0,1fr));
+    gap:7px!important;
+    overflow:visible!important;
+    border-bottom:0!important;
+    margin-bottom:15px!important;
+}
+.tab-admin-btn{
+    min-width:0;
+    width:100%;
+    min-height:48px;
+    padding:7px 6px!important;
+    border:1px solid #E2E4E5!important;
+    border-radius:11px!important;
+    background:#F7F8F8!important;
+    color:#2A2D32!important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    line-height:1.05;
+    white-space:normal!important;
+}
+.tab-admin-btn.activo{
+    background:var(--tm-lima)!important;
+    border-color:var(--tm-lima)!important;
+    color:var(--tm-negro)!important;
+    box-shadow:0 4px 12px rgba(210,236,0,.18);
+}
+.admin-field{min-width:0}.admin-field label{display:block;font-size:.68rem;font-weight:900;color:#2A2D32;margin:0 0 4px}.admin-field-full{grid-column:1/-1}
+.admin-product-grid textarea{grid-column:auto!important}
+.admin-variant-row{grid-template-columns:1fr 1fr 85px 1fr 90px 75px auto!important}
+.admin-variant-field{min-width:0}.admin-variant-field label{display:block;font-size:.62rem;font-weight:900;color:#6C7075;margin:0 0 3px}.admin-variant-field input,.admin-variant-field select{width:100%;box-sizing:border-box;padding:8px;border:1px solid #CBD5E1;border-radius:8px;font:inherit;min-width:0}
+.admin-accounting-period-display{background:#F7F8F8;border:1px solid #E2E4E5;border-radius:9px;padding:9px 10px;margin:-1px 0 10px;font-size:.72rem;font-weight:900;color:#2A2D32}
+.badge-promo{background:#6C7075!important;color:#6C7075!important}
+.catalogo-disponibilidad-titulo{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-nombre{margin-bottom:3px!important;min-height:2.5em!important}.producto:not(:has(.catalogo-disponibilidad)) .p-nombre{min-height:0!important}
+.precio{margin-bottom:6px!important}
+.producto:not(:has(.catalogo-disponibilidad)) .p-info{padding-top:9px!important}
+.producto:not(:has(.catalogo-disponibilidad)) .precio{margin-top:-1px!important}
+@media(max-width:720px){
+    .tab-admin-bar{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+    .tab-admin-btn{min-height:52px;font-size:.72rem!important}
+    .admin-variant-row{grid-template-columns:1fr 1fr!important;padding:8px;background:#F7F8F8;border-radius:9px}
+    .admin-variant-row>button{grid-column:1/-1}
+}
+@media(max-width:420px){
+    .tab-admin-bar{gap:5px!important}
+    .tab-admin-btn{min-height:48px;font-size:.66rem!important;padding:6px 4px!important}
+}
+
 </style>
 </head>
 
@@ -1862,6 +1918,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
                 </div>
 
                 <div id="accounting-custom-note" style="display:none;font-size:.7rem;color:#6C7075;margin:-3px 0 8px">Selecciona la fecha inicial y final para consultar un período personalizado.</div>
+                <div id="accounting-period-display" class="admin-accounting-period-display">Período consultado: —</div>
 
                 <div class="admin-accounting-grid">
                     <div class="admin-accounting-card"><strong id="acc-ventas">$0.00</strong><span>Ventas totales</span></div>
@@ -1982,17 +2039,17 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
         <h2 id="admin-product-title" style="text-align:center;color:var(--petroleo)">Nuevo producto</h2>
 
         <div class="admin-product-grid">
-            <input id="admin-product-id" placeholder="ID del producto">
-            <input id="admin-product-name" placeholder="Nombre del producto">
-            <input id="admin-product-price" type="number" min="0" step="0.01" placeholder="Precio">
-            <input id="admin-product-cat" placeholder="Categoría">
-            <input id="admin-product-promo" placeholder="Promoción / etiqueta">
-            <input id="admin-product-img" placeholder="URL de imagen">
-            <input id="admin-product-stock" type="number" min="0" step="1" placeholder="Stock general">
-            <input id="admin-product-cost" type="number" min="0" step="0.01" placeholder="Costo de fabricación ($)">
-            <input id="admin-product-colors" placeholder="Colores separados por ;">
-            <input id="admin-product-sizes" placeholder="Tallas separadas por ;">
-            <textarea id="admin-product-desc" rows="3" placeholder="Descripción"></textarea>
+            <div class="admin-field"><label for="admin-product-id">ID del producto</label><input id="admin-product-id" placeholder="Ej: FRANELA-001"></div>
+            <div class="admin-field"><label for="admin-product-name">Nombre del producto</label><input id="admin-product-name" placeholder="Nombre del producto"></div>
+            <div class="admin-field"><label for="admin-product-price">Precio de venta ($)</label><input id="admin-product-price" type="number" min="0" step="0.01" placeholder="0.00"></div>
+            <div class="admin-field"><label for="admin-product-cat">Categoría</label><input id="admin-product-cat" placeholder="Ej: franelas"></div>
+            <div class="admin-field"><label for="admin-product-promo">Etiqueta / promoción</label><input id="admin-product-promo" placeholder="Ej: NUEVO"></div>
+            <div class="admin-field"><label for="admin-product-img">Imagen principal (URL)</label><input id="admin-product-img" placeholder="https://..."></div>
+            <div class="admin-field"><label for="admin-product-stock">Stock general</label><input id="admin-product-stock" type="number" min="0" step="1" placeholder="0"></div>
+            <div class="admin-field"><label for="admin-product-cost">Costo de fabricación ($) — solo sin variantes</label><input id="admin-product-cost" type="number" min="0" step="0.01" placeholder="0.00"></div>
+            <div class="admin-field"><label for="admin-product-colors">Colores generales</label><input id="admin-product-colors" placeholder="Rojo; Negro; Blanco"></div>
+            <div class="admin-field"><label for="admin-product-sizes">Tallas generales</label><input id="admin-product-sizes" placeholder="S; M; L; XL"></div>
+            <div class="admin-field admin-field-full"><label for="admin-product-desc">Descripción</label><textarea id="admin-product-desc" rows="3" placeholder="Descripción del producto"></textarea></div>
         </div>
 
         <div style="margin-top:12px">
@@ -2636,7 +2693,7 @@ function mostrar(lista){
         const img=document.createElement("img");img.src=p.img;img.alt=p.nombre;img.loading="lazy";img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
         if(variantes.length){
             const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";
-            const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y colores disponibles";disponibilidad.appendChild(titulo);
+            const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y Colores Disponibles";disponibilidad.appendChild(titulo);
             const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>{const o={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};return(o[a.toUpperCase()]||99)-(o[b.toUpperCase()]||99)||a.localeCompare(b);});
             tallas.forEach(talla=>{
                 const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;
@@ -4523,7 +4580,14 @@ async function guardarVarianteStockAdmin(varianteId,input,button){
 function agregarFilaVarianteAdmin(data={}){
     const box=$("admin-variants-list");
     const row=document.createElement("div"); row.className="admin-variant-row";
-    row.innerHTML=`<input class="variant-talla" placeholder="Talla" value="${escaparHTML(data.talla||"")}"><input class="variant-color" placeholder="Color" value="${escaparHTML(data.color||"")}"><input class="variant-stock" type="number" min="0" value="${Number(data.stock||0)}"><input class="variant-imagen" placeholder="URL imagen variante" value="${escaparHTML(data.imagen||"")}"><select class="variant-activo"><option value="SI" ${data.activo===false?"":"selected"}>Activo</option><option value="NO" ${data.activo===false?"selected":""}>Inactivo</option></select><button class="btn-opcion" style="margin:0;color:#b91c1c" onclick="this.parentElement.remove()">✕</button>`;
+    row.innerHTML=`
+        <div class="admin-variant-field"><label>Talla</label><input class="variant-talla" placeholder="Ej: M" value="${escaparHTML(data.talla||"")}"></div>
+        <div class="admin-variant-field"><label>Color</label><input class="variant-color" placeholder="Ej: Negro" value="${escaparHTML(data.color||"")}"></div>
+        <div class="admin-variant-field"><label>Stock</label><input class="variant-stock" type="number" min="0" value="${Number(data.stock||0)}"></div>
+        <div class="admin-variant-field"><label>Imagen de variante</label><input class="variant-imagen" placeholder="URL imagen" value="${escaparHTML(data.imagen||"")}"></div>
+        <div class="admin-variant-field"><label>Costo fabricación ($)</label><input class="variant-costo" type="number" min="0" step="0.01" placeholder="0.00" value="${Number(data.costo||0)}"></div>
+        <div class="admin-variant-field"><label>Estado</label><select class="variant-activo"><option value="SI" ${data.activo===false?"":"selected"}>Activo</option><option value="NO" ${data.activo===false?"selected":""}>Inactivo</option></select></div>
+        <button class="btn-opcion" style="margin:0;color:#b91c1c;align-self:end" onclick="this.parentElement.remove()">✕ Eliminar</button>`;
     row.dataset.varianteId=data.varianteId||"";
     box.appendChild(row);
 }
@@ -4558,7 +4622,7 @@ async function guardarProductoAdminFrontend(){
         colores:$("admin-product-colors").value.split(";").map(x=>x.trim()).filter(Boolean), tallas:$("admin-product-sizes").value.split(";").map(x=>x.trim()).filter(Boolean), desc:$("admin-product-desc").value.trim(), variantes:[]
     };
     document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>{
-        data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),activo:row.querySelector(".variant-activo").value!=="NO"});
+        data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),costo:Math.max(0,Number(row.querySelector(".variant-costo")?.value||0)),activo:row.querySelector(".variant-activo").value!=="NO"});
     });
     if(!id||!data.nombre){alert("ID y nombre son obligatorios.");return;}
     const btn=$("btn-save-product-admin"); btn.disabled=true; btn.textContent="Guardando...";
@@ -5171,7 +5235,7 @@ function tmProductoCard(p){
 
     if(variantes.length){
         const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";
-        const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y colores disponibles";disponibilidad.appendChild(titulo);
+        const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y Colores Disponibles";disponibilidad.appendChild(titulo);
         const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};
         const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));
         tallas.forEach(talla=>{
@@ -5356,6 +5420,20 @@ function tmActualizarFiltroContabilidad(){
     const custom=$("accounting-period")?.value==="custom"; [$("accounting-from"),$("accounting-to")].forEach(x=>{if(x)x.style.display=custom?"block":"none";}); if($("accounting-custom-note"))$("accounting-custom-note").style.display=custom?"block":"none";
     if(custom){const hoy=tmFechaLocalInput(new Date());if($("accounting-from")&&!$("accounting-from").value)$("accounting-from").value=hoy;if($("accounting-to")&&!$("accounting-to").value)$("accounting-to").value=hoy;}
 }
+function tmTextoFechaCorta(fecha){
+    const d=new Date(String(fecha||"")+"T12:00:00");
+    if(isNaN(d.getTime()))return String(fecha||"");
+    return d.toLocaleDateString("es-VE",{day:"2-digit",month:"long",year:"numeric"});
+}
+function tmTextoPeriodoContabilidad(desde,hasta){
+    const periodo=$("accounting-period")?.value||"month";
+    if(periodo==="day")return "Hoy · "+tmTextoFechaCorta(desde);
+    if(periodo==="week")return "Semana · lunes "+tmTextoFechaCorta(desde)+" · domingo "+tmTextoFechaCorta(hasta);
+    if(periodo==="month")return "Mes · "+new Date(String(desde)+"T12:00:00").toLocaleDateString("es-VE",{month:"long",year:"numeric"});
+    if(periodo==="year")return "Año · "+new Date(String(desde)+"T12:00:00").getFullYear();
+    return "Desde "+tmTextoFechaCorta(desde)+" hasta "+tmTextoFechaCorta(hasta);
+}
+
 async function cargarContabilidadAdmin(){
     const rango=tmRangoContabilidad(); if(!rango){alert("Selecciona la fecha inicial y final.");return;}
     const box=$("accounting-top-products"); if(box)box.innerHTML='<div class="estado" style="padding:20px">Consultando información contable...</div>';
@@ -5373,6 +5451,7 @@ async function cargarContabilidadAdmin(){
         if($("acc-unidades"))$("acc-unidades").textContent=Number(r.unidadesVendidas||0);
         if($("acc-inv-unidades"))$("acc-inv-unidades").textContent=Number(r.inventarioUnidades||0)+" unidades";
         if($("acc-inv-inversion"))$("acc-inv-inversion").textContent=money(r.inventarioInversion);
+        if($("accounting-period-display"))$("accounting-period-display").textContent="Período consultado: "+tmTextoPeriodoContabilidad(rango.desde,rango.hasta);
         if(box){const top=r.topProductos||[];box.innerHTML='<div class="admin-top-products-title">📊 Rentabilidad por producto en el período</div>'+(top.length?top.map(x=>`<div class="admin-top-product-row"><span>${escaparHTML(x.nombre||x.productoId)}<small style="display:block;color:#6C7075">${Number(x.unidades||0)} un. · Ventas ${money(x.ventas)} · Costo ${money(x.costo)} · Utilidad ${money(x.utilidad)}</small></span><b>${Number(x.margen||0).toFixed(1)}%</b></div>`).join(""):"<div style='color:#6C7075'>No hay ventas en el período seleccionado.</div>");}
     }catch(e){console.error(e);if(box)box.innerHTML=`<div class="estado" style="padding:20px">❌ ${escaparHTML(e.message)}</div>`;}
 }
@@ -5403,7 +5482,7 @@ guardarProductoAdminFrontend=async function(){
     const old=window.guardarProductoAdminFrontend; // referencia informativa
     const id=$("admin-product-id").value.trim();
     const data={action:"guardar_producto",id,nombre:$("admin-product-name").value.trim(),precio:Number($("admin-product-price").value),cat:$("admin-product-cat").value.trim(),promo:$("admin-product-promo").value.trim(),img:$("admin-product-img").value.trim(),stock:parseInt($("admin-product-stock").value,10)||0,costo:Math.max(0,Number($("admin-product-cost")?.value||0)),colores:$("admin-product-colors").value.split(";").map(x=>x.trim()).filter(Boolean),tallas:$("admin-product-sizes").value.split(";").map(x=>x.trim()).filter(Boolean),desc:$("admin-product-desc").value.trim(),variantes:[]};
-    document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),activo:row.querySelector(".variant-activo").value!=="NO"}));
+    document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),costo:Math.max(0,Number(row.querySelector(".variant-costo")?.value||0)),activo:row.querySelector(".variant-activo").value!=="NO"}));
     if(!id||!data.nombre){alert("ID y nombre son obligatorios.");return;}
     const btn=$("btn-save-product-admin");btn.disabled=true;btn.textContent="Guardando...";
     try{const r=await adminRequest(data);if(r.status!=="success")throw new Error(r.message||"No se pudo guardar.");cerrarModalProductoAdmin();await cargarProductos();renderInventarioAdmin();mostrarToast(r.message||"Producto guardado.");}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="💾 Guardar producto";}
@@ -5418,7 +5497,7 @@ function tmProductoCard(p){
     const tools=document.createElement("div");tools.className="producto-tools";const fav=document.createElement("button");fav.type="button";fav.className="producto-tool";fav.title="Agregar a favoritos";fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));};const share=document.createElement("button");share.type="button";share.className="producto-tool";share.title="Compartir producto";share.textContent="↗";share.onclick=e=>{e.stopPropagation();compartirProducto(p.id,p.nombre);};tools.append(fav,share);imageBox.appendChild(tools);card.appendChild(imageBox);
     const info=document.createElement("div");info.className="p-info";const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre||"Producto";const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;info.append(nombre,precio);card.appendChild(info);
     const variantes=(p.variantes||[]).filter(v=>v.activo!==false);const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
-    if(variantes.length){const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y colores disponibles";disponibilidad.appendChild(titulo);const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));tallas.forEach(talla=>{const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;const row=document.createElement("div");row.className="catalogo-talla-row";const tallaBox=document.createElement("div");tallaBox.className="catalogo-talla-box";tallaBox.textContent=talla;row.appendChild(tallaBox);const coloresBox=document.createElement("div");coloresBox.className="catalogo-colores-por-talla";Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{const variantesColor=porTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());if(variantesColor.reduce((sum,v)=>sum+Number(v.stock||0),0)<=0)return;const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);boton.onclick=e=>{e.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);img.src=v?.imagen||p.img||"";};coloresBox.appendChild(boton);});if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}});card.appendChild(disponibilidad);}
+    if(variantes.length){const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y Colores Disponibles";disponibilidad.appendChild(titulo);const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));tallas.forEach(talla=>{const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;const row=document.createElement("div");row.className="catalogo-talla-row";const tallaBox=document.createElement("div");tallaBox.className="catalogo-talla-box";tallaBox.textContent=talla;row.appendChild(tallaBox);const coloresBox=document.createElement("div");coloresBox.className="catalogo-colores-por-talla";Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{const variantesColor=porTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());if(variantesColor.reduce((sum,v)=>sum+Number(v.stock||0),0)<=0)return;const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);boton.onclick=e=>{e.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);img.src=v?.imagen||p.img||"";};coloresBox.appendChild(boton);});if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}});card.appendChild(disponibilidad);}
     const acciones=document.createElement("div");acciones.style.padding="8px 9px 10px";const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.onclick=()=>abrirFicha(p.id);const add=document.createElement("button");add.className="btn-add";add.disabled=stockCatalogo<=0;add.textContent=stockCatalogo>0?"Añadir":"Agotado";if(stockCatalogo>0)add.onclick=()=>abrirFicha(p.id);acciones.append(ver,add);card.appendChild(acciones);return card;
 }
 
