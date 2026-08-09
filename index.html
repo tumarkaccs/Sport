@@ -1158,6 +1158,22 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .share-cat{border-radius:50%!important;width:28px;height:28px;padding:0!important;margin-right:4px;align-self:center;background:#F1F3F3!important}
 
 
+
+.admin-accounting-filter{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px}
+.admin-accounting-filter input,.admin-accounting-filter select{width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:9px;background:#fff;box-sizing:border-box}
+.admin-accounting-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0}
+.admin-accounting-card{background:#fff;border:1px solid #E2E4E5;border-radius:10px;padding:10px 6px;text-align:center}
+.admin-accounting-card strong{display:block;font-size:1rem;color:var(--tm-negro)}
+.admin-accounting-card span{display:block;font-size:.58rem;color:#6C7075;text-transform:uppercase;font-weight:800;margin-top:3px}
+.admin-accounting-card.utilidad{border-color:var(--tm-lima);background:#fbfde9}
+.admin-accounting-inventory{background:#F7F8F8;border:1px solid #E2E4E5;border-radius:10px;padding:10px;margin-bottom:10px;font-size:.72rem}
+.admin-accounting-inventory>div{display:flex;justify-content:space-between;gap:10px;padding:4px 0}
+.admin-accounting-inventory strong{color:var(--tm-oliva)}
+.producto-img-box{background:#fff;aspect-ratio:1/1;min-height:0}
+.producto-img-box>img{height:100%!important;aspect-ratio:1/1;object-fit:contain}
+.admin-product-cost-label{font-size:.68rem;color:#6C7075}
+@media(max-width:620px){.admin-accounting-grid{grid-template-columns:repeat(2,1fr)}.admin-accounting-filter{grid-template-columns:1fr}.admin-accounting-filter input{display:none!important}}
+
 /* =========================================================
    TU MARKA SPORT V12 — AJUSTES FINALES
 ========================================================= */
@@ -1742,6 +1758,14 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
                     💳 Pago
                 </button>
 
+                <button
+                    class="tab-admin-btn"
+                    id="tab-btn-accounting"
+                    onclick="switchAdminTab('accounting')"
+                >
+                    📈 Contabilidad
+                </button>
+
             </div>
 
             <!-- PEDIDOS -->
@@ -1816,6 +1840,47 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
                     style="max-height:350px;overflow-y:auto"
                 ></div>
 
+            </div>
+
+            <!-- CONTABILIDAD -->
+
+            <div
+                id="view-admin-accounting"
+                style="display:none"
+            >
+                <div class="admin-accounting-filter">
+                    <select id="accounting-period" class="metodo-pago-select">
+                        <option value="day">Hoy</option>
+                        <option value="week">Esta semana</option>
+                        <option value="month" selected>Este mes</option>
+                        <option value="year">Este año</option>
+                        <option value="custom">Fecha personalizada</option>
+                    </select>
+                    <input type="date" id="accounting-from" style="display:none">
+                    <input type="date" id="accounting-to" style="display:none">
+                    <button class="btn-opcion" style="margin:0" onclick="cargarContabilidadAdmin()">🔄 Actualizar</button>
+                </div>
+
+                <div id="accounting-custom-note" style="display:none;font-size:.7rem;color:#6C7075;margin:-3px 0 8px">Selecciona la fecha inicial y final para consultar un período personalizado.</div>
+
+                <div class="admin-accounting-grid">
+                    <div class="admin-accounting-card"><strong id="acc-ventas">$0.00</strong><span>Ventas totales</span></div>
+                    <div class="admin-accounting-card"><strong id="acc-cobrado">$0.00</strong><span>Dinero cobrado</span></div>
+                    <div class="admin-accounting-card"><strong id="acc-costo">$0.00</strong><span>Costo de ventas</span></div>
+                    <div class="admin-accounting-card utilidad"><strong id="acc-utilidad">$0.00</strong><span>Utilidad bruta</span></div>
+                    <div class="admin-accounting-card"><strong id="acc-pendiente">$0.00</strong><span>Por cobrar</span></div>
+                    <div class="admin-accounting-card"><strong id="acc-margen">0%</strong><span>Margen bruto</span></div>
+                    <div class="admin-accounting-card"><strong id="acc-pedidos">0</strong><span>Pedidos</span></div>
+                    <div class="admin-accounting-card"><strong id="acc-unidades">0</strong><span>Unidades vendidas</span></div>
+                </div>
+
+                <div class="admin-accounting-inventory">
+                    <div><b>📦 Inventario actual</b><span id="acc-inv-unidades">0 unidades</span></div>
+                    <div><b>💰 Dinero invertido en inventario</b><strong id="acc-inv-inversion">$0.00</strong></div>
+                </div>
+
+                <div id="accounting-top-products" class="admin-top-products"></div>
+                <div id="accounting-detail-note" style="font-size:.68rem;color:#6C7075;line-height:1.4;margin-top:8px">La utilidad mostrada es utilidad bruta: ventas menos costo de fabricación. No incluye delivery, publicidad, nómina, alquiler u otros gastos operativos.</div>
             </div>
 
             <!-- PAGOS -->
@@ -1924,6 +1989,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
             <input id="admin-product-promo" placeholder="Promoción / etiqueta">
             <input id="admin-product-img" placeholder="URL de imagen">
             <input id="admin-product-stock" type="number" min="0" step="1" placeholder="Stock general">
+            <input id="admin-product-cost" type="number" min="0" step="0.01" placeholder="Costo de fabricación ($)">
             <input id="admin-product-colors" placeholder="Colores separados por ;">
             <input id="admin-product-sizes" placeholder="Tallas separadas por ;">
             <textarea id="admin-product-desc" rows="3" placeholder="Descripción"></textarea>
@@ -2372,7 +2438,9 @@ async function cargarProductos(){
                 : [],
 
             ventas:parseFloat(String(c[10] || "").replace(",",".")) || 0,
-            nuevo: String(c[11] || "").trim().toLowerCase() === "si"
+            nuevo: String(c[11] || "").trim().toLowerCase() === "si",
+
+            costo:parseFloat(String(c[12] || "").replace(",",".")) || 0
 
         }))
         .filter(p=>p.nombre);
@@ -5244,7 +5312,7 @@ function tmDiasDesdePedido(fecha){
 }
 function mensajeRecordatorioPago(pedido){
     const nombre=pedido.cliente||"Cliente";const saldo=Number(pedido.saldoPendiente||0).toFixed(2);
-    return `Hola ${nombre}, somos Tu Marka Sport. 😊\n\nTe recordamos que el pedido ${pedido.pedidoId} tiene un saldo pendiente de $${saldo}.\n\nSi deseas continuar con tu pedido, puedes indicarnos cuando realizarás el pago.\n\n¡Gracias por tu preferencia! 💚`;
+    return `Hola ${nombre}, somos Tu Marka Sport. 😊\n\nTe recordamos que el pedido ${pedido.pedidoId} tiene un saldo pendiente de $${saldo}.\n\nSi deseas continuar con tu pedido, por favor realiza el pago correspondiente y notifícalo por esta vía.\n\n¡Gracias por tu preferencia! 💚`;
 }
 
 /* ---------- Inicialización V11 ---------- */
@@ -5258,6 +5326,108 @@ function mensajeRecordatorioPago(pedido){
     // Recalcular la regla de Cashea cuando cambia el carrito.
     window.actualizar=function(){const r=carritoOriginal.apply(this,arguments);setTimeout(tmActualizarPagoUI,0);return r;};
 })();
+
+
+
+/* =========================================================
+   TU MARKA SPORT V13 — CONTABILIDAD / COSTOS / CATALOGO
+========================================================= */
+function tmFechaLocalInput(d){
+    const x=new Date(d); if(isNaN(x.getTime())) return "";
+    const y=x.getFullYear(),m=String(x.getMonth()+1).padStart(2,"0"),day=String(x.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+}
+function tmRangoContabilidad(){
+    const periodo=$("accounting-period")?.value||"month";
+    const ahora=new Date(); let desde=new Date(ahora.getFullYear(),ahora.getMonth(),ahora.getDate()); let hasta=new Date(ahora.getFullYear(),ahora.getMonth(),ahora.getDate());
+    if(periodo==="week"){
+        const dia=desde.getDay(); const ajuste=dia===0?6:dia-1; desde.setDate(desde.getDate()-ajuste);
+    }else if(periodo==="month") desde=new Date(ahora.getFullYear(),ahora.getMonth(),1);
+    else if(periodo==="year") desde=new Date(ahora.getFullYear(),0,1);
+    else if(periodo==="custom"){
+        const f=$("accounting-from")?.value, t=$("accounting-to")?.value;
+        if(!f||!t) return null;
+        desde=new Date(f+"T00:00:00"); hasta=new Date(t+"T23:59:59");
+    }
+    hasta.setHours(23,59,59,999);
+    return {desde:tmFechaLocalInput(desde),hasta:tmFechaLocalInput(hasta)};
+}
+function tmActualizarFiltroContabilidad(){
+    const custom=$("accounting-period")?.value==="custom"; [$("accounting-from"),$("accounting-to")].forEach(x=>{if(x)x.style.display=custom?"block":"none";}); if($("accounting-custom-note"))$("accounting-custom-note").style.display=custom?"block":"none";
+    if(custom){const hoy=tmFechaLocalInput(new Date());if($("accounting-from")&&!$("accounting-from").value)$("accounting-from").value=hoy;if($("accounting-to")&&!$("accounting-to").value)$("accounting-to").value=hoy;}
+}
+async function cargarContabilidadAdmin(){
+    const rango=tmRangoContabilidad(); if(!rango){alert("Selecciona la fecha inicial y final.");return;}
+    const box=$("accounting-top-products"); if(box)box.innerHTML='<div class="estado" style="padding:20px">Consultando información contable...</div>';
+    try{
+        const r=await adminRequest({action:"contabilidad",desde:rango.desde,hasta:rango.hasta});
+        if(r.status!=="success")throw new Error(r.message||"No se pudo cargar la contabilidad.");
+        const money=v=>`$${Number(v||0).toFixed(2)}`;
+        if($("acc-ventas"))$("acc-ventas").textContent=money(r.ventasTotales);
+        if($("acc-cobrado"))$("acc-cobrado").textContent=money(r.dineroCobrado);
+        if($("acc-costo"))$("acc-costo").textContent=money(r.costoVentas);
+        if($("acc-utilidad"))$("acc-utilidad").textContent=money(r.utilidadBruta);
+        if($("acc-pendiente"))$("acc-pendiente").textContent=money(r.porCobrar);
+        if($("acc-margen"))$("acc-margen").textContent=Number(r.margenBruto||0).toFixed(1)+"%";
+        if($("acc-pedidos"))$("acc-pedidos").textContent=Number(r.pedidos||0);
+        if($("acc-unidades"))$("acc-unidades").textContent=Number(r.unidadesVendidas||0);
+        if($("acc-inv-unidades"))$("acc-inv-unidades").textContent=Number(r.inventarioUnidades||0)+" unidades";
+        if($("acc-inv-inversion"))$("acc-inv-inversion").textContent=money(r.inventarioInversion);
+        if(box){const top=r.topProductos||[];box.innerHTML='<div class="admin-top-products-title">📊 Rentabilidad por producto en el período</div>'+(top.length?top.map(x=>`<div class="admin-top-product-row"><span>${escaparHTML(x.nombre||x.productoId)}<small style="display:block;color:#6C7075">${Number(x.unidades||0)} un. · Ventas ${money(x.ventas)} · Costo ${money(x.costo)} · Utilidad ${money(x.utilidad)}</small></span><b>${Number(x.margen||0).toFixed(1)}%</b></div>`).join(""):"<div style='color:#6C7075'>No hay ventas en el período seleccionado.</div>");}
+    }catch(e){console.error(e);if(box)box.innerHTML=`<div class="estado" style="padding:20px">❌ ${escaparHTML(e.message)}</div>`;}
+}
+
+const tmSwitchAdminTabV13=switchAdminTab;
+switchAdminTab=function(tab){
+    document.querySelectorAll(".tab-admin-btn").forEach(b=>b.classList.remove("activo"));
+    ["view-admin-orders","view-admin-stock","view-admin-discount","view-admin-accounting"].forEach(id=>{if($(id))$(id).style.display="none";});
+    if(tab==="orders"){$("tab-btn-orders")?.classList.add("activo");$("view-admin-orders")&&( $("view-admin-orders").style.display="block" );cargarPedidosAdmin();return;}
+    if(tab==="stock"){$("tab-btn-stock")?.classList.add("activo");$("view-admin-stock")&&( $("view-admin-stock").style.display="block" );renderInventarioAdmin();return;}
+    if(tab==="discount"){$("tab-btn-discount")?.classList.add("activo");$("view-admin-discount")&&( $("view-admin-discount").style.display="block" );return;}
+    if(tab==="accounting"){$("tab-btn-accounting")?.classList.add("activo");$("view-admin-accounting")&&( $("view-admin-accounting").style.display="block" );tmActualizarFiltroContabilidad();cargarContabilidadAdmin();return;}
+    tmSwitchAdminTabV13(tab);
+};
+$("accounting-period")?.addEventListener("change",()=>{tmActualizarFiltroContabilidad();if($("accounting-period").value!=="custom")cargarContabilidadAdmin();});
+$("accounting-from")?.addEventListener("change",()=>{if($("accounting-period").value==="custom")cargarContabilidadAdmin();});
+$("accounting-to")?.addEventListener("change",()=>{if($("accounting-period").value==="custom")cargarContabilidadAdmin();});
+
+/* Coste de fabricación en editor */
+const tmAbrirEditorV13=abrirEditorProductoAdmin;
+abrirEditorProductoAdmin=async function(id=""){
+    await tmAbrirEditorV13(id);
+    const p=id?DB.find(x=>String(x.id)===String(id)):null;
+    if($("admin-product-cost"))$("admin-product-cost").value=p?Number(p.costo||0):0;
+};
+const tmGuardarProductoV13=guardarProductoAdminFrontend;
+guardarProductoAdminFrontend=async function(){
+    const old=window.guardarProductoAdminFrontend; // referencia informativa
+    const id=$("admin-product-id").value.trim();
+    const data={action:"guardar_producto",id,nombre:$("admin-product-name").value.trim(),precio:Number($("admin-product-price").value),cat:$("admin-product-cat").value.trim(),promo:$("admin-product-promo").value.trim(),img:$("admin-product-img").value.trim(),stock:parseInt($("admin-product-stock").value,10)||0,costo:Math.max(0,Number($("admin-product-cost")?.value||0)),colores:$("admin-product-colors").value.split(";").map(x=>x.trim()).filter(Boolean),tallas:$("admin-product-sizes").value.split(";").map(x=>x.trim()).filter(Boolean),desc:$("admin-product-desc").value.trim(),variantes:[]};
+    document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),activo:row.querySelector(".variant-activo").value!=="NO"}));
+    if(!id||!data.nombre){alert("ID y nombre son obligatorios.");return;}
+    const btn=$("btn-save-product-admin");btn.disabled=true;btn.textContent="Guardando...";
+    try{const r=await adminRequest(data);if(r.status!=="success")throw new Error(r.message||"No se pudo guardar.");cerrarModalProductoAdmin();await cargarProductos();renderInventarioAdmin();mostrarToast(r.message||"Producto guardado.");}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="💾 Guardar producto";}
+};
+
+/* Orden final del catálogo: imagen → nombre → precio → tallas/colores */
+function tmProductoCard(p){
+    const card=document.createElement("article");card.className="producto";
+    const imageBox=document.createElement("div");imageBox.className="producto-img-box";
+    if(p.promo){const badge=document.createElement("div");badge.className="badge-promo";badge.textContent=p.promo;imageBox.appendChild(badge);}
+    const img=document.createElement("img");img.src=p.img||"";img.alt=p.nombre||"Producto";img.loading="lazy";img.onerror=()=>{img.style.visibility="hidden"};img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
+    const tools=document.createElement("div");tools.className="producto-tools";const fav=document.createElement("button");fav.type="button";fav.className="producto-tool";fav.title="Agregar a favoritos";fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));};const share=document.createElement("button");share.type="button";share.className="producto-tool";share.title="Compartir producto";share.textContent="↗";share.onclick=e=>{e.stopPropagation();compartirProducto(p.id,p.nombre);};tools.append(fav,share);imageBox.appendChild(tools);card.appendChild(imageBox);
+    const info=document.createElement("div");info.className="p-info";const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre||"Producto";const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;info.append(nombre,precio);card.appendChild(info);
+    const variantes=(p.variantes||[]).filter(v=>v.activo!==false);const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
+    if(variantes.length){const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y colores disponibles";disponibilidad.appendChild(titulo);const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));tallas.forEach(talla=>{const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;const row=document.createElement("div");row.className="catalogo-talla-row";const tallaBox=document.createElement("div");tallaBox.className="catalogo-talla-box";tallaBox.textContent=talla;row.appendChild(tallaBox);const coloresBox=document.createElement("div");coloresBox.className="catalogo-colores-por-talla";Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{const variantesColor=porTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());if(variantesColor.reduce((sum,v)=>sum+Number(v.stock||0),0)<=0)return;const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);boton.onclick=e=>{e.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);img.src=v?.imagen||p.img||"";};coloresBox.appendChild(boton);});if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}});card.appendChild(disponibilidad);}
+    const acciones=document.createElement("div");acciones.style.padding="8px 9px 10px";const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.onclick=()=>abrirFicha(p.id);const add=document.createElement("button");add.className="btn-add";add.disabled=stockCatalogo<=0;add.textContent=stockCatalogo>0?"Añadir":"Agotado";if(stockCatalogo>0)add.onclick=()=>abrirFicha(p.id);acciones.append(ver,add);card.appendChild(acciones);return card;
+}
+
+/* Recordatorio con detalle completo */
+function mensajeRecordatorioPago(pedido){
+    const nombre=pedido.cliente||"Cliente";const items=Array.isArray(pedido.items)?pedido.items:[];let detalle="";
+    items.forEach((item,i)=>{detalle+=`${i+1}. ${Number(item.cantidad||0)}x ${item.nombre||"Producto"} — $${Number(item.precio||0).toFixed(2)} c/u\n`;if(item.talla)detalle+=`   Talla: ${item.talla}\n`;if(item.color)detalle+=`   Color: ${item.color}\n`;if(item.nota)detalle+=`   Nota: ${item.nota}\n`;detalle+=`   Subtotal: $${Number(item.subtotal||0).toFixed(2)}\n\n`;});
+    return `Hola ${nombre}, somos Tu Marka Sport. 😊\n\nTe recordamos que tienes un pago pendiente correspondiente a tu pedido ${pedido.pedidoId}.\n\n📋 DETALLE DEL PEDIDO\nFecha: ${pedido.fecha||""}\nEntrega: ${pedido.entrega||"No indicada"}${pedido.direccion?`\nDirección: ${pedido.direccion}`:""}\nMétodo de pago: ${pedido.metodoPago||"No indicado"}\n\n🛍️ PRODUCTOS\n${detalle||"Sin detalle"}💰 RESUMEN DE PAGO\nTotal del pedido: $${Number(pedido.total||0).toFixed(2)}\nTotal abonado: $${Number(pedido.montoPagado||0).toFixed(2)}\nSaldo pendiente: $${Number(pedido.saldoPendiente||0).toFixed(2)}\n\nSi deseas continuar con tu pedido, por favor realiza el pago correspondiente y notifícalo por esta vía.\n\n¡Gracias por tu preferencia! 💚`;
+}
 
 </script>
 
