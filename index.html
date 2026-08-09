@@ -633,6 +633,89 @@ header{
     background:#e0f0ff;
 }
 
+.metodo-pago-select{
+    width:100%;
+    padding:12px;
+    border:1px solid #cbd5e1;
+    border-radius:10px;
+    background:#fff;
+    font-weight:700;
+    color:#334155;
+    box-sizing:border-box;
+}
+
+.admin-order-card{
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:12px;
+    margin-bottom:10px;
+    background:#fff;
+}
+
+.admin-order-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.admin-order-id{
+    font-weight:900;
+    color:var(--petroleo);
+}
+
+.admin-order-status{
+    display:inline-block;
+    padding:4px 8px;
+    border-radius:999px;
+    font-size:.68rem;
+    font-weight:900;
+    background:#e2e8f0;
+    color:#334155;
+}
+
+.admin-order-status.pendiente{background:#fff7ed;color:#c2410c}
+.admin-order-status.abono{background:#eff6ff;color:#1d4ed8}
+.admin-order-status.pagado{background:#ecfdf5;color:#047857}
+.admin-order-status.cancelado{background:#fef2f2;color:#b91c1c}
+
+.admin-order-items{
+    margin-top:10px;
+    padding:10px;
+    border-radius:9px;
+    background:#f8fafc;
+    font-size:.76rem;
+}
+
+.admin-order-item{
+    padding:5px 0;
+    border-bottom:1px solid #e2e8f0;
+}
+
+.admin-order-item:last-child{
+    border-bottom:0;
+}
+
+.admin-payment-box{
+    margin-top:10px;
+    padding:10px;
+    border-radius:10px;
+    background:#f8fafc;
+    border:1px solid #e2e8f0;
+}
+
+.admin-payment-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+}
+
+@media(max-width:520px){
+    .admin-payment-grid{
+        grid-template-columns:1fr;
+    }
+}
+
 /* =========================
    FAQ
 ========================= */
@@ -1283,14 +1366,22 @@ header{
         </div>
 
         <p style="font-weight:bold;margin-bottom:5px">
-            Métodos de Pago Aceptados:
+            Método de Pago:
         </p>
+
+        <select
+            id="metodo-pago"
+            class="metodo-pago-select"
+        >
+            <option value="">Selecciona un método de pago</option>
+        </select>
 
         <div
             id="metodos-pago-box"
             class="metodos-pago-box"
+            style="margin-top:8px"
         >
-            Cargando...
+            Selecciona cómo realizarás el pago.
         </div>
 
         <p style="font-weight:bold;margin-bottom:5px">
@@ -1521,16 +1612,31 @@ header{
                     Aquí aparecerán los pedidos registrados.
                 </p>
 
-                <button
-                    class="btn-opcion"
-                    onclick="cargarPedidosAdmin()"
-                >
-                    🔄 Actualizar pedidos
-                </button>
+                <div style="display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:8px">
+                    <select
+                        id="admin-order-filter"
+                        class="metodo-pago-select"
+                        onchange="cargarPedidosAdmin()"
+                    >
+                        <option value="">Todos los estados</option>
+                        <option value="PENDIENTE_PAGO">Pendientes de pago</option>
+                        <option value="ABONO_PARCIAL">Con abono parcial</option>
+                        <option value="PAGADO">Pagados</option>
+                        <option value="CANCELADO">Cancelados</option>
+                    </select>
+
+                    <button
+                        class="btn-opcion"
+                        style="margin:0"
+                        onclick="cargarPedidosAdmin()"
+                    >
+                        🔄
+                    </button>
+                </div>
 
                 <div
                     id="admin-orders-list"
-                    style="max-height:350px;overflow-y:auto"
+                    style="max-height:500px;overflow-y:auto"
                 >
                     <div class="estado">
                         Presiona actualizar para consultar.
@@ -1560,34 +1666,74 @@ header{
 
             </div>
 
-            <!-- DESCUENTO -->
+            <!-- PAGOS -->
 
             <div
                 id="view-admin-discount"
                 style="display:none"
             >
 
-                <p
-                    style="font-size:.8rem;color:#64748b"
-                >
-                    Utiliza esta opción únicamente después de verificar
-                    el pago del cliente.
+                <p style="font-size:.8rem;color:#64748b">
+                    Registra un abono parcial o confirma el pago total.
+                    El primer abono aparta y descuenta el stock. Los abonos posteriores no vuelven a descontarlo.
                 </p>
 
                 <input
                     type="text"
                     id="auth-order-id"
                     placeholder="Número de pedido"
-                    style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:8px"
+                    style="width:100%;padding:10px;margin-bottom:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box"
                 >
+
+                <div
+                    id="admin-payment-summary"
+                    class="admin-payment-box"
+                    style="display:none"
+                ></div>
+
+                <div class="admin-payment-grid">
+                    <input
+                        type="number"
+                        id="admin-payment-amount"
+                        min="0.01"
+                        step="0.01"
+                        placeholder="Monto del abono"
+                        style="width:100%;padding:10px;border:1px solid #ddd;border-radius:8px;box-sizing:border-box"
+                    >
+
+                    <select
+                        id="admin-payment-method"
+                        class="metodo-pago-select"
+                    >
+                        <option value="">Método de pago</option>
+                    </select>
+                </div>
+
+                <button
+                    class="btn-add"
+                    id="btn-partial-payment"
+                    style="background:var(--azul-claro);margin-top:10px"
+                    onclick="registrarAbonoAdmin()"
+                >
+                    💵 Registrar abono
+                </button>
 
                 <button
                     class="btn-add"
                     id="btn-process-order"
-                    style="background:var(--purpura)"
+                    style="background:var(--purpura);margin-top:10px"
                     onclick="procesarPedidoAdmin()"
                 >
-                    ✅ Verificar pago y procesar
+                    ✅ Confirmar pago total
+                </button>
+
+                <button
+                    class="btn-opcion"
+                    id="btn-cancel-order"
+                    style="color:#b91c1c;border-color:#fecaca;margin-top:10px"
+                    onclick="cancelarPedidoAdmin()"
+                >
+                    ❌ Marcar pedido como cancelado
                 </button>
 
             </div>
@@ -1720,6 +1866,7 @@ let CART = [];
 let CONFIG = {
     tel:"",
     pago:"Pago Móvil / Zelle / Cashea 💛 / Efectivo",
+    pagos:[],
     logo:"",
     banner:"",
     bannerTitulo:"",
@@ -1880,10 +2027,15 @@ async function cargarConfiguracion(){
         }
 
         if(key.includes("pago")){
-            CONFIG.pago =
-                value.toLowerCase().includes("cashea")
-                ? value
-                : value + " / Cashea 💛";
+            CONFIG.pago = value;
+            CONFIG.pagos = String(value)
+                .split(/[;,|/]+/)
+                .map(x=>x.trim())
+                .filter(Boolean);
+
+            if(!CONFIG.pagos.length){
+                CONFIG.pagos = [value];
+            }
         }
 
         if(key.includes("banner") && !key.includes("titulo")){
@@ -1895,7 +2047,37 @@ async function cargarConfiguracion(){
         }
     });
 
-    $("metodos-pago-box").textContent = CONFIG.pago;
+    const pagoSelect = $("metodo-pago");
+    const adminPagoSelect = $("admin-payment-method");
+
+    if(pagoSelect){
+        pagoSelect.innerHTML =
+            `<option value="">Selecciona un método de pago</option>`;
+
+        CONFIG.pagos.forEach(metodo=>{
+            const option = document.createElement("option");
+            option.value = metodo;
+            option.textContent = metodo;
+            pagoSelect.appendChild(option);
+        });
+    }
+
+    if(adminPagoSelect){
+        adminPagoSelect.innerHTML =
+            `<option value="">Método de pago</option>`;
+
+        CONFIG.pagos.forEach(metodo=>{
+            const option = document.createElement("option");
+            option.value = metodo;
+            option.textContent = metodo;
+            adminPagoSelect.appendChild(option);
+        });
+    }
+
+    $("metodos-pago-box").textContent =
+        CONFIG.pagos.length
+        ? "Selecciona el método de pago que utilizarás."
+        : CONFIG.pago;
 
     if(CONFIG.banner){
 
@@ -1976,6 +2158,21 @@ async function cargarProductos(){
     );
 }
 
+
+$("auth-order-id")?.addEventListener(
+    "change",
+    function(){
+        if(this.value.trim()){
+            cargarResumenPedidoAdmin()
+                .catch(error=>console.error(error));
+        }
+    }
+);
+
+$("admin-payment-method")?.addEventListener(
+    "change",
+    function(){}
+);
 
 /* =====================================================
    CARGA PRINCIPAL
@@ -3048,6 +3245,7 @@ async function crearPedidoBackend(datos){
                         telefono:datos.telefono,
                         entrega:datos.entrega,
                         direccion:datos.direccion,
+                        metodoPago:datos.metodoPago,
                         items:datos.items
                     }),
                     redirect:"follow"
@@ -3107,6 +3305,15 @@ async function enviarWA(){
         return;
     }
 
+    const metodoPago =
+        $("metodo-pago").value.trim();
+
+    if(!metodoPago){
+        alert("Selecciona el método de pago.");
+        $("metodo-pago").focus();
+        return;
+    }
+
     if(!entregaM){
         alert("Selecciona cómo recibirás tu compra.");
         return;
@@ -3155,6 +3362,7 @@ async function enviarWA(){
                 telefono: clienteTelefono,
                 entrega: entregaM,
                 direccion,
+                metodoPago,
                 items: CART.map(item=>({
                     id:item.id,
                     cantidad:item.cantidad,
@@ -3226,7 +3434,7 @@ async function enviarWA(){
             `💰 *TOTAL: $${total.toFixed(2)}*\n\n`;
 
         mensaje +=
-            `💳 *Método de pago:* ${CONFIG.pago}\n`;
+            `💳 *Método de pago:* ${metodoPago}\n`;
 
         mensaje +=
             `📍 *Entrega:* ${entregaM}\n`;
@@ -3254,7 +3462,7 @@ async function enviarWA(){
             encodeURIComponent(mensaje);
 
         localStorage.setItem(
-            "tu_marka_last_order_v4",
+            "tu_marka_last_order_v7",
             JSON.stringify({
                 numero:numeroPedido,
                 fecha:new Date().toISOString(),
@@ -3262,7 +3470,7 @@ async function enviarWA(){
                 telefono:clienteTelefono,
                 items:CART,
                 total,
-                pago:CONFIG.pago,
+                pago:metodoPago,
                 entrega:entregaM,
                 direccion
             })
@@ -3295,6 +3503,7 @@ async function enviarWA(){
         $("dir-val").style.display = "none";
         $("cliente-nombre").value = "";
         $("cliente-telefono").value = "";
+        $("metodo-pago").value = "";
 
         document
             .querySelectorAll(
@@ -3762,8 +3971,7 @@ function switchAdminTab(tab){
 
 async function cargarPedidosAdmin(){
 
-    const container =
-        $("admin-orders-list");
+    const container = $("admin-orders-list");
 
     container.innerHTML =
         `<div class="estado">
@@ -3773,32 +3981,32 @@ async function cargarPedidosAdmin(){
 
     try{
 
+        const filtro =
+            $("admin-order-filter")
+                ? $("admin-order-filter").value
+                : "";
+
         const resultado =
             await adminRequest({
                 action:"listar_pedidos",
-                limit:50
+                limit:100,
+                estado:filtro
             });
 
-        if(
-            resultado.status !== "success"
-        ){
-
+        if(resultado.status !== "success"){
             throw new Error(
                 resultado.message ||
                 "No se pudieron cargar pedidos."
             );
         }
 
-        const pedidos =
-            resultado.pedidos || [];
+        const pedidos = resultado.pedidos || [];
 
         if(!pedidos.length){
-
             container.innerHTML =
                 `<div class="estado">
-                    📦 No hay pedidos registrados.
+                    📦 No hay pedidos para este filtro.
                 </div>`;
-
             return;
         }
 
@@ -3806,75 +4014,158 @@ async function cargarPedidosAdmin(){
 
         pedidos.forEach(pedido=>{
 
-            const box =
-                document.createElement("div");
+            const box = document.createElement("div");
+            box.className = "admin-order-card";
 
-            box.style.border =
-                "1px solid #e2e8f0";
+            const estado = String(
+                pedido.estado || "PENDIENTE_PAGO"
+            );
 
-            box.style.borderRadius =
-                "10px";
+            const estadoClase =
+                estado === "PAGADO" ? "pagado" :
+                estado === "ABONO_PARCIAL" ? "abono" :
+                estado === "CANCELADO" ? "cancelado" :
+                "pendiente";
 
-            box.style.padding =
-                "10px";
+            const estadoTexto =
+                estado === "PAGADO" ? "PAGADO" :
+                estado === "ABONO_PARCIAL" ? "ABONO PARCIAL" :
+                estado === "CANCELADO" ? "CANCELADO" :
+                "PENDIENTE DE PAGO";
 
-            box.style.marginBottom =
-                "8px";
+            const total = Number(pedido.total || 0);
+            const pagado = Number(pedido.montoPagado || 0);
+            const saldo = Math.max(
+                0,
+                Number(
+                    pedido.saldoPendiente ??
+                    (total - pagado)
+                )
+            );
 
-            const numero =
-                document.createElement("b");
+            const head = document.createElement("div");
+            head.className = "admin-order-head";
 
-            numero.textContent =
-                pedido.pedidoId ||
-                pedido.numero ||
-                pedido.id ||
-                "Pedido";
+            const left = document.createElement("div");
+            left.innerHTML =
+                `<div class="admin-order-id">${escaparHTML(
+                    pedido.pedidoId || "Pedido"
+                )}</div>
+                 <div style="font-size:.72rem;color:#64748b;margin-top:3px">
+                    ${escaparHTML(pedido.fecha || "")}
+                 </div>`;
 
-            const estado =
-                document.createElement("div");
+            const badge = document.createElement("span");
+            badge.className =
+                `admin-order-status ${estadoClase}`;
+            badge.textContent = estadoTexto;
 
-            estado.style.marginTop =
-                "5px";
+            head.appendChild(left);
+            head.appendChild(badge);
+            box.appendChild(head);
 
-            estado.style.fontSize =
-                ".75rem";
+            const datos = document.createElement("div");
+            datos.style.fontSize = ".76rem";
+            datos.style.marginTop = "8px";
+            datos.innerHTML =
+                `<div>👤 <b>Cliente:</b> ${escaparHTML(
+                    pedido.cliente || "No indicado"
+                )}</div>
+                 <div>📞 <b>Teléfono:</b> ${escaparHTML(
+                    pedido.telefono || "No indicado"
+                )}</div>
+                 <div>📍 <b>Entrega:</b> ${escaparHTML(
+                    pedido.entrega || "No indicada"
+                )}</div>
+                 ${pedido.direccion ? `<div>🏠 <b>Dirección:</b> ${escaparHTML(
+                    pedido.direccion
+                 )}</div>` : ""}
+                 <div>💳 <b>Método:</b> ${escaparHTML(
+                    pedido.metodoPago || "No indicado"
+                 )}</div>
+                 <div style="margin-top:6px">
+                    💰 <b>Total:</b> $${total.toFixed(2)}
+                    &nbsp; | &nbsp;
+                    💵 <b>Pagado:</b> $${pagado.toFixed(2)}
+                    &nbsp; | &nbsp;
+                    🔴 <b>Saldo:</b> $${saldo.toFixed(2)}
+                 </div>`;
 
-            estado.textContent =
-                `Estado: ${pedido.estado || "PENDIENTE"}`;
+            box.appendChild(datos);
 
-            const total =
-                document.createElement("div");
+            const itemsBox = document.createElement("div");
+            itemsBox.className = "admin-order-items";
 
-            total.style.fontWeight =
-                "bold";
+            const items = Array.isArray(pedido.items)
+                ? pedido.items
+                : [];
 
-            total.textContent =
-                `Total: $${Number(
-                    pedido.total || 0
-                ).toFixed(2)}`;
+            if(items.length){
+                items.forEach(item=>{
+                    const row = document.createElement("div");
+                    row.className = "admin-order-item";
 
-            const cliente =
-                document.createElement("div");
+                    const extras = [];
+                    if(item.talla) extras.push(`Talla: ${item.talla}`);
+                    if(item.color) extras.push(`Color: ${item.color}`);
+                    if(item.nota) extras.push(`Nota: ${item.nota}`);
 
-            cliente.style.fontSize = ".75rem";
-            cliente.style.color = "#64748b";
-            cliente.style.marginTop = "4px";
-            cliente.textContent =
-                `Cliente: ${pedido.cliente || "No indicado"}`;
+                    row.innerHTML =
+                        `<b>${Number(item.cantidad || 0)}x</b>
+                         ${escaparHTML(item.nombre || item.producto || "")}
+                         <span style="float:right">
+                            $${Number(item.subtotal || 0).toFixed(2)}
+                         </span>
+                         ${extras.length
+                            ? `<div style="color:#64748b;margin-top:3px">${escaparHTML(extras.join(" · "))}</div>`
+                            : ""}`;
 
-            const telefono =
-                document.createElement("div");
+                    itemsBox.appendChild(row);
+                });
+            }else{
+                itemsBox.textContent =
+                    "No se encontró el detalle del pedido.";
+            }
 
-            telefono.style.fontSize = ".75rem";
-            telefono.style.color = "#64748b";
-            telefono.textContent =
-                `Teléfono: ${pedido.telefono || "No indicado"}`;
+            box.appendChild(itemsBox);
 
-            box.appendChild(numero);
-            box.appendChild(estado);
-            box.appendChild(cliente);
-            box.appendChild(telefono);
-            box.appendChild(total);
+            if(estado !== "CANCELADO" && estado !== "PAGADO"){
+
+                const acciones = document.createElement("div");
+                acciones.style.display = "flex";
+                acciones.style.gap = "7px";
+                acciones.style.marginTop = "10px";
+                acciones.style.flexWrap = "wrap";
+
+                const pagoBtn = document.createElement("button");
+                pagoBtn.className = "btn-opcion";
+                pagoBtn.style.margin = "0";
+                pagoBtn.style.flex = "1";
+                pagoBtn.textContent = "💳 Registrar pago";
+                pagoBtn.onclick = ()=>{
+                    switchAdminTab("discount");
+                    $("auth-order-id").value =
+                        pedido.pedidoId || "";
+                    actualizarResumenPagoAdmin(pedido);
+                };
+
+                const cancelBtn = document.createElement("button");
+                cancelBtn.className = "btn-opcion";
+                cancelBtn.style.margin = "0";
+                cancelBtn.style.flex = "1";
+                cancelBtn.style.color = "#b91c1c";
+                cancelBtn.style.borderColor = "#fecaca";
+                cancelBtn.textContent = "❌ Cancelar";
+                cancelBtn.onclick = ()=>{
+                    cancelarPedidoAdmin(
+                        pedido.pedidoId
+                    );
+                };
+
+                acciones.appendChild(pagoBtn);
+                acciones.appendChild(cancelBtn);
+                box.appendChild(acciones);
+            }
 
             container.appendChild(box);
         });
@@ -3889,7 +4180,6 @@ async function cargarPedidosAdmin(){
             </div>`;
     }
 }
-
 
 /* =====================================================
    INVENTARIO ADMIN
@@ -4112,42 +4402,186 @@ async function guardarStockAdmin(
    PROCESAR PEDIDO
 ===================================================== */
 
+async function consultarPedidoAdmin(pedidoId){
+
+    const resultado =
+        await adminRequest({
+            action:"consultar_pedido",
+            pedidoId
+        });
+
+    if(resultado.status !== "success"){
+        throw new Error(
+            resultado.message ||
+            "No se pudo consultar el pedido."
+        );
+    }
+
+    return resultado;
+}
+
+function actualizarResumenPagoAdmin(pedido){
+
+    const box = $("admin-payment-summary");
+
+    if(!box || !pedido) return;
+
+    const total = Number(pedido.total || 0);
+    const pagado = Number(pedido.montoPagado || 0);
+    const saldo = Math.max(
+        0,
+        Number(
+            pedido.saldoPendiente ??
+            (total - pagado)
+        )
+    );
+
+    box.style.display = "block";
+
+    box.innerHTML =
+        `<b>${escaparHTML(pedido.pedidoId || "")}</b><br>
+         Cliente: ${escaparHTML(pedido.cliente || "")}<br>
+         Total: <b>$${total.toFixed(2)}</b><br>
+         Pagado: <b>$${pagado.toFixed(2)}</b><br>
+         Saldo pendiente: <b style="color:#b91c1c">$${saldo.toFixed(2)}</b>
+         ${pedido.metodoPago
+            ? `<br>Método registrado: ${escaparHTML(pedido.metodoPago)}`
+            : ""}`;
+
+    $("admin-payment-amount").max = saldo || "";
+}
+
+async function cargarResumenPedidoAdmin(){
+
+    const numero =
+        $("auth-order-id").value.trim();
+
+    if(!numero){
+        $("admin-payment-summary").style.display = "none";
+        return;
+    }
+
+    try{
+        const resultado =
+            await consultarPedidoAdmin(numero);
+
+        actualizarResumenPagoAdmin(
+            resultado.pedido
+        );
+    }catch(error){
+        $("admin-payment-summary").style.display = "none";
+        throw error;
+    }
+}
+
+async function registrarAbonoAdmin(){
+
+    const numero =
+        $("auth-order-id").value.trim();
+
+    const monto =
+        Number(
+            $("admin-payment-amount").value
+        );
+
+    const metodo =
+        $("admin-payment-method").value.trim();
+
+    if(!numero){
+        alert("Ingresa el número de pedido.");
+        return;
+    }
+
+    if(!monto || monto <= 0){
+        alert("Ingresa un monto de abono válido.");
+        return;
+    }
+
+    if(!metodo){
+        alert("Selecciona el método de pago.");
+        return;
+    }
+
+    const boton = $("btn-partial-payment");
+    boton.disabled = true;
+    boton.textContent = "Registrando...";
+
+    try{
+
+        const resultado =
+            await adminRequest({
+                action:"registrar_pago",
+                pedidoId:numero,
+                monto:monto,
+                metodoPago:metodo
+            });
+
+        if(resultado.status !== "success"){
+            throw new Error(
+                resultado.message ||
+                "No se pudo registrar el pago."
+            );
+        }
+
+        alert(
+            resultado.message ||
+            "Pago registrado correctamente."
+        );
+
+        $("admin-payment-amount").value = "";
+
+        await cargarPedidosAdmin();
+
+        const consulta =
+            await consultarPedidoAdmin(numero);
+
+        actualizarResumenPagoAdmin(
+            consulta.pedido
+        );
+
+        await cargarProductos();
+
+    }catch(error){
+
+        console.error(error);
+        alert(error.message);
+
+    }finally{
+
+        boton.disabled = false;
+        boton.textContent = "💵 Registrar abono";
+    }
+}
+
 async function procesarPedidoAdmin(){
 
     const numero =
-        $("auth-order-id")
-            .value
-            .trim();
+        $("auth-order-id").value.trim();
 
     if(!numero){
-
-        alert(
-            "Ingresa el número de pedido."
-        );
-
+        alert("Ingresa el número de pedido.");
         return;
     }
+
+    const metodo =
+        $("admin-payment-method").value.trim();
 
     const boton =
         $("btn-process-order");
 
-    boton.disabled=true;
-
-    boton.textContent =
-        "Verificando...";
+    boton.disabled = true;
+    boton.textContent = "Procesando...";
 
     try{
 
         const resultado =
             await adminRequest({
                 action:"confirmar_pago",
-                pedidoId:numero
+                pedidoId:numero,
+                metodoPago:metodo
             });
 
-        if(
-            resultado.status !== "success"
-        ){
-
+        if(resultado.status !== "success"){
             throw new Error(
                 resultado.message ||
                 "No se pudo procesar el pedido."
@@ -4156,30 +4590,92 @@ async function procesarPedidoAdmin(){
 
         alert(
             resultado.message ||
-            "Pedido procesado correctamente."
+            "Pago confirmado y pedido procesado."
         );
 
-        $("auth-order-id").value="";
+        $("auth-order-id").value = "";
+        $("admin-payment-amount").value = "";
+        $("admin-payment-method").value = "";
+        $("admin-payment-summary").style.display = "none";
 
         await cargarProductos();
-
-        cargarPedidosAdmin();
+        await cargarPedidosAdmin();
 
     }catch(error){
 
         console.error(error);
-
         alert(error.message);
 
     }finally{
 
-        boton.disabled=false;
-
-        boton.textContent =
-            "✅ Verificar pago y procesar";
+        boton.disabled = false;
+        boton.textContent = "✅ Confirmar pago total";
     }
 }
 
+async function cancelarPedidoAdmin(pedidoIdForzado=""){
+
+    const numero =
+        pedidoIdForzado ||
+        $("auth-order-id").value.trim();
+
+    if(!numero){
+        alert("Ingresa el número de pedido.");
+        return;
+    }
+
+    const confirmar =
+        window.confirm(
+            `¿Seguro que deseas cancelar el pedido ${numero}?`
+        );
+
+    if(!confirmar) return;
+
+    const boton = $("btn-cancel-order");
+
+    if(boton) boton.disabled = true;
+
+    try{
+
+        const resultado =
+            await adminRequest({
+                action:"cancelar_pedido",
+                pedidoId:numero
+            });
+
+        if(resultado.status !== "success"){
+            throw new Error(
+                resultado.message ||
+                "No se pudo cancelar el pedido."
+            );
+        }
+
+        alert(
+            resultado.message ||
+            "Pedido cancelado correctamente."
+        );
+
+        if($("auth-order-id")){
+            $("auth-order-id").value = "";
+        }
+
+        if($("admin-payment-summary")){
+            $("admin-payment-summary").style.display = "none";
+        }
+
+        await cargarPedidosAdmin();
+        await cargarProductos();
+
+    }catch(error){
+
+        console.error(error);
+        alert(error.message);
+
+    }finally{
+
+        if(boton) boton.disabled = false;
+    }
+}
 
 /* =====================================================
    CERRAR SESIÓN
