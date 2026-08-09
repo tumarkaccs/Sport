@@ -1250,64 +1250,36 @@ header{
             style="text-align:right;font-size:1.4rem;font-weight:900;margin:20px 0"
         >
             Total: $0.00
+        </div>
 
-            <!-- DATOS DEL CLIENTE -->
+        <!-- DATOS DEL CLIENTE -->
+        <div
+            style="margin-top:15px;padding:15px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0"
+        >
+            <p
+                style="font-weight:900;margin:0 0 10px;color:var(--petroleo)"
+            >
+                👤 Datos del cliente
+            </p>
 
-<div
-    style="
-        margin-top:15px;
-        padding:15px;
-        background:#f8fafc;
-        border-radius:10px;
-        border:1px solid #e2e8f0;
-    "
->
+            <input
+                type="text"
+                id="cliente-nombre"
+                maxlength="100"
+                placeholder="Nombre y apellido"
+                autocomplete="name"
+                style="width:100%;padding:12px;margin-bottom:10px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box"
+            >
 
-    <p
-        style="
-            font-weight:900;
-            margin:0 0 10px;
-            color:var(--petroleo);
-        "
-    >
-        👤 Datos del cliente
-    </p>
-
-    <input
-        type="text"
-        id="cliente-nombre"
-        maxlength="100"
-        placeholder="Nombre y apellido"
-        autocomplete="name"
-        style="
-            width:100%;
-            padding:12px;
-            margin-bottom:10px;
-            border-radius:8px;
-            border:1px solid #ddd;
-            box-sizing:border-box;
-        "
-    >
-
-    <input
-        type="tel"
-        id="cliente-telefono"
-        maxlength="30"
-        placeholder="Teléfono / WhatsApp"
-        autocomplete="tel"
-        inputmode="tel"
-        style="
-            width:100%;
-            padding:12px;
-            border-radius:8px;
-            border:1px solid #ddd;
-            box-sizing:border-box;
-        "
-    >
-
-</div>
-```
-
+            <input
+                type="tel"
+                id="cliente-telefono"
+                maxlength="30"
+                placeholder="Teléfono / WhatsApp"
+                autocomplete="tel"
+                inputmode="tel"
+                style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box"
+            >
         </div>
 
         <p style="font-weight:bold;margin-bottom:5px">
@@ -1863,74 +1835,7 @@ function parseCSV(texto){
    CARGAR CONFIGURACIÓN
 ===================================================== */
 
-function renderMetodosPago(){
-
-    const box = $("metodos-pago-box");
-
-    if(!box){
-        return;
-    }
-
-    box.innerHTML = "";
-
-    const metodos = String(CONFIG.pago || "")
-        .split(",")
-        .map(m => m.trim())
-        .filter(Boolean);
-
-    if(!metodos.length){
-
-        box.innerHTML = `
-            <div class="estado">
-                No hay métodos de pago disponibles.
-            </div>
-        `;
-
-        return;
-    }
-
-    metodos.forEach((metodo, index)=>{
-
-        const label =
-            document.createElement("label");
-
-        label.style.display = "flex";
-        label.style.alignItems = "center";
-        label.style.gap = "10px";
-        label.style.padding = "12px";
-        label.style.marginBottom = "8px";
-        label.style.border = "1px solid #ddd";
-        label.style.borderRadius = "10px";
-        label.style.cursor = "pointer";
-        label.style.background = "#fff";
-
-        const radio =
-            document.createElement("input");
-
-        radio.type = "radio";
-        radio.name = "metodo-pago";
-        radio.value = metodo;
-
-        radio.style.width = "18px";
-        radio.style.height = "18px";
-
-        if(index === 0){
-            radio.checked = true;
-        }
-
-        const texto =
-            document.createElement("span");
-
-        texto.textContent = metodo;
-
-        label.appendChild(radio);
-        label.appendChild(texto);
-
-        box.appendChild(label);
-    });
-}
-    
-    async function cargarConfiguracion(){
+async function cargarConfiguracion(){
 
     const response = await fetch(
         CONFIG_URL + "&cache=" + Date.now()
@@ -1975,8 +1880,11 @@ function renderMetodosPago(){
         }
 
         if(key.includes("pago")){
-    CONFIG.pago = value;
-}
+            CONFIG.pago =
+                value.toLowerCase().includes("cashea")
+                ? value
+                : value + " / Cashea 💛";
+        }
 
         if(key.includes("banner") && !key.includes("titulo")){
             CONFIG.banner = value;
@@ -1987,7 +1895,7 @@ function renderMetodosPago(){
         }
     });
 
-    renderMetodosPago();
+    $("metodos-pago-box").textContent = CONFIG.pago;
 
     if(CONFIG.banner){
 
@@ -3121,7 +3029,7 @@ function validarStockLocal(){
    REGISTRAR PEDIDO EN BACKEND
 ===================================================== */
 
-async function registrarPedidoBackend(pedido){
+async function crearPedidoBackend(datos){
 
     try{
 
@@ -3130,46 +3038,29 @@ async function registrarPedidoBackend(pedido){
                 APPS_SCRIPT_URL,
                 {
                     method:"POST",
-
                     headers:{
                         "Content-Type":
                             "text/plain;charset=utf-8"
                     },
-
                     body:JSON.stringify({
-
                         action:"crear_pedido",
-
-                        cliente:
-                            pedido.cliente || "",
-
-                        telefono:
-                            pedido.telefono || "",
-
-                        entrega:
-                            pedido.entrega || "",
-
-                        direccion:
-                            pedido.direccion || "",
-
-                        items:
-                            pedido.items
-
+                        cliente:datos.cliente,
+                        telefono:datos.telefono,
+                        entrega:datos.entrega,
+                        direccion:datos.direccion,
+                        items:datos.items
                     }),
-
                     redirect:"follow"
                 }
             );
 
-        const resultado =
-            await response.json();
+        if(!response.ok){
+            throw new Error(
+                `Error HTTP ${response.status}`
+            );
+        }
 
-        console.log(
-            "Respuesta Apps Script:",
-            resultado
-        );
-
-        return resultado;
+        return await response.json();
 
     }catch(error){
 
@@ -3179,16 +3070,10 @@ async function registrarPedidoBackend(pedido){
         );
 
         return {
-
             status:"error",
-
-            message:
-                error.toString()
-
+            message:error.message || String(error)
         };
-
     }
-
 }
 
 /* =====================================================
@@ -3197,424 +3082,245 @@ async function registrarPedidoBackend(pedido){
 
 async function enviarWA(){
 
-    /* =====================================================
-       VALIDAR CARRITO
-       ===================================================== */
-
     if(!CART.length){
-
         mostrarToast(
             "El carrito está vacío."
         );
-
         return;
     }
 
+    const clienteNombre =
+        $("cliente-nombre").value.trim().slice(0,100);
 
-    /* =====================================================
-       DATOS DEL CLIENTE
-       ===================================================== */
+    const clienteTelefono =
+        $("cliente-telefono").value.trim().slice(0,30);
 
-    const cliente =
-        $("cliente-nombre")
-            .value
-            .trim();
-
-    const telefonoCliente =
-        $("cliente-telefono")
-            .value
-            .trim();
-
-
-    if(!cliente){
-
-        alert(
-            "Por favor, ingresa tu nombre y apellido."
-        );
-
+    if(!clienteNombre){
+        alert("Por favor, ingresa tu nombre y apellido.");
         $("cliente-nombre").focus();
-
         return;
     }
 
-
-    if(!telefonoCliente){
-
-        alert(
-            "Por favor, ingresa tu teléfono o WhatsApp."
-        );
-
+    if(!clienteTelefono){
+        alert("Por favor, ingresa tu teléfono o WhatsApp.");
         $("cliente-telefono").focus();
-
         return;
     }
 
-
-    /* =====================================================
-       VALIDAR DELIVERY
-       ===================================================== */
+    if(!entregaM){
+        alert("Selecciona cómo recibirás tu compra.");
+        return;
+    }
 
     if(
         entregaM === "Delivery" &&
         !$("dir-val").value.trim()
     ){
-
         alert(
             "Por favor, ingresa tu dirección."
         );
 
         $("dir-val").focus();
-
         return;
     }
-
-
-    /* =====================================================
-       VALIDAR MÉTODO DE ENTREGA
-       ===================================================== */
-
-    if(!entregaM){
-
-        alert(
-            "Por favor, selecciona cómo deseas recibir tu compra."
-        );
-
-        return;
-    }
-
-
-    /* =====================================================
-       VALIDAR STOCK LOCAL
-       ===================================================== */
 
     const validacion =
         validarStockLocal();
 
     if(!validacion.ok){
-
-        alert(
-            validacion.mensaje
-        );
-
+        alert(validacion.mensaje);
         await cargarProductos();
-
         return;
     }
 
-
-    /* =====================================================
-       DIRECCIÓN
-       ===================================================== */
-
     const direccion =
-        $("dir-val")
-            .value
-            .trim();
-
-
-    /* =====================================================
-       BOTÓN
-       ===================================================== */
+        $("dir-val").value.trim().slice(0,500);
 
     const boton =
         $("btn-final-wa");
 
     boton.disabled = true;
-
     boton.textContent =
         "Registrando pedido...";
 
+    try{
 
-    /* =====================================================
-       CREAR PEDIDO
-       ===================================================== */
+        /*
+         * El backend genera el número oficial del pedido.
+         * El frontend NO debe inventar un ID diferente.
+         */
+        const resultado =
+            await crearPedidoBackend({
+                cliente: clienteNombre,
+                telefono: clienteTelefono,
+                entrega: entregaM,
+                direccion,
+                items: CART.map(item=>({
+                    id:item.id,
+                    cantidad:item.cantidad,
+                    precio:item.precio,
+                    talla:item.talla || "",
+                    color:item.color || "",
+                    nota:item.instruccion || ""
+                }))
+            });
 
-    const pedido = {
-
-        fecha:
-            new Date().toISOString(),
-
-        cliente:
-            cliente,
-
-        telefono:
-            telefonoCliente,
-
-        items:
-
-            CART.map(item=>({
-
-                id:
-                    item.id,
-
-                nombre:
-                    item.nombre,
-
-                cantidad:
-                    item.cantidad,
-
-                precio:
-                    item.precio,
-
-                talla:
-                    item.talla || "",
-
-                color:
-                    item.color || "",
-
-                instruccion:
-                    item.instruccion || ""
-
-            })),
-
-        total:
-            calcularTotal(),
-
-        pago:
-            CONFIG.pago,
-
-        entrega:
-            entregaM,
-
-        direccion:
-            direccion
-
-    };
-
-
-    /* =====================================================
-       REGISTRAR EN GOOGLE SHEETS
-       ===================================================== */
-
-    const backend =
-        await registrarPedidoBackend(
-            pedido
-        );
-
-
-    console.log(
-        "Resultado registro:",
-        backend
-    );
-
-
-    /* =====================================================
-       SI FALLÓ EL REGISTRO
-       ===================================================== */
-
-    if(
-        !backend ||
-        backend.status !== "success"
-    ){
-
-        console.error(
-            "No se pudo registrar el pedido:",
-            backend
-        );
-
-        alert(
-            "No se pudo registrar el pedido en el sistema.\n\n" +
-            "El pedido NO fue enviado por WhatsApp.\n\n" +
-            "Por favor, intenta nuevamente."
-        );
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "🚀 Enviar Pedido por WhatsApp";
-
-        return;
-    }
-
-
-    /* =====================================================
-       NÚMERO OFICIAL DEL PEDIDO
-       ===================================================== */
-
-    const numeroPedido =
-        backend.pedidoId;
-
-
-    if(!numeroPedido){
-
-        console.error(
-            "Apps Script no devolvió pedidoId:",
-            backend
-        );
-
-        alert(
-            "El pedido fue procesado pero no se recibió " +
-            "el número de pedido. No se abrirá WhatsApp."
-        );
-
-        boton.disabled = false;
-
-        boton.textContent =
-            "🚀 Enviar Pedido por WhatsApp";
-
-        return;
-    }
-
-
-    /* =====================================================
-       CREAR MENSAJE WHATSAPP
-       ===================================================== */
-
-    boton.textContent =
-        "Abriendo WhatsApp...";
-
-
-    let mensaje =
-        `*¡Hola, Tu Marka!* 🙌\n\n` +
-
-        `*PEDIDO ${numeroPedido}*\n` +
-
-        `--------------------------------\n` +
-
-        `👤 *Cliente:* ${cliente}\n` +
-
-        `📱 *Teléfono:* ${telefonoCliente}\n\n`;
-
-
-    CART.forEach((item,index)=>{
-
-        mensaje +=
-            `${index+1}. *${item.cantidad}x ${item.nombre}*\n`;
-
-        mensaje +=
-            `ID: ${item.id}\n`;
-
-        mensaje +=
-            `Subtotal: $${(
-                item.precio *
-                item.cantidad
-            ).toFixed(2)}\n`;
-
-
-        if(item.talla){
-
-            mensaje +=
-                `📏 Talla: ${item.talla}\n`;
+        if(!resultado || resultado.status !== "success"){
+            throw new Error(
+                resultado?.message ||
+                "No fue posible registrar el pedido."
+            );
         }
 
+        const numeroPedido =
+            resultado.pedidoId ||
+            resultado.numero ||
+            "SIN-ID";
 
-        if(item.color){
+        const total =
+            Number(resultado.total ?? calcularTotal()) || 0;
+
+        let mensaje =
+            `*¡Hola, Tu Marka!* 🙌\n\n` +
+            `*PEDIDO ${numeroPedido}*\n` +
+            `--------------------------------\n` +
+            `👤 *Cliente:* ${clienteNombre}\n` +
+            `📞 *Teléfono:* ${clienteTelefono}\n\n`;
+
+        CART.forEach((item,index)=>{
 
             mensaje +=
-                `🎨 Color: ${item.color}\n`;
-        }
-
-
-        if(item.instruccion){
+                `${index+1}. *${item.cantidad}x ${item.nombre}*\n`;
 
             mensaje +=
-                `📝 Nota: ${item.instruccion}\n`;
-        }
+                `ID: ${item.id}\n`;
 
+            mensaje +=
+                `Subtotal: $${(
+                    item.precio *
+                    item.cantidad
+                ).toFixed(2)}\n`;
 
-        mensaje += "\n";
+            if(item.talla){
+                mensaje +=
+                    `📏 Talla: ${item.talla}\n`;
+            }
 
-    });
+            if(item.color){
+                mensaje +=
+                    `🎨 Color: ${item.color}\n`;
+            }
 
+            if(item.instruccion){
+                mensaje +=
+                    `📝 Nota: ${item.instruccion}\n`;
+            }
 
-    mensaje +=
-        `--------------------------------\n`;
-
-
-    mensaje +=
-        `💰 *TOTAL: $${calcularTotal().toFixed(2)}*\n\n`;
-
-
-    mensaje +=
-        `💳 *Método de pago:* ${CONFIG.pago}\n`;
-
-
-    mensaje +=
-        `📍 *Entrega:* ${entregaM}\n`;
-
-
-    if(entregaM === "Delivery"){
+            mensaje += "\n";
+        });
 
         mensaje +=
-            `🏠 *Dirección:* ${direccion}\n`;
+            `--------------------------------\n`;
 
-    }
+        mensaje +=
+            `💰 *TOTAL: $${total.toFixed(2)}*\n\n`;
 
+        mensaje +=
+            `💳 *Método de pago:* ${CONFIG.pago}\n`;
 
-    mensaje +=
-        `\nGracias por preferir *Tu Marka Sport*. 💙`;
+        mensaje +=
+            `📍 *Entrega:* ${entregaM}\n`;
 
+        if(entregaM === "Delivery"){
+            mensaje +=
+                `🏠 *Dirección:* ${direccion}\n`;
+        }
 
-    /* =====================================================
-       TELÉFONO DEL NEGOCIO
-       ===================================================== */
+        mensaje +=
+            `\nGracias por preferir *Tu Marka Sport*. 💙`;
 
-    const telefonoNegocio =
-        String(CONFIG.tel)
-            .replace(/\D/g,"");
+        const telefono =
+            String(CONFIG.tel)
+                .replace(/\D/g,"");
 
+        if(!telefono){
+            throw new Error(
+                "El número de WhatsApp de Tu Marka Sport no está configurado."
+            );
+        }
 
-    if(!telefonoNegocio){
+        const url =
+            `https://wa.me/${telefono}?text=` +
+            encodeURIComponent(mensaje);
+
+        localStorage.setItem(
+            "tu_marka_last_order_v4",
+            JSON.stringify({
+                numero:numeroPedido,
+                fecha:new Date().toISOString(),
+                cliente:clienteNombre,
+                telefono:clienteTelefono,
+                items:CART,
+                total,
+                pago:CONFIG.pago,
+                entrega:entregaM,
+                direccion
+            })
+        );
+
+        /*
+         * Abrimos WhatsApp solamente después de que
+         * el pedido fue registrado correctamente.
+         */
+        window.open(
+            url,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+        mostrarToast(
+            `Pedido ${numeroPedido} registrado correctamente.`
+        );
+
+        /*
+         * El carrito se limpia porque el pedido ya quedó
+         * registrado en Google Sheets.
+         */
+        CART = [];
+        guardarCarrito();
+        actualizar();
+
+        entregaM = "";
+        $("dir-val").value = "";
+        $("dir-val").style.display = "none";
+        $("cliente-nombre").value = "";
+        $("cliente-telefono").value = "";
+
+        document
+            .querySelectorAll(
+                "#modalCarrito .btn-opcion"
+            )
+            .forEach(b=>b.classList.remove("seleccionado"));
+
+        cerrar();
+
+    }catch(error){
+
+        console.error(error);
 
         alert(
-            "El número de WhatsApp del negocio " +
-            "no está configurado."
+            error.message ||
+            "No fue posible registrar el pedido."
         );
+
+    }finally{
 
         boton.disabled = false;
-
         boton.textContent =
             "🚀 Enviar Pedido por WhatsApp";
-
-        return;
     }
-
-
-    /* =====================================================
-       GUARDAR ÚLTIMO PEDIDO
-       ===================================================== */
-
-    pedido.numero =
-        numeroPedido;
-
-
-    localStorage.setItem(
-        "tu_marka_last_order_v4",
-        JSON.stringify(pedido)
-    );
-
-
-    /* =====================================================
-       ABRIR WHATSAPP
-       ===================================================== */
-
-    const url =
-        `https://wa.me/${telefonoNegocio}?text=` +
-        encodeURIComponent(
-            mensaje
-        );
-
-
-    window.open(
-        url,
-        "_blank",
-        "noopener,noreferrer"
-    );
-
-
-    /* =====================================================
-       FINALIZAR
-       ===================================================== */
-
-    boton.disabled = false;
-
-    boton.textContent =
-        "🚀 Enviar Pedido por WhatsApp";
-
-
-    cerrar();
-
 }
+
 /* =====================================================
    COMPARTIR
 ===================================================== */
@@ -3905,11 +3611,9 @@ async function loginAdmin(){
 
             expires:
                 Date.now() +
-                (
-                    Number(
-                        resultado.expiresIn ||
-                        21600000
-                    )
+                Number(
+                    resultado.expiresIn ||
+                    21600000
                 )
         };
 
@@ -4121,6 +3825,7 @@ async function cargarPedidosAdmin(){
                 document.createElement("b");
 
             numero.textContent =
+                pedido.pedidoId ||
                 pedido.numero ||
                 pedido.id ||
                 "Pedido";
@@ -4148,8 +3853,27 @@ async function cargarPedidosAdmin(){
                     pedido.total || 0
                 ).toFixed(2)}`;
 
+            const cliente =
+                document.createElement("div");
+
+            cliente.style.fontSize = ".75rem";
+            cliente.style.color = "#64748b";
+            cliente.style.marginTop = "4px";
+            cliente.textContent =
+                `Cliente: ${pedido.cliente || "No indicado"}`;
+
+            const telefono =
+                document.createElement("div");
+
+            telefono.style.fontSize = ".75rem";
+            telefono.style.color = "#64748b";
+            telefono.textContent =
+                `Teléfono: ${pedido.telefono || "No indicado"}`;
+
             box.appendChild(numero);
             box.appendChild(estado);
+            box.appendChild(cliente);
+            box.appendChild(telefono);
             box.appendChild(total);
 
             container.appendChild(box);
@@ -4416,8 +4140,8 @@ async function procesarPedidoAdmin(){
 
         const resultado =
             await adminRequest({
-                action:"procesar_pedido",
-                numero
+                action:"confirmar_pago",
+                pedidoId:numero
             });
 
         if(
