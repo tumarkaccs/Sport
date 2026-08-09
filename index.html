@@ -1160,7 +1160,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 
 
 .admin-accounting-filter{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px}
-.admin-accounting-filter input,.admin-accounting-filter select{width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:9px;background:#fff;box-sizing:border-box}
+.admin-accounting-filter input,.admin-accounting-filter select{width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:9px;background:#fff;box-sizing:border-box}.admin-accounting-filter input[type="date"]{min-height:42px;appearance:auto;-webkit-appearance:auto;color:#2A2D32;}
 .admin-accounting-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0}
 .admin-accounting-card{background:#fff;border:1px solid #E2E4E5;border-radius:10px;padding:10px 6px;text-align:center}
 .admin-accounting-card strong{display:block;font-size:1rem;color:var(--tm-negro)}
@@ -1172,7 +1172,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .producto-img-box{background:#fff;aspect-ratio:1/1;min-height:0}
 .producto-img-box>img{height:100%!important;aspect-ratio:1/1;object-fit:contain}
 .admin-product-cost-label{font-size:.68rem;color:#6C7075}
-@media(max-width:620px){.admin-accounting-grid{grid-template-columns:repeat(2,1fr)}.admin-accounting-filter{grid-template-columns:1fr}.admin-accounting-filter input{display:none!important}}
+@media(max-width:620px){.admin-accounting-grid{grid-template-columns:repeat(2,1fr)}.admin-accounting-filter{grid-template-columns:1fr}.admin-accounting-filter input{display:block!important}}
 
 /* =========================================================
    TU MARKA SPORT V12 — AJUSTES FINALES
@@ -1220,7 +1220,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .admin-variant-row{grid-template-columns:1fr 1fr 85px 1fr 90px 75px auto!important}
 .admin-variant-field{min-width:0}.admin-variant-field label{display:block;font-size:.62rem;font-weight:900;color:#6C7075;margin:0 0 3px}.admin-variant-field input,.admin-variant-field select{width:100%;box-sizing:border-box;padding:8px;border:1px solid #CBD5E1;border-radius:8px;font:inherit;min-width:0}
 .admin-accounting-period-display{background:#F7F8F8;border:1px solid #E2E4E5;border-radius:9px;padding:9px 10px;margin:-1px 0 10px;font-size:.72rem;font-weight:900;color:#2A2D32}
-.badge-promo{background:#6C7075!important;color:#6C7075!important}
+.badge-promo{background:#6C7075!important;color:#D2EC00!important}
 .catalogo-disponibilidad-titulo{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .p-nombre{margin-bottom:3px!important;min-height:2.5em!important}.producto:not(:has(.catalogo-disponibilidad)) .p-nombre{min-height:0!important}
 .precio{margin-bottom:6px!important}
@@ -5266,13 +5266,24 @@ function tmProductoCard(p){
 }
 
 function tmRenderGrid(id,lista){const grid=$(id);if(!grid)return;grid.innerHTML="";if(!lista.length){grid.innerHTML='<div class="estado" style="grid-column:1/-1">No hay productos disponibles.</div>';return;}const f=document.createDocumentFragment();lista.forEach(p=>f.appendChild(tmProductoCard(p)));grid.appendChild(f);}
+function tmTieneVariantes(p){
+    return Array.isArray(p?.variantes) && p.variantes.some(v=>v && v.activo!==false);
+}
+function tmVariantesPrimero(lista){
+    return [...lista].sort((a,b)=>Number(tmTieneVariantes(b))-Number(tmTieneVariantes(a)));
+}
 function tmOrdenNuevos(){
-    const withFlag=DB.filter(p=>p.nuevo);const base=withFlag.length?withFlag:DB;return [...base].sort((a,b)=>Number(b.nuevo)-Number(a.nuevo)).slice(0,4);
+    const withFlag=DB.filter(p=>p.nuevo);const base=withFlag.length?withFlag:DB;
+    return tmVariantesPrimero([...base].sort((a,b)=>Number(b.nuevo)-Number(a.nuevo))).slice(0,4);
 }
 function tmOrdenVendidos(){
-    const vistas=tmVistas();return [...DB].sort((a,b)=>(Number(b.ventas||0)-Number(a.ventas||0))||((Number(vistas[b.id]||0))-(Number(vistas[a.id]||0)))).slice(0,4);
+    const vistas=tmVistas();
+    const base=[...DB].sort((a,b)=>(Number(b.ventas||0)-Number(a.ventas||0))||((Number(vistas[b.id]||0))-(Number(vistas[a.id]||0))));
+    return tmVariantesPrimero(base).slice(0,4);
 }
-function tmGeneral(lista){return mezclarProductos([...lista]).slice(0,10);}
+function tmGeneral(lista){
+    return tmVariantesPrimero(mezclarProductos([...lista])).slice(0,10);
+}
 function renderCatalogoCompleto(){
     const texto=$("buscador")?.value.toLowerCase().trim()||"";const filtrado=DB.filter(p=>{const cat=catActual&&catActual!=="todos"?p.cat===catActual:true;const q=!texto||p.nombre.toLowerCase().includes(texto)||String(p.id).toLowerCase().includes(texto);return cat&&q;});
     const hayFiltro=!!texto||(catActual&&catActual!=="todos");
@@ -5282,8 +5293,30 @@ function renderCatalogoCompleto(){
 }
 function mostrar(lista){renderCatalogoCompleto();}
 function filtrarCat(c,btn){
-    document.querySelectorAll(".btn-cat").forEach(x=>x.classList.remove("activo"));document.querySelectorAll(".cat-pill").forEach(x=>x.classList.remove("activo"));
-    btn?.classList.add("activo");btn?.parentElement?.classList.add("activo");catActual=c;renderCatalogoCompleto();
+    document.querySelectorAll(".btn-cat").forEach(x=>x.classList.remove("activo"));
+    document.querySelectorAll(".cat-pill").forEach(x=>x.classList.remove("activo"));
+
+    if(c==="todos"){
+        catActual="todos";
+        const buscador=$("buscador");
+        if(buscador) buscador.value="";
+        const todos=$("pill-todos .btn-cat") || btn;
+        todos?.classList.add("activo");
+        todos?.parentElement?.classList.add("activo");
+        renderCatalogoCompleto();
+
+        // "Todos" funciona como botón de inicio: vuelve al comienzo del catálogo.
+        requestAnimationFrame(()=>{
+            const destino=$("banner-box") || $("container-logo") || document.body;
+            destino?.scrollIntoView({behavior:"smooth",block:"start"});
+        });
+        return;
+    }
+
+    btn?.classList.add("activo");
+    btn?.parentElement?.classList.add("activo");
+    catActual=c;
+    renderCatalogoCompleto();
 }
 function filtrar(){renderCatalogoCompleto();}
 function construirCategorias(){
