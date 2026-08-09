@@ -1160,7 +1160,9 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 
 
 .admin-accounting-filter{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:10px}
-.admin-accounting-filter input,.admin-accounting-filter select{width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:9px;background:#fff;box-sizing:border-box}.admin-accounting-filter input[type="date"]{min-height:42px;appearance:auto;-webkit-appearance:auto;color:#2A2D32;}
+.admin-accounting-filter input,.admin-accounting-filter select{width:100%;padding:10px;border:1px solid #CBD5E1;border-radius:9px;background:#fff;box-sizing:border-box;min-height:42px;color:#2A2D32}
+.admin-accounting-filter input[type="date"],.admin-accounting-filter input[type="month"]{appearance:auto;-webkit-appearance:auto;color:#2A2D32}
+.admin-accounting-filter input[type="date"]::-webkit-calendar-picker-indicator,.admin-accounting-filter input[type="month"]::-webkit-calendar-picker-indicator{opacity:1;cursor:pointer}
 .admin-accounting-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;margin:10px 0}
 .admin-accounting-card{background:#fff;border:1px solid #E2E4E5;border-radius:10px;padding:10px 6px;text-align:center}
 .admin-accounting-card strong{display:block;font-size:1rem;color:var(--tm-negro)}
@@ -1172,7 +1174,11 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .producto-img-box{background:#fff;aspect-ratio:1/1;min-height:0}
 .producto-img-box>img{height:100%!important;aspect-ratio:1/1;object-fit:contain}
 .admin-product-cost-label{font-size:.68rem;color:#6C7075}
-@media(max-width:620px){.admin-accounting-grid{grid-template-columns:repeat(2,1fr)}.admin-accounting-filter{grid-template-columns:1fr}.admin-accounting-filter input{display:block!important}}
+@media(max-width:620px){
+    .admin-accounting-grid{grid-template-columns:repeat(2,1fr)}
+    .admin-accounting-filter{grid-template-columns:1fr}
+    .admin-accounting-filter input,.admin-accounting-filter select{width:100%;min-height:44px}
+}
 
 /* =========================================================
    TU MARKA SPORT V12 — AJUSTES FINALES
@@ -1906,14 +1912,17 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
             >
                 <div class="admin-accounting-filter">
                     <select id="accounting-period" class="metodo-pago-select">
-                        <option value="day">Hoy</option>
-                        <option value="week">Esta semana</option>
-                        <option value="month" selected>Este mes</option>
-                        <option value="year">Este año</option>
+                        <option value="day" selected>Hoy</option>
+                        <option value="month">Mes</option>
+                        <option value="year">Año</option>
                         <option value="custom">Fecha personalizada</option>
                     </select>
-                    <input type="date" id="accounting-from" style="display:none">
-                    <input type="date" id="accounting-to" style="display:none">
+
+                    <input type="month" id="accounting-month" aria-label="Mes y año" style="display:none">
+                    <select id="accounting-year" class="metodo-pago-select" aria-label="Año" style="display:none"></select>
+                    <input type="date" id="accounting-from" aria-label="Fecha inicial" style="display:none">
+                    <input type="date" id="accounting-to" aria-label="Fecha final" style="display:none">
+
                     <button class="btn-opcion" style="margin:0" onclick="cargarContabilidadAdmin()">🔄 Actualizar</button>
                 </div>
 
@@ -4855,10 +4864,9 @@ async function registrarAbonoAdmin(){
         );
 
         if(resultado.whatsappUrl){
-            abrirWhatsAppCliente(
-                resultado.telefonoCliente || "",
-                resultado.whatsappMessage || ""
-            );
+            // El backend genera la URL oficial https://wa.me/...
+            // y la usamos directamente para evitar construir otra URL.
+            window.open(resultado.whatsappUrl, "_blank", "noopener,noreferrer");
         }
 
         $("admin-payment-amount").value = "";
@@ -4927,10 +4935,9 @@ async function procesarPedidoAdmin(){
         );
 
         if(resultado.whatsappUrl){
-            abrirWhatsAppCliente(
-                resultado.telefonoCliente || "",
-                resultado.whatsappMessage || ""
-            );
+            // El backend genera la URL oficial https://wa.me/...
+            // y la usamos directamente para evitar construir otra URL.
+            window.open(resultado.whatsappUrl, "_blank", "noopener,noreferrer");
         }
 
         $("auth-order-id").value = "";
@@ -5434,42 +5441,106 @@ function tmFechaLocalInput(d){
     const y=x.getFullYear(),m=String(x.getMonth()+1).padStart(2,"0"),day=String(x.getDate()).padStart(2,"0");
     return `${y}-${m}-${day}`;
 }
+function tmAnioActual(){
+    return new Date().getFullYear();
+}
+
+function tmFechaLocalInput(d){
+    const x=new Date(d); if(isNaN(x.getTime())) return "";
+    const y=x.getFullYear(),m=String(x.getMonth()+1).padStart(2,"0"),day=String(x.getDate()).padStart(2,"0");
+    return `${y}-${m}-${day}`;
+}
+
+function tmMesLocalInput(d){
+    const x=new Date(d); if(isNaN(x.getTime())) return "";
+    return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,"0")}`;
+}
+
+function tmPrepararSelectorAnio(){
+    const select=$("accounting-year");
+    if(!select) return;
+    const actual=tmAnioActual();
+    const seleccionado=select.value || String(actual);
+    select.innerHTML="";
+    for(let y=actual+1;y>=actual-10;y--){
+        const option=document.createElement("option");
+        option.value=String(y);
+        option.textContent=String(y);
+        select.appendChild(option);
+    }
+    select.value=(Array.from(select.options).some(o=>o.value===seleccionado)?seleccionado:String(actual));
+}
+
 function tmRangoContabilidad(){
-    const periodo=$("accounting-period")?.value||"month";
-    const ahora=new Date(); let desde=new Date(ahora.getFullYear(),ahora.getMonth(),ahora.getDate()); let hasta=new Date(ahora.getFullYear(),ahora.getMonth(),ahora.getDate());
-    if(periodo==="week"){
-        const dia=desde.getDay(); const ajuste=dia===0?6:dia-1; desde.setDate(desde.getDate()-ajuste);
-    }else if(periodo==="month") desde=new Date(ahora.getFullYear(),ahora.getMonth(),1);
-    else if(periodo==="year") desde=new Date(ahora.getFullYear(),0,1);
-    else if(periodo==="custom"){
+    const periodo=$("accounting-period")?.value||"day";
+    const ahora=new Date();
+    let desde,hasta;
+
+    if(periodo==="day"){
+        desde=new Date(ahora.getFullYear(),ahora.getMonth(),ahora.getDate());
+        hasta=new Date(desde);
+    }else if(periodo==="month"){
+        const valor=$("accounting-month")?.value || tmMesLocalInput(ahora);
+        const partes=valor.split("-").map(Number);
+        if(partes.length!==2 || !partes[0] || !partes[1]) return null;
+        desde=new Date(partes[0],partes[1]-1,1);
+        hasta=new Date(partes[0],partes[1],0);
+    }else if(periodo==="year"){
+        const anio=Number($("accounting-year")?.value || ahora.getFullYear());
+        if(!anio) return null;
+        desde=new Date(anio,0,1);
+        hasta=new Date(anio,11,31);
+    }else if(periodo==="custom"){
         const f=$("accounting-from")?.value, t=$("accounting-to")?.value;
         if(!f||!t) return null;
-        desde=new Date(f+"T00:00:00"); hasta=new Date(t+"T23:59:59");
+        desde=new Date(f+"T00:00:00");
+        hasta=new Date(t+"T23:59:59");
+        if(isNaN(desde.getTime())||isNaN(hasta.getTime())||desde>hasta) return null;
     }
-    hasta.setHours(23,59,59,999);
+
     return {desde:tmFechaLocalInput(desde),hasta:tmFechaLocalInput(hasta)};
 }
+
 function tmActualizarFiltroContabilidad(){
-    const custom=$("accounting-period")?.value==="custom"; [$("accounting-from"),$("accounting-to")].forEach(x=>{if(x)x.style.display=custom?"block":"none";}); if($("accounting-custom-note"))$("accounting-custom-note").style.display=custom?"block":"none";
-    if(custom){const hoy=tmFechaLocalInput(new Date());if($("accounting-from")&&!$("accounting-from").value)$("accounting-from").value=hoy;if($("accounting-to")&&!$("accounting-to").value)$("accounting-to").value=hoy;}
+    const periodo=$("accounting-period")?.value||"day";
+    const month=$("accounting-month"), year=$("accounting-year"), from=$("accounting-from"), to=$("accounting-to"), note=$("accounting-custom-note");
+    const ahora=new Date();
+
+    tmPrepararSelectorAnio();
+
+    if(month && !month.value) month.value=tmMesLocalInput(ahora);
+    if(from && !from.value) from.value=tmFechaLocalInput(ahora);
+    if(to && !to.value) to.value=tmFechaLocalInput(ahora);
+
+    if(month) month.style.display=periodo==="month"?"block":"none";
+    if(year) year.style.display=periodo==="year"?"block":"none";
+    if(from) from.style.display=periodo==="custom"?"block":"none";
+    if(to) to.style.display=periodo==="custom"?"block":"none";
+    if(note) note.style.display=periodo==="custom"?"block":"none";
 }
+
 function tmTextoFechaCorta(fecha){
     const d=new Date(String(fecha||"")+"T12:00:00");
     if(isNaN(d.getTime()))return String(fecha||"");
     return d.toLocaleDateString("es-VE",{day:"2-digit",month:"long",year:"numeric"});
 }
+
 function tmTextoPeriodoContabilidad(desde,hasta){
-    const periodo=$("accounting-period")?.value||"month";
-    if(periodo==="day")return "Hoy · "+tmTextoFechaCorta(desde);
-    if(periodo==="week")return "Semana · lunes "+tmTextoFechaCorta(desde)+" · domingo "+tmTextoFechaCorta(hasta);
-    if(periodo==="month")return "Mes · "+new Date(String(desde)+"T12:00:00").toLocaleDateString("es-VE",{month:"long",year:"numeric"});
-    if(periodo==="year")return "Año · "+new Date(String(desde)+"T12:00:00").getFullYear();
+    const periodo=$("accounting-period")?.value||"day";
+    if(periodo==="day") return "Hoy · "+tmTextoFechaCorta(desde);
+    if(periodo==="month"){
+        const d=new Date(String(desde)+"T12:00:00");
+        return "Mes · "+d.toLocaleDateString("es-VE",{month:"long",year:"numeric"});
+    }
+    if(periodo==="year") return "Año · "+String(new Date(String(desde)+"T12:00:00").getFullYear());
     return "Desde "+tmTextoFechaCorta(desde)+" hasta "+tmTextoFechaCorta(hasta);
 }
 
 async function cargarContabilidadAdmin(){
-    const rango=tmRangoContabilidad(); if(!rango){alert("Selecciona la fecha inicial y final.");return;}
-    const box=$("accounting-top-products"); if(box)box.innerHTML='<div class="estado" style="padding:20px">Consultando información contable...</div>';
+    const rango=tmRangoContabilidad();
+    if(!rango){alert("Selecciona un período válido.");return;}
+    const box=$("accounting-top-products");
+    if(box)box.innerHTML='<div class="estado" style="padding:20px">Consultando información contable...</div>';
     try{
         const r=await adminRequest({action:"contabilidad",desde:rango.desde,hasta:rango.hasta});
         if(r.status!=="success")throw new Error(r.message||"No se pudo cargar la contabilidad.");
@@ -5499,7 +5570,12 @@ switchAdminTab=function(tab){
     if(tab==="accounting"){$("tab-btn-accounting")?.classList.add("activo");$("view-admin-accounting")&&( $("view-admin-accounting").style.display="block" );tmActualizarFiltroContabilidad();cargarContabilidadAdmin();return;}
     tmSwitchAdminTabV13(tab);
 };
-$("accounting-period")?.addEventListener("change",()=>{tmActualizarFiltroContabilidad();if($("accounting-period").value!=="custom")cargarContabilidadAdmin();});
+$("accounting-period")?.addEventListener("change",()=>{
+    tmActualizarFiltroContabilidad();
+    if($("accounting-period").value!=="custom")cargarContabilidadAdmin();
+});
+$("accounting-month")?.addEventListener("change",()=>{if($("accounting-period").value==="month")cargarContabilidadAdmin();});
+$("accounting-year")?.addEventListener("change",()=>{if($("accounting-period").value==="year")cargarContabilidadAdmin();});
 $("accounting-from")?.addEventListener("change",()=>{if($("accounting-period").value==="custom")cargarContabilidadAdmin();});
 $("accounting-to")?.addEventListener("change",()=>{if($("accounting-period").value==="custom")cargarContabilidadAdmin();});
 
