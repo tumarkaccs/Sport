@@ -1863,7 +1863,74 @@ function parseCSV(texto){
    CARGAR CONFIGURACIÓN
 ===================================================== */
 
-async function cargarConfiguracion(){
+function renderMetodosPago(){
+
+    const box = $("metodos-pago-box");
+
+    if(!box){
+        return;
+    }
+
+    box.innerHTML = "";
+
+    const metodos = String(CONFIG.pago || "")
+        .split(",")
+        .map(m => m.trim())
+        .filter(Boolean);
+
+    if(!metodos.length){
+
+        box.innerHTML = `
+            <div class="estado">
+                No hay métodos de pago disponibles.
+            </div>
+        `;
+
+        return;
+    }
+
+    metodos.forEach((metodo, index)=>{
+
+        const label =
+            document.createElement("label");
+
+        label.style.display = "flex";
+        label.style.alignItems = "center";
+        label.style.gap = "10px";
+        label.style.padding = "12px";
+        label.style.marginBottom = "8px";
+        label.style.border = "1px solid #ddd";
+        label.style.borderRadius = "10px";
+        label.style.cursor = "pointer";
+        label.style.background = "#fff";
+
+        const radio =
+            document.createElement("input");
+
+        radio.type = "radio";
+        radio.name = "metodo-pago";
+        radio.value = metodo;
+
+        radio.style.width = "18px";
+        radio.style.height = "18px";
+
+        if(index === 0){
+            radio.checked = true;
+        }
+
+        const texto =
+            document.createElement("span");
+
+        texto.textContent = metodo;
+
+        label.appendChild(radio);
+        label.appendChild(texto);
+
+        box.appendChild(label);
+    });
+}
+    
+    async function cargarConfiguracion(){
 
     const response = await fetch(
         CONFIG_URL + "&cache=" + Date.now()
@@ -1908,11 +1975,8 @@ async function cargarConfiguracion(){
         }
 
         if(key.includes("pago")){
-            CONFIG.pago =
-                value.toLowerCase().includes("cashea")
-                ? value
-                : value + " / Cashea 💛";
-        }
+    CONFIG.pago = value;
+}
 
         if(key.includes("banner") && !key.includes("titulo")){
             CONFIG.banner = value;
@@ -1923,7 +1987,7 @@ async function cargarConfiguracion(){
         }
     });
 
-    $("metodos-pago-box").textContent = CONFIG.pago;
+    renderMetodosPago();
 
     if(CONFIG.banner){
 
