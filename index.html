@@ -3514,26 +3514,21 @@ async function loginAdmin(){
 
     try{
 
-        const response =
-            await fetch(
-                APPS_SCRIPT_URL,
-                {
-                    method:"POST",
-
-                    headers:{
-                        "Content-Type":
-                            "text/plain;charset=utf-8"
-                    },
-
-                    body:JSON.stringify({
-                        action:"login_admin",
-                        usuario,
-                        password
-                    }),
-
-                    redirect:"follow"
-                }
-            );
+        const response = await fetch(
+    APPS_SCRIPT_URL,
+    {
+        method: "POST",
+        headers: {
+            "Content-Type": "text/plain;charset=utf-8"
+        },
+        body: JSON.stringify({
+            action: "login",
+            usuario: usuario,
+            contraseña: password
+        }),
+        redirect: "follow"
+    }
+);
 
         const resultado =
             await response.json();
