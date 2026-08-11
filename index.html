@@ -2453,7 +2453,7 @@ function parseCSV(texto){
    La caché permite mostrar la última versión conocida
    inmediatamente y actualizarla en segundo plano.
 ===================================================== */
-const TM_CACHE_VERSION = "v2";
+const TM_CACHE_VERSION = "v3";
 const TM_CATALOGO_CACHE_KEY = "tu_marka_catalogo_cache_" + TM_CACHE_VERSION;
 const TM_CONFIG_CACHE_KEY = "tu_marka_config_cache_" + TM_CACHE_VERSION;
 
@@ -2488,12 +2488,51 @@ function tmCacheAge(key){
     return cached && cached.timestamp ? Date.now() - cached.timestamp : Infinity;
 }
 
+/* =====================================================
+   SINCRONIZACIÓN DE CACHÉ ENTRE PESTAÑAS
+   Si el administrador modifica el catálogo, las pestañas
+   abiertas reciben una señal para refrescarse.
+===================================================== */
+const TM_CACHE_SIGNAL_KEY = "tu_marka_catalogo_cache_signal_v1";
+let tmRefreshEnCurso = false;
+
+function tmInvalidarCatalogoLocal(){
+    try{ localStorage.removeItem(TM_CATALOGO_CACHE_KEY); }catch(e){}
+    try{ localStorage.setItem(TM_CACHE_SIGNAL_KEY, String(Date.now())); }catch(e){}
+}
+
+async function tmActualizarCatalogoSilencioso(){
+    if(tmRefreshEnCurso) return;
+    tmRefreshEnCurso = true;
+    try{
+        await tmRefrescarCatalogo();
+    }catch(error){
+        console.warn("Actualización silenciosa del catálogo:",error);
+    }finally{
+        tmRefreshEnCurso = false;
+    }
+}
+
+window.addEventListener("storage", event=>{
+    if(event.key === TM_CACHE_SIGNAL_KEY){
+        tmInvalidarCatalogoLocal();
+        tmActualizarCatalogoSilencioso();
+    }
+});
+
+window.addEventListener("pageshow", ()=>{
+    /* Una pestaña que vuelve al primer plano comprueba el catálogo
+       sin bloquear la interfaz ni borrar lo que ya está visible. */
+    setTimeout(()=>tmActualizarCatalogoSilencioso(), 150);
+});
+
 function tmCatalogoCacheAplicar(data){
     if(!Array.isArray(data) || !data.length) return false;
     DB = data;
     DB.forEach(p=>{ if(!Array.isArray(p.variantes)) p.variantes=[]; });
     construirCategorias();
     mostrar(mezclarProductos([...DB]));
+    tmPrecargarImagenesVariantes(DB);
     return true;
 }
 
@@ -2621,6 +2660,60 @@ async function cargarConfiguracion(){
     }
 
     await tmRefrescarConfiguracion();
+}
+
+function tmPrecargarImagenesVariantes(productos){
+    const urls=[];
+    const seen=new Set();
+    (productos||[]).forEach(p=>{
+        (p.variantes||[]).forEach(v=>{
+            const url=String(v.imagen||"").trim();
+            if(!url || seen.has(url)) return;
+            seen.add(url);
+            urls.push(url);
+        });
+    });
+
+    /* Precarga en segundo plano y por tandas pequeñas para no competir
+       con las imágenes principales de la tienda. */
+    let index=0;
+    const cargarLote=()=>{
+        const lote=urls.slice(index,index+4);
+        index+=4;
+        lote.forEach(url=>{
+            const img=new Image();
+            img.decoding="async";
+            img.src=url;
+        });
+        if(index<urls.length){
+            const continuar=window.requestIdleCallback || (fn=>setTimeout(fn,250));
+            continuar(cargarLote);
+        }
+    };
+    if(urls.length){
+        const iniciar=window.requestIdleCallback || (fn=>setTimeout(fn,300));
+        iniciar(cargarLote);
+    }
+}
+
+function tmCambiarImagenVariante(img,url,fallback){
+    const src=String(url||fallback||"").trim();
+    if(!src){return;}
+    if(img.dataset.srcActual===src) return;
+    img.classList.add("tm-imagen-variante-cargando");
+    const pre=new Image();
+    pre.decoding="async";
+    pre.onload=()=>{
+        img.src=src;
+        img.dataset.srcActual=src;
+        img.classList.remove("tm-imagen-variante-cargando");
+    };
+    pre.onerror=()=>{
+        img.src=fallback||"";
+        img.dataset.srcActual=fallback||"";
+        img.classList.remove("tm-imagen-variante-cargando");
+    };
+    pre.src=src;
 }
 
 async function cargarVariantesPublicas(){
@@ -2933,7 +3026,7 @@ function mostrar(lista){
                     const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;
                     const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);
                     const qty=document.createElement("span");qty.className="catalogo-color-stock";qty.textContent=String(cantidad);boton.appendChild(qty);
-                    boton.onclick=event=>{event.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);img.src=v?.imagen||p.img;};
+                    boton.onclick=event=>{event.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);tmCambiarImagenVariante(img,v?.imagen,p.img);};
                     coloresBox.appendChild(boton);
                 });
                 if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}
@@ -3102,6 +3195,36 @@ function obtenerVarianteSeleccionadaLocal(){
 /* =====================================================
    FICHA PRODUCTO
 ===================================================== */
+
+function tmRenderDescripcion(texto){
+    const box=document.createElement("div");
+    box.className="tm-descripcion-formateada";
+    const raw=String(texto||"").replace(/\r\n?/g,"\n").trim();
+    if(!raw){box.textContent="Sin descripción.";return box;}
+
+    const bloques=raw.split(/\n\s*\n/);
+    bloques.forEach(bloque=>{
+        const lineas=bloque.split("\n").map(x=>x.trim()).filter(Boolean);
+        if(!lineas.length)return;
+        const esLista=lineas.every(x=>/^(?:[-*•]|\d+[.)])\s+/.test(x));
+        if(esLista){
+            const ul=document.createElement("ul");
+            lineas.forEach(linea=>{
+                const li=document.createElement("li");
+                li.textContent=linea.replace(/^(?:[-*•]|\d+[.)])\s+/,"");
+                ul.appendChild(li);
+            });
+            box.appendChild(ul);
+        }else{
+            lineas.forEach(linea=>{
+                const p=document.createElement("p");
+                p.textContent=linea;
+                box.appendChild(p);
+            });
+        }
+    });
+    return box;
+}
 
 function abrirFicha(id){
 
@@ -5365,9 +5488,16 @@ function tmColorBorder(color){
 }
 function tmSetFichaImage(variant){
     if(!selectedProd)return;
+    const img=$("m-img");
     const src=variant && variant.imagen ? variant.imagen : selectedProd.img;
-    $("m-img").src=src||selectedProd.img||"";
-    $("m-img").onerror=()=>{$("m-img").src=selectedProd.img||"";};
+    const fallback=selectedProd.img||"";
+    if(!src){img.src="";return;}
+    img.classList.add("tm-imagen-variante-cargando");
+    const pre=new Image();
+    pre.decoding="async";
+    pre.onload=()=>{img.src=src;img.classList.remove("tm-imagen-variante-cargando");};
+    pre.onerror=()=>{img.src=fallback;img.classList.remove("tm-imagen-variante-cargando");};
+    pre.src=src;
 }
 function tmVariantesConStock(){return obtenerVariantesProductoLocal(selectedProd).filter(v=>v.activo!==false&&Number(v.stock||0)>0);}
 function tmOrdenTallas(a,b){const o={XXXS:1,XXS:2,XS:3,S:4,M:5,L:6,XL:7,XXL:8,XXXL:9};return(o[String(a).toUpperCase()]||99)-(o[String(b).toUpperCase()]||99)||String(a).localeCompare(String(b));}
@@ -5450,7 +5580,8 @@ function tmActualizarBotonFavoritoFicha(){
 }
 function abrirFicha(id){
     selectedProd=DB.find(x=>String(x.id)===String(id));if(!selectedProd)return;currentQty=1;$("m-qty").textContent="1";
-    tmRegistrarVista(selectedProd.id);tmSetFichaImage(null);$("m-img").alt=selectedProd.nombre;$("m-nombre").textContent=selectedProd.nombre;$("m-id").textContent=`ID: ${selectedProd.id}`;$("m-desc").textContent=selectedProd.desc||"Sin descripción.";$("m-precio").textContent=`$${selectedProd.precio.toFixed(2)}`;$("m-nota").value="";
+    tmRegistrarVista(selectedProd.id);tmSetFichaImage(null);$("m-img").alt=selectedProd.nombre;$("m-nombre").textContent=selectedProd.nombre;$("m-id").textContent=`ID: ${selectedProd.id}`;$("m-desc").innerHTML="";
+    $("m-desc").appendChild(tmRenderDescripcion(selectedProd.desc));$("m-precio").textContent=`$${selectedProd.precio.toFixed(2)}`;$("m-nota").value="";
     if($("m-talla"))$("m-talla").value="";if($("m-color"))$("m-color").value="";
     actualizarOpcionesVariantesFicha();tmActualizarBotonFavoritoFicha();
     $("m-talla").onchange=actualizarOpcionesVariantesFicha;$("m-color").onchange=()=>{actualizarStockModal();actualizarOpcionesColoresSolo();tmSetFichaImage(obtenerVarianteSeleccionadaLocal());};
@@ -5486,7 +5617,7 @@ function tmProductoCard(p){
                 const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;boton.setAttribute("aria-label",`Color ${color}, talla ${talla}`);
                 const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;
                 const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);
-                boton.onclick=event=>{event.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);img.src=v?.imagen||p.img||"";};
+                boton.onclick=event=>{event.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);tmCambiarImagenVariante(img,v?.imagen,p.img||"");};
                 coloresBox.appendChild(boton);
             });
             if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}
@@ -5824,7 +5955,7 @@ guardarProductoAdminFrontend=async function(){
     document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),costo:Math.max(0,Number(row.querySelector(".variant-costo")?.value||0)),activo:row.querySelector(".variant-activo").value!=="NO"}));
     if(!id||!data.nombre){alert("ID y nombre son obligatorios.");return;}
     const btn=$("btn-save-product-admin");btn.disabled=true;btn.textContent="Guardando...";
-    try{const r=await adminRequest(data);if(r.status!=="success")throw new Error(r.message||"No se pudo guardar.");cerrarModalProductoAdmin();await cargarProductos();renderInventarioAdmin();mostrarToast(r.message||"Producto guardado.");}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="💾 Guardar producto";}
+    try{const r=await adminRequest(data);if(r.status!=="success")throw new Error(r.message||"No se pudo guardar.");tmInvalidarCatalogoLocal();cerrarModalProductoAdmin();await cargarProductos();renderInventarioAdmin();mostrarToast(r.message||"Producto guardado.");}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="💾 Guardar producto";}
 };
 
 /* Orden final del catálogo: imagen → nombre → precio → tallas/colores */
@@ -5836,7 +5967,7 @@ function tmProductoCard(p){
     const tools=document.createElement("div");tools.className="producto-tools";const fav=document.createElement("button");fav.type="button";fav.className="producto-tool";fav.title="Agregar a favoritos";fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));};const share=document.createElement("button");share.type="button";share.className="producto-tool";share.title="Compartir producto";share.textContent="↗";share.onclick=e=>{e.stopPropagation();compartirProducto(p.id,p.nombre);};tools.append(fav,share);imageBox.appendChild(tools);card.appendChild(imageBox);
     const info=document.createElement("div");info.className="p-info";const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre||"Producto";const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;info.append(nombre,precio);card.appendChild(info);
     const variantes=(p.variantes||[]).filter(v=>v.activo!==false);const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
-    if(variantes.length){const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y Colores Disponibles";disponibilidad.appendChild(titulo);const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));tallas.forEach(talla=>{const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;const row=document.createElement("div");row.className="catalogo-talla-row";const tallaBox=document.createElement("div");tallaBox.className="catalogo-talla-box";tallaBox.textContent=talla;row.appendChild(tallaBox);const coloresBox=document.createElement("div");coloresBox.className="catalogo-colores-por-talla";Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{const variantesColor=porTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());if(variantesColor.reduce((sum,v)=>sum+Number(v.stock||0),0)<=0)return;const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);boton.onclick=e=>{e.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);img.src=v?.imagen||p.img||"";};coloresBox.appendChild(boton);});if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}});card.appendChild(disponibilidad);}
+    if(variantes.length){const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y Colores Disponibles";disponibilidad.appendChild(titulo);const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));tallas.forEach(talla=>{const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;const row=document.createElement("div");row.className="catalogo-talla-row";const tallaBox=document.createElement("div");tallaBox.className="catalogo-talla-box";tallaBox.textContent=talla;row.appendChild(tallaBox);const coloresBox=document.createElement("div");coloresBox.className="catalogo-colores-por-talla";Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{const variantesColor=porTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());if(variantesColor.reduce((sum,v)=>sum+Number(v.stock||0),0)<=0)return;const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);boton.onclick=e=>{e.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);tmCambiarImagenVariante(img,v?.imagen,p.img||"");};coloresBox.appendChild(boton);});if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}});card.appendChild(disponibilidad);}
     const acciones=document.createElement("div");acciones.style.padding="8px 9px 10px";const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.onclick=()=>abrirFicha(p.id);const add=document.createElement("button");add.className="btn-add";add.disabled=stockCatalogo<=0;add.textContent=stockCatalogo>0?"Añadir":"Agotado";if(stockCatalogo>0)add.onclick=()=>abrirFicha(p.id);acciones.append(ver,add);card.appendChild(acciones);return card;
 }
 
@@ -6354,6 +6485,16 @@ body{
     .tm-nav-v11 .btn-nav{font-size:.5rem!important;padding:3px 5px!important}
     .tm-nav-v11 .btn-nav-faq{min-width:62px!important}
 }
+
+/* =====================================================
+   FASE 2/3 — IMÁGENES DE VARIANTE Y DESCRIPCIÓN
+===================================================== */
+.tm-imagen-variante-cargando{opacity:.55;transition:opacity .15s ease;}
+.tm-descripcion-formateada{line-height:1.65;color:inherit;text-align:left;}
+.tm-descripcion-formateada p{margin:0 0 10px;}
+.tm-descripcion-formateada p:last-child{margin-bottom:0;}
+.tm-descripcion-formateada ul{margin:6px 0 12px;padding-left:22px;}
+.tm-descripcion-formateada li{margin:4px 0;}
 </style></head><body><main class="sheet">
     <div class="brand">${brandLogo}<div class="brand-copy"><h1>TU MARKA SPORT</h1><p>Comprobante de compra</p></div></div>
     <div class="order-title">PEDIDO ${escaparHTML(pedido.pedidoId||"")}</div>
@@ -6424,4 +6565,4 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
-```
+2
