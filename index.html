@@ -1489,6 +1489,18 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
             style="font-size:.7rem;color:#94a3b8;margin-top:3px"
         ></div>
 
+        <div id="box-talla" class="ficha-opciones-box" style="display:none">
+            <label class="ficha-opciones-label">Talla:</label>
+            <div id="m-talla-options" class="tallas-opciones"></div>
+            <select id="m-talla" class="select-opt ficha-hidden-select" aria-hidden="true"></select>
+        </div>
+
+        <div id="box-color" class="ficha-opciones-box" style="display:none">
+            <label class="ficha-opciones-label">Colores disponibles:</label>
+            <div id="m-color-options" class="colores-opciones"></div>
+            <select id="m-color" class="select-opt ficha-hidden-select" aria-hidden="true"></select>
+        </div>
+
         <div
             id="m-desc"
             style="background:#f8fafb;padding:12px;margin:12px 0;border-radius:10px;font-size:.85rem"
@@ -1510,18 +1522,6 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
                 Stock: 0
             </div>
 
-        </div>
-
-        <div id="box-talla" class="ficha-opciones-box" style="display:none">
-            <label class="ficha-opciones-label">Talla:</label>
-            <div id="m-talla-options" class="tallas-opciones"></div>
-            <select id="m-talla" class="select-opt ficha-hidden-select" aria-hidden="true"></select>
-        </div>
-
-        <div id="box-color" class="ficha-opciones-box" style="display:none">
-            <label class="ficha-opciones-label">Colores disponibles:</label>
-            <div id="m-color-options" class="colores-opciones"></div>
-            <select id="m-color" class="select-opt ficha-hidden-select" aria-hidden="true"></select>
         </div>
 
         <div>
@@ -2494,6 +2494,42 @@ function tmCacheAge(key){
    abiertas reciben una señal para refrescarse.
 ===================================================== */
 const TM_CACHE_SIGNAL_KEY = "tu_marka_catalogo_cache_signal_v1";
+const TM_CATALOGO_VERSION_KEY = "tu_marka_catalogo_version_local_v1";
+let tmVersionConsultaEnCurso = false;
+let tmUltimaVersionCatalogo = localStorage.getItem(TM_CATALOGO_VERSION_KEY) || "";
+
+async function tmConsultarVersionCatalogo(){
+    if(tmVersionConsultaEnCurso) return;
+    tmVersionConsultaEnCurso = true;
+    try{
+        const response = await fetch(APPS_SCRIPT_URL + "?action=catalogo_version&cache=" + Date.now(), {cache:"no-store"});
+        if(!response.ok) return;
+        const data = await response.json();
+        if(!data || data.status !== "success" || !data.version) return;
+        const version = String(data.version);
+        if(!tmUltimaVersionCatalogo){
+            tmUltimaVersionCatalogo = version;
+            localStorage.setItem(TM_CATALOGO_VERSION_KEY, version);
+            return;
+        }
+        if(version !== tmUltimaVersionCatalogo){
+            tmUltimaVersionCatalogo = version;
+            localStorage.setItem(TM_CATALOGO_VERSION_KEY, version);
+            tmInvalidarCatalogoLocal();
+            await tmActualizarCatalogoSilencioso();
+        }
+    }catch(error){
+        console.warn("No se pudo comprobar la versión del catálogo:", error);
+    }finally{
+        tmVersionConsultaEnCurso = false;
+    }
+}
+
+function tmIniciarSincronizacionCatalogo(){
+    tmConsultarVersionCatalogo();
+    setInterval(tmConsultarVersionCatalogo, 10000);
+}
+
 let tmRefreshEnCurso = false;
 
 function tmInvalidarCatalogoLocal(){
@@ -5448,6 +5484,7 @@ document
 ===================================================== */
 
 cargar();
+tmIniciarSincronizacionCatalogo();
 
 
 
@@ -6495,6 +6532,94 @@ body{
 .tm-descripcion-formateada p:last-child{margin-bottom:0;}
 .tm-descripcion-formateada ul{margin:6px 0 12px;padding-left:22px;}
 .tm-descripcion-formateada li{margin:4px 0;}
+
+/* =====================================================
+   V26 — SINCRONIZACIÓN + FICHA + ESCRITORIO ADMIN
+===================================================== */
+
+/* Nombres completos de productos: máximo 3 líneas */
+.p-nombre{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    line-clamp:3!important;
+    overflow:hidden!important;
+    white-space:normal!important;
+    text-overflow:clip!important;
+    line-height:1.25!important;
+    min-height:3.75em!important;
+    max-height:3.75em!important;
+}
+
+/* Ficha: opciones arriba y descripción debajo */
+#modalFicha .ficha-opciones-box{
+    margin:10px 0;
+}
+#modalFicha .ficha-opciones-label{
+    display:block;
+    font-size:.78rem;
+    font-weight:900;
+    margin-bottom:5px;
+}
+#modalFicha #m-desc{
+    margin:14px 0!important;
+    line-height:1.55;
+}
+#modalFicha #m-desc p{margin:0 0 9px}
+#modalFicha #m-desc p:last-child{margin-bottom:0}
+#modalFicha #m-desc ul,#modalFicha #m-desc ol{margin:6px 0 10px;padding-left:22px}
+#modalFicha #m-desc li{margin:3px 0}
+
+/* Administración en PC: usar mucho mejor el ancho disponible */
+@media(min-width:721px){
+    #modalAdmin .modal-content,
+    #modalAdminProducto .modal-content{
+        width:min(1180px, calc(100vw - 50px));
+        max-width:1180px;
+        padding:24px;
+        border-radius:18px;
+    }
+    #modalAdminProducto .modal-content{max-height:92vh}
+    #modalAdmin .modal-content{max-height:92vh}
+    #modalAdminProducto .admin-product-grid{
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:12px;
+    }
+    #modalAdminProducto .admin-field-full{grid-column:1/-1}
+    #modalAdminProducto .admin-variant-row{
+        grid-template-columns:minmax(110px,1fr) minmax(120px,1fr) 90px minmax(190px,1.4fr) 120px 105px 88px!important;
+        gap:9px!important;
+        padding:10px;
+        border:1px solid #E2E4E5;
+        border-radius:10px;
+        background:#FAFBFB;
+        margin-bottom:8px;
+    }
+    #modalAdminProducto .admin-variant-field input,
+    #modalAdminProducto .admin-variant-field select{
+        min-height:40px;
+    }
+    #modalAdminProducto .admin-variant-row>button{
+        min-height:40px;
+        white-space:nowrap;
+    }
+    #modalAdmin .tab-admin-bar{
+        grid-template-columns:repeat(4,minmax(150px,1fr))!important;
+        gap:10px!important;
+    }
+}
+
+@media(min-width:721px) and (max-width:1050px){
+    #modalAdminProducto .admin-product-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+    #modalAdminProducto .admin-variant-row{
+        grid-template-columns:1fr 1fr 90px 1.4fr 110px 100px!important;
+    }
+    #modalAdminProducto .admin-variant-row>button{grid-column:1/-1}
+}
+
+@media(max-width:720px){
+    .p-nombre{min-height:3.75em!important;max-height:3.75em!important}
+}
 </style></head><body><main class="sheet">
     <div class="brand">${brandLogo}<div class="brand-copy"><h1>TU MARKA SPORT</h1><p>Comprobante de compra</p></div></div>
     <div class="order-title">PEDIDO ${escaparHTML(pedido.pedidoId||"")}</div>
@@ -6565,4 +6690,3 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
-2
