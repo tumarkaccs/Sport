@@ -6005,7 +6005,7 @@ function tmProductoCard(p){
     const info=document.createElement("div");info.className="p-info";const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre||"Producto";const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;info.append(nombre,precio);card.appendChild(info);
     const variantes=(p.variantes||[]).filter(v=>v.activo!==false);const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
     if(variantes.length){const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y Colores Disponibles";disponibilidad.appendChild(titulo);const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};const tallas=Array.from(new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))).sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));tallas.forEach(talla=>{const porTalla=variantes.filter(v=>String(v.talla||"").trim().toLowerCase()===talla.toLowerCase()&&Number(v.stock||0)>0);if(!porTalla.length)return;const row=document.createElement("div");row.className="catalogo-talla-row";const tallaBox=document.createElement("div");tallaBox.className="catalogo-talla-box";tallaBox.textContent=talla;row.appendChild(tallaBox);const coloresBox=document.createElement("div");coloresBox.className="catalogo-colores-por-talla";Array.from(new Set(porTalla.map(v=>String(v.color||"").trim()).filter(Boolean))).forEach(color=>{const variantesColor=porTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());if(variantesColor.reduce((sum,v)=>sum+Number(v.stock||0),0)<=0)return;const boton=document.createElement("button");boton.type="button";boton.className="catalogo-color-option";boton.title=`${talla} / ${color}`;const bg=colorToCSS(color);const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;const dot=document.createElement("span");dot.className="color-dot";dot.style.setProperty("--color-dot",bg);dot.style.setProperty("--color-border",borde);boton.appendChild(dot);boton.onclick=e=>{e.stopPropagation();const v=variantesColor.find(x=>x.imagen&&Number(x.stock||0)>0);tmCambiarImagenVariante(img,v?.imagen,p.img||"");};coloresBox.appendChild(boton);});if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}});card.appendChild(disponibilidad);}
-    const acciones=document.createElement("div");acciones.style.padding="8px 9px 10px";const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.onclick=()=>abrirFicha(p.id);const add=document.createElement("button");add.className="btn-add";add.disabled=stockCatalogo<=0;add.textContent=stockCatalogo>0?"Añadir":"Agotado";if(stockCatalogo>0)add.onclick=()=>abrirFicha(p.id);acciones.append(ver,add);card.appendChild(acciones);return card;
+    const acciones=document.createElement("div");acciones.className="p-actions";acciones.style.padding="8px 9px 10px";const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.onclick=()=>abrirFicha(p.id);const add=document.createElement("button");add.className="btn-add";add.disabled=stockCatalogo<=0;add.textContent=stockCatalogo>0?"Añadir":"Agotado";if(stockCatalogo>0)add.onclick=()=>abrirFicha(p.id);acciones.append(ver,add);card.appendChild(acciones);return card;
 }
 
 /* Recordatorio con detalle completo */
@@ -6619,6 +6619,54 @@ body{
 
 @media(max-width:720px){
     .p-nombre{min-height:3.75em!important;max-height:3.75em!important}
+}
+
+/* =====================================================
+   V27 — ALINEACIÓN UNIFORME DE LA GRILLA DE PRODUCTOS
+===================================================== */
+.producto{
+    display:flex!important;
+    flex-direction:column!important;
+    height:100%!important;
+}
+/* Reserva exactamente el mismo espacio para nombre + precio.
+   Así "Tallas y Colores Disponibles" comienza a la misma altura
+   aunque el nombre tenga 1, 2 o 3 líneas. */
+.producto .p-info{
+    height:78px!important;
+    min-height:78px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    flex:0 0 78px!important;
+}
+.producto .p-nombre{
+    display:-webkit-box!important;
+    -webkit-box-orient:vertical!important;
+    -webkit-line-clamp:3!important;
+    line-clamp:3!important;
+    overflow:hidden!important;
+    white-space:normal!important;
+    text-overflow:clip!important;
+    line-height:1.25!important;
+    min-height:3.75em!important;
+    max-height:3.75em!important;
+}
+.producto .catalogo-disponibilidad{
+    flex:0 0 auto!important;
+}
+.producto .p-actions{
+    margin-top:auto!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+}
+/* Cuando hay tarjetas con diferente cantidad de variantes,
+   los botones quedan alineados al fondo de cada fila de la grilla. */
+@media(max-width:767px){
+    .producto .p-info{
+        height:72px!important;
+        min-height:72px!important;
+        flex-basis:72px!important;
+    }
 }
 </style></head><body><main class="sheet">
     <div class="brand">${brandLogo}<div class="brand-copy"><h1>TU MARKA SPORT</h1><p>Comprobante de compra</p></div></div>
