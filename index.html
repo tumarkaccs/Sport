@@ -6903,7 +6903,7 @@ function tmProductoCard(p){
     }
 
     const img=document.createElement("img");
-    img.src=p.img||"";
+    img.src=p.img||p.imagen||"";
     img.alt=p.nombre||"Producto";
     img.loading="lazy";
     img.decoding="async";
@@ -6948,7 +6948,6 @@ function tmProductoCard(p){
     precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;
     infoHead.append(nombre,precio);
     info.appendChild(infoHead);
-    card.appendChild(info);
 
     const variantes=(p.variantes||[]).filter(v=>v.activo!==false);
     const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
@@ -6960,38 +6959,34 @@ function tmProductoCard(p){
 
         const titulo=document.createElement("div");
         titulo.className="catalogo-disponibilidad-titulo";
-        titulo.textContent="Disponibilidad";
+        titulo.textContent="Elegir Talla";
         disponibilidad.appendChild(titulo);
 
         const tallasUnicas=[...new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))];
         const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};
         tallasUnicas.sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));
 
-        const select=document.createElement("select");
-        select.className="select-talla-card";
-        select.setAttribute("aria-label",`Elegir talla de ${p.nombre||"producto"}`);
-        const placeholder=document.createElement("option");
-        placeholder.value="";
-        placeholder.textContent="-- Elegir talla --";
-        select.appendChild(placeholder);
+        const pills=document.createElement("div");
+        pills.className="tallas-pills-row";
         tallasUnicas.forEach(talla=>{
-            const option=document.createElement("option");
-            option.value=talla;
-            option.textContent=`Talla ${talla}`;
-            select.appendChild(option);
+            const btn=document.createElement("button");
+            btn.type="button";
+            btn.className="talla-pill";
+            btn.textContent=talla;
+            btn.setAttribute("aria-label",`Elegir talla ${talla}`);
+            btn.addEventListener("click",()=>seleccionarTallaPill(btn,p.id,talla));
+            pills.appendChild(btn);
         });
-        disponibilidad.appendChild(select);
+        disponibilidad.appendChild(pills);
 
         const coloresBox=document.createElement("div");
         coloresBox.className="box-colores-card";
         coloresBox.id=`colores-card-${p.id}`;
         const prompt=document.createElement("span");
         prompt.className="text-prompt";
-        prompt.textContent="Selecciona una talla";
+        prompt.textContent="Toca una talla para ver colores";
         coloresBox.appendChild(prompt);
         disponibilidad.appendChild(coloresBox);
-
-        select.addEventListener("change",()=>seleccionarTallaCard(select,p.id));
         info.appendChild(disponibilidad);
     }
 
@@ -7009,42 +7004,38 @@ function tmProductoCard(p){
     if(stockCatalogo>0)add.onclick=()=>abrirFicha(p.id);
     acciones.append(ver,add);
     info.appendChild(acciones);
+    card.appendChild(info);
 
     return card;
 }
 
-function seleccionarTallaCard(selectEl,productoId){
-    const tallaElegida=selectEl.value;
+function seleccionarTallaPill(btnEl,productoId,talla){
+    const contenedorTarjeta=btnEl.closest(".catalogo-disponibilidad");
+    if(contenedorTarjeta){
+        contenedorTarjeta.querySelectorAll(".talla-pill").forEach(b=>b.classList.remove("activa"));
+    }
+    btnEl.classList.add("activa");
+
     const contenedorColores=document.getElementById(`colores-card-${productoId}`);
     if(!contenedorColores)return;
-
     contenedorColores.innerHTML="";
-    if(!tallaElegida){
-        const prompt=document.createElement("span");
-        prompt.className="text-prompt";
-        prompt.textContent="Selecciona una talla";
-        contenedorColores.appendChild(prompt);
-        return;
-    }
 
     const producto=DB.find(p=>p.id===productoId);
-    if(!producto||!producto.variantes){return;}
+    if(!producto||!producto.variantes)return;
 
     const variantesTalla=producto.variantes.filter(v=>
-        v.talla===tallaElegida && v.activo!==false && Number(v.stock||0)>0
+        v.talla===talla && v.activo!==false && Number(v.stock||0)>0
     );
-
     const colores=[...new Set(variantesTalla.map(v=>String(v.color||"").trim()).filter(Boolean))];
+
     colores.forEach(color=>{
-        const variantesColor=variantesTalla.filter(v=>
-            String(v.color||"").trim().toLowerCase()===color.toLowerCase()
-        );
+        const variantesColor=variantesTalla.filter(v=>String(v.color||"").trim().toLowerCase()===color.toLowerCase());
         if(!variantesColor.length)return;
 
         const boton=document.createElement("button");
         boton.type="button";
         boton.className="catalogo-color-option";
-        boton.title=`${tallaElegida} / ${color}`;
+        boton.title=`${talla} / ${color}`;
         const bg=colorToCSS(color);
         const borde=String(color).toLowerCase().includes("blanc")||bg==="#ffffff"?"#94a3b8":bg;
         const dot=document.createElement("span");
@@ -7055,8 +7046,8 @@ function seleccionarTallaCard(selectEl,productoId){
         boton.onclick=e=>{
             e.stopPropagation();
             const variante=variantesColor.find(v=>v.imagen&&Number(v.stock||0)>0);
-            const img=selectEl.closest(".producto")?.querySelector(".producto-img-box img");
-            if(img)tmCambiarImagenVariante(img,variante?.imagen,producto.img||producto.imagen||"");
+            const imagen=btnEl.closest(".producto")?.querySelector(".producto-img-box img");
+            if(imagen)tmCambiarImagenVariante(imagen,variante?.imagen,producto.img||producto.imagen||"");
         };
         contenedorColores.appendChild(boton);
     });
@@ -7064,7 +7055,7 @@ function seleccionarTallaCard(selectEl,productoId){
     if(!contenedorColores.children.length){
         const prompt=document.createElement("span");
         prompt.className="text-prompt";
-        prompt.textContent="Sin colores disponibles";
+        prompt.textContent="Agotado en esta talla";
         contenedorColores.appendChild(prompt);
     }
 }
@@ -7292,3 +7283,79 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
+```
+
+/* =====================================================
+   BLOQUE TALLAS (BOTONES DIRECTOS) Y COLORES
+===================================================== */
+.producto > .catalogo-disponibilidad{
+    background:#f8fafc!important;
+    border:1px solid var(--border,#e2e8f0)!important;
+    border-radius:6px!important;
+    padding:8px!important;
+    margin-bottom:.75rem!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:6px!important;
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+    overflow:visible!important;
+    flex:0 0 auto!important;
+    box-sizing:border-box!important;
+}
+.producto > .catalogo-disponibilidad .catalogo-disponibilidad-titulo{
+    font-size:.68rem!important;
+    font-weight:700!important;
+    text-transform:uppercase!important;
+    color:#64748b!important;
+    letter-spacing:.5px!important;
+    min-height:0!important;
+    height:auto!important;
+    margin:0!important;
+    line-height:1.2!important;
+}
+.tallas-pills-row{
+    display:flex;
+    gap:5px;
+    flex-wrap:wrap;
+}
+.talla-pill{
+    background:#fff;
+    border:1px solid #cbd5e1;
+    color:#1e293b;
+    font-size:.75rem;
+    font-weight:700;
+    padding:3px 8px;
+    border-radius:4px;
+    cursor:pointer;
+    user-select:none;
+    transition:all .15s ease;
+}
+.talla-pill.activa{
+    background:#1e293b;
+    color:#fff;
+    border-color:#1e293b;
+}
+.box-colores-card{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    flex-wrap:wrap;
+    min-height:18px;
+    margin-top:2px;
+}
+.text-prompt{
+    font-size:.7rem;
+    color:#94a3b8;
+    font-style:italic;
+}
+@media(max-width:576px){
+    .producto > .catalogo-disponibilidad{
+        height:auto!important;
+        min-height:0!important;
+        max-height:none!important;
+        overflow:visible!important;
+        flex:0 0 auto!important;
+    }
+}
