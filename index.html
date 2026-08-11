@@ -714,6 +714,7 @@ header{
 /* =========================
    V8 ADMIN / VARIANTES
 ========================= */
+.admin-category-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;padding:8px 0;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.admin-category-title{font-weight:900;color:var(--petroleo);font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-list{display:flex;gap:6px;flex-wrap:wrap}.admin-category-list button{border:1px solid #c8cdd0;background:#fff;border-radius:999px;padding:6px 10px;font-weight:800;font-size:.72rem;cursor:pointer}.admin-category-list button.activo{background:var(--tm-lima);border-color:var(--tm-lima)}.admin-bulk-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#f8fafb}.admin-bulk-row strong{display:block;color:var(--petroleo);font-size:.82rem}.admin-bulk-row small{display:block;color:#64748b;font-size:.68rem;margin-top:2px}.admin-bulk-actions{display:flex;gap:6px;flex-wrap:wrap}#tm-bulk-stock-preview{margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#fff;font-size:.76rem}.tm-bulk-summary{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}.tm-bulk-summary b{color:var(--petroleo)}.tm-bulk-errors{margin-top:7px;color:#b91c1c}.tm-bulk-ok{color:#166534}@media(max-width:700px){.admin-bulk-row{align-items:flex-start;flex-direction:column}.admin-bulk-actions{width:100%}}
 .admin-stock-toolbar{
     display:grid;
     grid-template-columns:1fr auto auto;
@@ -3407,20 +3408,23 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
             >
 
                 <div class="admin-stock-toolbar">
-                    <input
-                        type="search"
-                        id="admin-stock-search"
-                        placeholder="🔎 Buscar producto por nombre o ID..."
-                        oninput="renderInventarioAdmin()"
-                    >
+                    <input type="search" id="admin-stock-search" placeholder="🔎 Buscar producto por nombre o ID..." oninput="renderInventarioAdmin()">
                     <button class="btn-opcion" style="margin:0" onclick="abrirEditorProductoAdmin()">➕ Nuevo producto</button>
                     <button class="btn-opcion" style="margin:0" onclick="renderInventarioAdmin()">🔄 Actualizar</button>
                 </div>
-
-                <div
-                    id="admin-inventory-list"
-                    style="max-height:350px;overflow-y:auto"
-                ></div>
+                <div class="admin-category-row">
+                    <div class="admin-category-title">Categorías</div>
+                    <div id="admin-category-list" class="admin-category-list"></div>
+                </div>
+                <div class="admin-bulk-row">
+                    <div><strong>📥 Entradas masivas</strong><small>El archivo siempre <b>suma</b> unidades al inventario existente.</small></div>
+                    <div class="admin-bulk-actions">
+                        <button class="btn-opcion" style="margin:0" onclick="tmDescargarPlantillaEntradaMasiva()">⬇️ Plantilla</button>
+                        <label class="btn-opcion" style="margin:0;cursor:pointer">📥 Cargar archivo<input id="tm-bulk-stock-file" type="file" accept=".csv,.txt" style="display:none" onchange="tmPrepararEntradaMasiva(this.files[0])"></label>
+                    </div>
+                </div>
+                <div id="tm-bulk-stock-preview" style="display:none"></div>
+                <div id="admin-inventory-list" style="max-height:350px;overflow-y:auto"></div>
 
             </div>
 
@@ -3622,7 +3626,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
             <div class="admin-field"><label for="admin-product-id">ID del producto</label><input id="admin-product-id" placeholder="Ej: FRANELA-001"></div>
             <div class="admin-field"><label for="admin-product-name">Nombre del producto</label><input id="admin-product-name" placeholder="Nombre del producto"></div>
             <div class="admin-field"><label for="admin-product-price">Precio de venta ($)</label><input id="admin-product-price" type="number" min="0" step="0.01" placeholder="0.00"></div>
-            <div class="admin-field"><label for="admin-product-cat">Categoría</label><input id="admin-product-cat" placeholder="Ej: franelas"></div>
+            <div class="admin-field"><label for="admin-product-cat">Categoría</label><select id="admin-product-cat"><option value="">Selecciona una categoría</option></select></div>
             <div class="admin-field"><label for="admin-product-promo">Etiqueta / promoción</label><input id="admin-product-promo" placeholder="Ej: NUEVO"></div>
             <div class="admin-field"><label for="admin-product-img">Imagen principal (URL)</label><input id="admin-product-img" placeholder="https://..."></div>
             <div class="admin-field"><label for="admin-product-stock">Stock general</label><input id="admin-product-stock" type="number" min="0" step="1" placeholder="0"></div>
@@ -5930,7 +5934,7 @@ async function cargarPedidosAdminOriginal(){
 
 function renderInventarioAdmin(){
     const container=$("admin-inventory-list");const texto=($("admin-stock-search")?.value||"").toLowerCase().trim();container.innerHTML="";
-    const lista=DB.filter(item=>!texto||String(item.nombre).toLowerCase().includes(texto)||String(item.id).toLowerCase().includes(texto));
+    const lista=DB.filter(item=>(!TM_ADMIN_INVENTORY_CATEGORY||String(item.cat||"").toLowerCase()===TM_ADMIN_INVENTORY_CATEGORY)&&(!texto||String(item.nombre).toLowerCase().includes(texto)||String(item.id).toLowerCase().includes(texto)));
     if(!lista.length){container.innerHTML=`<div class="estado">No hay productos que coincidan.</div>`;return;}
     const fragment=document.createDocumentFragment();
     lista.forEach(item=>{
@@ -6025,7 +6029,52 @@ function actualizarCabeceraVariantesAdmin(){
     if(head && !rows.length) head.remove();
 }
 
+function tmCategoriasDefinidas(){
+    return [...new Set((DB||[]).map(p=>String(p.cat||"").trim().toLowerCase()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+}
+function tmRenderCategoriasAdmin(){
+    const list=$("admin-category-list"), select=$("admin-product-cat");
+    if(!list)return;
+    const cats=tmCategoriasDefinidas(); list.innerHTML="";
+    const all=document.createElement("button"); all.type="button"; all.textContent="Todas"; all.className="activo";
+    all.onclick=()=>{TM_ADMIN_INVENTORY_CATEGORY="";document.querySelectorAll("#admin-category-list button").forEach(x=>x.classList.remove("activo"));all.classList.add("activo");renderInventarioAdmin();}; list.appendChild(all);
+    cats.forEach(cat=>{const b=document.createElement("button");b.type="button";b.textContent=cat.charAt(0).toUpperCase()+cat.slice(1);b.onclick=()=>{TM_ADMIN_INVENTORY_CATEGORY=cat;document.querySelectorAll("#admin-category-list button").forEach(x=>x.classList.remove("activo"));b.classList.add("activo");renderInventarioAdmin();};list.appendChild(b);});
+    if(select){const actual=select.value;select.innerHTML='<option value="">Selecciona una categoría</option>'+cats.map(c=>`<option value="${escaparHTML(c)}">${escaparHTML(c.charAt(0).toUpperCase()+c.slice(1))}</option>`).join("");if(cats.includes(actual))select.value=actual;}
+}
+let TM_ADMIN_INVENTORY_CATEGORY="";
+function tmCsvParseSimple(text){
+    const rows=parseCSV(String(text||"")); if(!rows.length)return [];
+    const headers=rows[0].map(x=>String(x||"").trim().toLowerCase().replace(/\s+/g,"_"));
+    const aliases={id:["id","id_producto","producto_id"],talla:["talla","size"],color:["color"],cantidad:["cantidad","entrada","unidades","stock_entrada"],costo:["costo","costo_unitario"]}; const idx={};
+    Object.keys(aliases).forEach(k=>idx[k]=aliases[k].map(a=>headers.indexOf(a)).find(i=>i>=0));
+    if(idx.id===undefined||idx.cantidad===undefined)throw new Error("La plantilla debe contener ID_PRODUCTO y CANTIDAD.");
+    return rows.slice(1).map((r,n)=>({fila:n+2,id:String(r[idx.id]||"").trim(),talla:idx.talla===undefined?"":String(r[idx.talla]||"").trim(),color:idx.color===undefined?"":String(r[idx.color]||"").trim(),cantidad:parseInt(String(r[idx.cantidad]||""),10),costo:idx.costo===undefined?null:Number(String(r[idx.costo]||"").replace(",","."))})).filter(x=>x.id||x.cantidad);
+}
+function tmDescargarPlantillaEntradaMasiva(){
+    const csv="ID_PRODUCTO,TALLA,COLOR,CANTIDAD,COSTO\nCAM-001,M,Negro,20,8.50\nCAM-001,L,Negro,15,8.50\n"; const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="plantilla_entradas_inventario.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);
+}
+async function tmPrepararEntradaMasiva(file){
+    const box=$("tm-bulk-stock-preview");if(!box||!file)return;
+    try{const rows=tmCsvParseSimple(await file.text()),byId=new Map(),errores=[];
+        rows.forEach(r=>{const p=DB.find(x=>String(x.id).trim()===r.id);if(!p)errores.push(`Fila ${r.fila}: producto ${r.id} no existe.`);else if(!Number.isInteger(r.cantidad)||r.cantidad<=0)errores.push(`Fila ${r.fila}: CANTIDAD debe ser un entero mayor que 0.`);else if(p.variantes?.length&&(!r.talla||!r.color))errores.push(`Fila ${r.fila}: ${r.id} tiene variantes; TALLA y COLOR son obligatorios.`);else if(p.variantes?.length&&!p.variantes.some(v=>String(v.talla||"").toLowerCase()===r.talla.toLowerCase()&&String(v.color||"").toLowerCase()===r.color.toLowerCase()))errores.push(`Fila ${r.fila}: no existe la variante ${r.id} / ${r.talla} / ${r.color}.`);else if(!p.variantes?.length&&(r.talla||r.color))errores.push(`Fila ${r.fila}: ${r.id} no tiene variantes; deja TALLA y COLOR vacíos.`);else{if(!byId.has(r.id))byId.set(r.id,[]);byId.get(r.id).push(r);}});
+        const cambios=[...byId].map(([id,items])=>({p:DB.find(x=>String(x.id)===id),items,total:items.reduce((s,r)=>s+r.cantidad,0)})); window.TM_BULK_IMPORT={cambios,errores};
+        box.style.display="block";box.innerHTML=`<div class="tm-bulk-summary"><span>Filas: <b>${rows.length}</b></span><span>Productos: <b>${cambios.length}</b></span><span>Unidades a sumar: <b>${cambios.reduce((s,x)=>s+x.total,0)}</b></span><span>Errores: <b>${errores.length}</b></span></div>${errores.length?`<div class="tm-bulk-errors">${errores.map(escaparHTML).join("<br>")}</div>`:'<div class="tm-bulk-ok">✓ Archivo validado correctamente.</div>'}<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:8px"><button class="btn-opcion" style="margin:0" onclick="tmCancelarEntradaMasiva()">Cancelar</button>${!errores.length&&cambios.length?'<button class="btn-add" style="margin:0" onclick="tmAplicarEntradaMasiva()">📥 Aplicar entrada</button>':''}</div>`;
+    }catch(e){box.style.display="block";box.innerHTML=`<div class="tm-bulk-errors">❌ ${escaparHTML(e.message)}</div>`;window.TM_BULK_IMPORT=null;}
+}
+function tmCancelarEntradaMasiva(){window.TM_BULK_IMPORT=null;const b=$("tm-bulk-stock-preview"),f=$("tm-bulk-stock-file");if(b){b.style.display="none";b.innerHTML=""}if(f)f.value="";}
+async function tmAplicarEntradaMasiva(){
+    const imp=window.TM_BULK_IMPORT;if(!imp||imp.errores.length)return; const btn=document.querySelector("#tm-bulk-stock-preview .btn-add");if(btn){btn.disabled=true;btn.textContent="Aplicando...";}
+    try{let actualizados=0;
+        for(const x of imp.cambios){const p=JSON.parse(JSON.stringify(x.p));
+            if(Array.isArray(p.variantes)&&p.variantes.length){for(const r of x.items){const v=p.variantes.find(v=>String(v.talla||"").toLowerCase()===r.talla.toLowerCase()&&String(v.color||"").toLowerCase()===r.color.toLowerCase());if(!v)throw new Error(`No existe la variante ${p.id} / ${r.talla} / ${r.color}.`);v.stock=Number(v.stock||0)+r.cantidad;if(r.costo!==null&&!Number.isNaN(r.costo))v.costo=Math.max(0,r.costo);}p.stock=p.variantes.reduce((s,v)=>s+Number(v.stock||0),0);}else{p.stock=Number(p.stock||0)+x.total;const c=x.items.find(r=>r.costo!==null&&!Number.isNaN(r.costo));if(c)p.costo=Math.max(0,c.costo);}
+            const payload={action:"guardar_producto",id:p.id,nombre:p.nombre,precio:Number(p.precio||0),cat:p.cat||"",promo:p.promo||"",img:p.img||"",stock:Number(p.stock||0),costo:Number(p.costo||0),colores:p.colores||[],tallas:p.tallas||[],desc:p.desc||"",variantes:(p.variantes||[]).map(v=>({varianteId:v.varianteId||"",talla:v.talla||"",color:v.color||"",stock:Number(v.stock||0),imagen:v.imagen||v.img||"",costo:Number(v.costo||0),activo:v.activo!==false}))};
+            const r=await adminRequest(payload);if(r.status!=="success")throw new Error(r.message||`No se pudo actualizar ${p.id}.`);actualizados++;}
+        await cargarProductos();tmRenderCategoriasAdmin();renderInventarioAdmin();mostrarToast(`Entrada aplicada: ${actualizados} producto(s) actualizados.`);tmCancelarEntradaMasiva();
+    }catch(e){alert(`No se aplicó la entrada. ${e.message}`);if(btn){btn.disabled=false;btn.textContent="📥 Aplicar entrada";}}
+}
+
 async function abrirEditorProductoAdmin(id=""){
+    tmRenderCategoriasAdmin();
     adminProductEditingId=id||"";
     $("admin-product-title").textContent=id?"Editar producto":"Nuevo producto";
     $("admin-product-id").disabled=!!id;
@@ -6048,6 +6097,8 @@ function cerrarModalProductoAdmin(){ $("modalAdminProducto").style.display="none
 
 async function guardarProductoAdminFrontend(){
     const id=$("admin-product-id").value.trim();
+    const categoriaSeleccionada=String($("admin-product-cat")?.value||"").trim().toLowerCase();
+    if(!categoriaSeleccionada||!tmCategoriasDefinidas().includes(categoriaSeleccionada)){alert("Debes seleccionar una categoría de la lista existente.");return;}
     const data={
         action:"guardar_producto", id,
         nombre:$("admin-product-name").value.trim(), precio:Number($("admin-product-price").value), cat:$("admin-product-cat").value.trim(),
@@ -6924,7 +6975,7 @@ switchAdminTab=function(tab){
     document.querySelectorAll(".tab-admin-btn").forEach(b=>b.classList.remove("activo"));
     ["view-admin-orders","view-admin-stock","view-admin-discount","view-admin-accounting","view-admin-sale"].forEach(id=>{if($(id))$(id).style.display="none";});
     if(tab==="orders"){$("tab-btn-orders")?.classList.add("activo");$("view-admin-orders")&&($("view-admin-orders").style.display="block");cargarPedidosAdmin();return;}
-    if(tab==="stock"){$("tab-btn-stock")?.classList.add("activo");$("view-admin-stock")&&($("view-admin-stock").style.display="block");renderInventarioAdmin();return;}
+    if(tab==="stock"){$("tab-btn-stock")?.classList.add("activo");$("view-admin-stock")&&($("view-admin-stock").style.display="block");tmRenderCategoriasAdmin();renderInventarioAdmin();return;}
     if(tab==="discount"){$("tab-btn-discount")?.classList.add("activo");$("view-admin-discount")&&($("view-admin-discount").style.display="block");return;}
     if(tab==="accounting"){$("tab-btn-accounting")?.classList.add("activo");$("view-admin-accounting")&&($("view-admin-accounting").style.display="block");tmActualizarFiltroContabilidad();cargarContabilidadAdmin();return;}
     if(tab==="sale"){$("tab-btn-sale")?.classList.add("activo");$("view-admin-sale")&&($("view-admin-sale").style.display="block");tmAdminSaleInicializar();return;}
