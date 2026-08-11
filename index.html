@@ -3067,7 +3067,6 @@ function mostrar(lista){
                 });
                 if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}
             });
-            imageBox.appendChild(disponibilidad);
         }
         const info=document.createElement("div");info.className="p-info";
         const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre;
@@ -5659,7 +5658,6 @@ function tmProductoCard(p){
             });
             if(coloresBox.children.length){row.appendChild(coloresBox);disponibilidad.appendChild(row);}
         });
-        imageBox.appendChild(disponibilidad);
     }
 
     const info=document.createElement("div");info.className="p-info";
@@ -5667,7 +5665,13 @@ function tmProductoCard(p){
     const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;
     const ver=document.createElement("button");ver.className="btn-ver-mas";ver.textContent="Ver opciones / Detalle";ver.addEventListener("click",()=>abrirFicha(p.id));
     const add=document.createElement("button");add.className="btn-add";add.disabled=stockCatalogo<=0;add.textContent=stockCatalogo>0?"Añadir":"Agotado";if(stockCatalogo>0)add.addEventListener("click",()=>abrirFicha(p.id));
-    info.append(nombre,precio,ver,add);card.append(imageBox,info);return card;
+    info.append(nombre,precio);
+    const actions=document.createElement("div");actions.className="p-actions";
+    actions.append(ver,add);
+    card.append(imageBox,info);
+    if(variantes.length) card.append(disponibilidad);
+    card.append(actions);
+    return card;
 }
 
 function tmRenderGrid(id,lista){const grid=$(id);if(!grid)return;grid.innerHTML="";if(!lista.length){grid.innerHTML='<div class="estado" style="grid-column:1/-1">No hay productos disponibles.</div>';return;}const f=document.createDocumentFragment();lista.forEach(p=>f.appendChild(tmProductoCard(p)));grid.appendChild(f);}
@@ -6622,22 +6626,23 @@ body{
 }
 
 /* =====================================================
-   V27 — ALINEACIÓN UNIFORME DE LA GRILLA DE PRODUCTOS
+   V27 — ALINEACIÓN UNIFORME REAL DE LA GRILLA
 ===================================================== */
 .producto{
     display:flex!important;
     flex-direction:column!important;
     height:100%!important;
+    min-height:0!important;
 }
-/* Reserva exactamente el mismo espacio para nombre + precio.
-   Así "Tallas y Colores Disponibles" comienza a la misma altura
-   aunque el nombre tenga 1, 2 o 3 líneas. */
+/* La zona de nombre/precio es fija. La disponibilidad queda FUERA
+   de la zona de imagen y empieza a la misma altura en todas las tarjetas. */
 .producto .p-info{
-    height:78px!important;
-    min-height:78px!important;
+    height:82px!important;
+    min-height:82px!important;
+    flex:0 0 82px!important;
     box-sizing:border-box!important;
     overflow:hidden!important;
-    flex:0 0 78px!important;
+    padding:10px 13px 8px!important;
 }
 .producto .p-nombre{
     display:-webkit-box!important;
@@ -6650,22 +6655,55 @@ body{
     line-height:1.25!important;
     min-height:3.75em!important;
     max-height:3.75em!important;
+    margin:0!important;
 }
-.producto .catalogo-disponibilidad{
+.producto .p-info .precio{
+    margin-top:3px!important;
+    margin-bottom:0!important;
+}
+.producto > .catalogo-disponibilidad{
     flex:0 0 auto!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    min-height:0!important;
+    padding:8px 10px 7px!important;
+    background:#fff!important;
 }
-.producto .p-actions{
+.producto > .p-actions{
     margin-top:auto!important;
     width:100%!important;
     box-sizing:border-box!important;
+    padding:0 10px 10px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:7px!important;
 }
-/* Cuando hay tarjetas con diferente cantidad de variantes,
-   los botones quedan alineados al fondo de cada fila de la grilla. */
+.producto > .p-actions .btn-ver-mas,
+.producto > .p-actions .btn-add{
+    width:100%!important;
+    min-height:36px!important;
+    margin:0!important;
+}
+/* Los encabezados y filas de disponibilidad no cambian de posición por
+   tener una cantidad diferente de variantes. */
+.producto > .catalogo-disponibilidad .catalogo-disponibilidad-titulo{
+    min-height:1.2em!important;
+    line-height:1.2!important;
+    margin-bottom:6px!important;
+}
 @media(max-width:767px){
     .producto .p-info{
-        height:72px!important;
-        min-height:72px!important;
-        flex-basis:72px!important;
+        height:76px!important;
+        min-height:76px!important;
+        flex-basis:76px!important;
+        padding:8px 9px 7px!important;
+    }
+    .producto > .catalogo-disponibilidad{
+        padding:7px 9px 6px!important;
+    }
+    .producto > .p-actions{
+        padding:0 9px 9px!important;
+        gap:6px!important;
     }
 }
 </style></head><body><main class="sheet">
@@ -6738,3 +6776,4 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
+```
