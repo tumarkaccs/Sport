@@ -5,9 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Tu Marka Sport | Tienda Oficial</title>
+<!-- VELOCIDAD V24: caché + lazy images + skeleton + refresh en segundo plano -->
 
 <meta name="description" content="Tu Marka Sport - Ropa deportiva y productos personalizados.">
-<meta name="theme-color" content="#0979f7">
+<meta name="theme-color" content="#181A1C">
 
 <style>
 :root{
@@ -1275,6 +1276,56 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
  .admin-sale-actions .btn-add,.admin-sale-actions .btn-opcion{width:100%}
 }
 
+
+/* =====================================================
+   VELOCIDAD FASE 3 — SKELETON LOADING
+===================================================== */
+.tm-skeleton-grid{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+    width:100%;
+}
+.tm-skeleton-card{
+    background:#fff;
+    border:1px solid #e7e9ea;
+    border-radius:12px;
+    overflow:hidden;
+}
+.tm-skeleton-img{
+    aspect-ratio:1/1;
+    background:linear-gradient(100deg,#f1f1f1 25%,#fafafa 37%,#f1f1f1 63%);
+    background-size:400% 100%;
+    animation:tmSkeleton 1.25s ease-in-out infinite;
+}
+.tm-skeleton-line{
+    height:12px;
+    border-radius:6px;
+    margin:10px 12px;
+    background:linear-gradient(100deg,#f1f1f1 25%,#fafafa 37%,#f1f1f1 63%);
+    background-size:400% 100%;
+    animation:tmSkeleton 1.25s ease-in-out infinite;
+}
+.tm-skeleton-line.short{width:45%;}
+.tm-skeleton-line.price{width:30%;height:16px;margin-bottom:14px;}
+@keyframes tmSkeleton{0%{background-position:100% 0}100%{background-position:0 0}}
+.tm-actualizando-catalogo{
+    position:fixed;
+    right:14px;
+    bottom:14px;
+    z-index:9998;
+    background:#181A1C;
+    color:#fff;
+    border-radius:999px;
+    padding:8px 12px;
+    font-size:.72rem;
+    font-weight:700;
+    box-shadow:0 5px 18px rgba(0,0,0,.12);
+    opacity:.92;
+    pointer-events:none;
+}
+@media(min-width:768px){.tm-skeleton-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}}
+@media(min-width:1024px){.tm-skeleton-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;}}
 </style>
 </head>
 
@@ -1393,7 +1444,14 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 
     <section class="catalog-section" id="section-catalogo-general">
         <div class="section-heading"><h2>Catálogo General</h2><span id="catalogo-general-label">10 artículos</span></div>
-        <div class="galeria" id="grid"><div class="estado"><div class="spinner"></div>Cargando catálogo...</div></div>
+        <div class="galeria" id="grid">
+<div class="tm-skeleton-grid" aria-label="Cargando catálogo">
+  <div class="tm-skeleton-card"><div class="tm-skeleton-img"></div><div class="tm-skeleton-line"></div><div class="tm-skeleton-line short"></div><div class="tm-skeleton-line price"></div></div>
+  <div class="tm-skeleton-card"><div class="tm-skeleton-img"></div><div class="tm-skeleton-line"></div><div class="tm-skeleton-line short"></div><div class="tm-skeleton-line price"></div></div>
+  <div class="tm-skeleton-card"><div class="tm-skeleton-img"></div><div class="tm-skeleton-line"></div><div class="tm-skeleton-line short"></div><div class="tm-skeleton-line price"></div></div>
+  <div class="tm-skeleton-card"><div class="tm-skeleton-img"></div><div class="tm-skeleton-line"></div><div class="tm-skeleton-line short"></div><div class="tm-skeleton-line price"></div></div>
+</div>
+</div>
     </section>
 
 <!-- =====================================================
@@ -2395,7 +2453,7 @@ function parseCSV(texto){
    La caché permite mostrar la última versión conocida
    inmediatamente y actualizarla en segundo plano.
 ===================================================== */
-const TM_CACHE_VERSION = "v1";
+const TM_CACHE_VERSION = "v2";
 const TM_CATALOGO_CACHE_KEY = "tu_marka_catalogo_cache_" + TM_CACHE_VERSION;
 const TM_CONFIG_CACHE_KEY = "tu_marka_config_cache_" + TM_CACHE_VERSION;
 
@@ -2600,6 +2658,24 @@ function colorCircleHTML(color, disponible=true){
 }
 
 /* =====================================================
+   ESTADO DE ACTUALIZACIÓN — FASES 2/3
+===================================================== */
+function tmMostrarActualizando(mensaje="Actualizando catálogo…"){
+    let box=$("tm-actualizando-catalogo");
+    if(!box){
+        box=document.createElement("div");
+        box.id="tm-actualizando-catalogo";
+        box.className="tm-actualizando-catalogo";
+        document.body.appendChild(box);
+    }
+    box.textContent=mensaje;
+    box.style.display="block";
+}
+function tmOcultarActualizando(){
+    const box=$("tm-actualizando-catalogo");
+    if(box) box.style.display="none";
+}
+/* =====================================================
    CARGAR PRODUCTOS
 ===================================================== */
 
@@ -2666,9 +2742,12 @@ async function cargarProductos(){
     const cache = tmCacheData(TM_CATALOGO_CACHE_KEY);
 
     if(cache && tmCatalogoCacheAplicar(cache)){
-        tmRefrescarCatalogo().catch(error=>{
-            console.warn("Actualización de catálogo en segundo plano:",error);
-        });
+        tmMostrarActualizando();
+        tmRefrescarCatalogo()
+            .catch(error=>{
+                console.warn("Actualización de catálogo en segundo plano:",error);
+            })
+            .finally(()=>tmOcultarActualizando());
         return;
     }
 
@@ -2838,7 +2917,7 @@ function mostrar(lista){
         const stockBadge=document.createElement("div");stockBadge.className="stock-badge";
         if(stockCatalogo<=0){stockBadge.classList.add("agotado");stockBadge.textContent="Agotado";}else if(stockCatalogo<=3){stockBadge.classList.add("bajo");stockBadge.textContent=`Últimas ${stockCatalogo}`;}else{stockBadge.textContent=`Stock: ${stockCatalogo}`;}
         imageBox.appendChild(stockBadge);
-        const img=document.createElement("img");img.src=p.img;img.alt=p.nombre;img.loading="lazy";img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
+        const img=document.createElement("img");img.src=p.img;img.alt=p.nombre;img.loading="lazy";img.decoding="async";img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
         if(variantes.length){
             const disponibilidad=document.createElement("div");disponibilidad.className="catalogo-disponibilidad";
             const titulo=document.createElement("div");titulo.className="catalogo-disponibilidad-titulo";titulo.textContent="Tallas y Colores Disponibles";disponibilidad.appendChild(titulo);
@@ -4697,7 +4776,7 @@ function renderInventarioAdmin(){
         const row=document.createElement("div");row.className="admin-item-row";
         const header=document.createElement("div");header.className="admin-item-header";
         const visual=document.createElement("div");visual.className="admin-stock-product-head";
-        const foto=document.createElement("img");foto.className="admin-product-visual";foto.src=item.img||"";foto.alt=item.nombre||"Producto";foto.loading="lazy";foto.onerror=()=>{foto.style.visibility="hidden"};
+        const foto=document.createElement("img");foto.className="admin-product-visual";foto.src=item.img||"";foto.alt=item.nombre||"Producto";foto.loading="lazy";foto.decoding="async";foto.onerror=()=>{foto.style.visibility="hidden"};
         const info=document.createElement("div");info.className="admin-stock-product-info";info.innerHTML=`<b>${escaparHTML(item.nombre)}</b><small style="display:block;color:#6C7075">Stock total: ${Number(item.stock||0)}</small>`;
         visual.appendChild(foto);visual.appendChild(info);
         const precio=document.createElement("span");precio.style.cssText="font-weight:900;color:var(--tm-oliva);white-space:nowrap";precio.textContent=`$${Number(item.precio||0).toFixed(2)}`;
@@ -5385,7 +5464,7 @@ function tmProductoCard(p){
     if(p.promo){const badge=document.createElement("div");badge.className="badge-promo";badge.textContent=p.promo;imageBox.appendChild(badge);}
     const variantes=(p.variantes||[]).filter(v=>v.activo!==false);
     const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
-    const img=document.createElement("img");img.src=p.img||"";img.alt=p.nombre||"Producto";img.loading="lazy";img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
+    const img=document.createElement("img");img.src=p.img||"";img.alt=p.nombre||"Producto";img.loading="lazy";img.decoding="async";img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
 
     const tools=document.createElement("div");tools.className="producto-tools";
     const fav=document.createElement("button");fav.type="button";fav.className="producto-tool";fav.title="Agregar a favoritos";fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));};tools.appendChild(fav);
@@ -5753,7 +5832,7 @@ function tmProductoCard(p){
     const card=document.createElement("article");card.className="producto";
     const imageBox=document.createElement("div");imageBox.className="producto-img-box";
     if(p.promo){const badge=document.createElement("div");badge.className="badge-promo";badge.textContent=p.promo;imageBox.appendChild(badge);}
-    const img=document.createElement("img");img.src=p.img||"";img.alt=p.nombre||"Producto";img.loading="lazy";img.onerror=()=>{img.style.visibility="hidden"};img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
+    const img=document.createElement("img");img.src=p.img||"";img.alt=p.nombre||"Producto";img.loading="lazy";img.decoding="async";img.onerror=()=>{img.style.visibility="hidden"};img.addEventListener("click",()=>abrirFicha(p.id));imageBox.appendChild(img);
     const tools=document.createElement("div");tools.className="producto-tools";const fav=document.createElement("button");fav.type="button";fav.className="producto-tool";fav.title="Agregar a favoritos";fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);fav.textContent=tmEsFavorito(p.id)?"♥":"♡";fav.classList.toggle("favorito-activo",tmEsFavorito(p.id));};const share=document.createElement("button");share.type="button";share.className="producto-tool";share.title="Compartir producto";share.textContent="↗";share.onclick=e=>{e.stopPropagation();compartirProducto(p.id,p.nombre);};tools.append(fav,share);imageBox.appendChild(tools);card.appendChild(imageBox);
     const info=document.createElement("div");info.className="p-info";const nombre=document.createElement("div");nombre.className="p-nombre";nombre.textContent=p.nombre||"Producto";const precio=document.createElement("div");precio.className="precio";precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;info.append(nombre,precio);card.appendChild(info);
     const variantes=(p.variantes||[]).filter(v=>v.activo!==false);const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
@@ -6345,4 +6424,4 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
-```1
+```
