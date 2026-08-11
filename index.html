@@ -1582,6 +1582,25 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
     gap:4px!important;
     min-width:0!important;
 }
+.btn-ver-tallas{
+    width:100%;
+    background:#f8fafc;
+    color:var(--primary,#1e293b);
+    border:1px solid #cbd5e1;
+    padding:9px 10px;
+    border-radius:7px;
+    font-size:.75rem;
+    font-weight:700;
+    line-height:1.2;
+    cursor:pointer;
+    transition:background .15s ease,border-color .15s ease,transform .15s ease;
+}
+.btn-ver-tallas:hover{
+    background:#f1f5f9;
+    border-color:#94a3b8;
+}
+.btn-ver-tallas:active{transform:translateY(1px);}
+
 .p-actions{
     margin-top:auto!important;
     display:flex!important;
@@ -6913,6 +6932,7 @@ function tmProductoCard(p){
 
     const tools=document.createElement("div");
     tools.className="producto-tools";
+
     const fav=document.createElement("button");
     fav.type="button";
     fav.className="producto-tool";
@@ -6923,14 +6943,22 @@ function tmProductoCard(p){
         fav.classList.toggle("favorito-activo",activo);
     };
     actualizarFavorito();
-    fav.onclick=e=>{e.stopPropagation();tmToggleFavorito(p.id);actualizarFavorito();};
+    fav.onclick=e=>{
+        e.stopPropagation();
+        tmToggleFavorito(p.id);
+        actualizarFavorito();
+    };
 
     const share=document.createElement("button");
     share.type="button";
     share.className="producto-tool";
     share.title="Compartir producto";
     share.textContent="↗";
-    share.onclick=e=>{e.stopPropagation();compartirProducto(p.id,p.nombre);};
+    share.onclick=e=>{
+        e.stopPropagation();
+        compartirProducto(p.id,p.nombre);
+    };
+
     tools.append(fav,share);
     imageBox.appendChild(tools);
     card.appendChild(imageBox);
@@ -6940,69 +6968,42 @@ function tmProductoCard(p){
 
     const infoHead=document.createElement("div");
     infoHead.className="p-info-head";
+
     const nombre=document.createElement("div");
     nombre.className="p-nombre";
     nombre.textContent=p.nombre||"Producto";
+
     const precio=document.createElement("div");
     precio.className="precio";
     precio.textContent=`$${Number(p.precio||0).toFixed(2)}`;
+
     infoHead.append(nombre,precio);
     info.appendChild(infoHead);
 
     const variantes=(p.variantes||[]).filter(v=>v.activo!==false);
-    const stockCatalogo=variantes.length?variantes.reduce((sum,v)=>sum+Number(v.stock||0),0):Number(p.stock||0);
-
-    if(variantes.length){
-        const disponibilidad=document.createElement("div");
-        disponibilidad.className="catalogo-disponibilidad";
-        disponibilidad.id=`disponibilidad-card-${p.id}`;
-
-        const titulo=document.createElement("div");
-        titulo.className="catalogo-disponibilidad-titulo";
-        titulo.textContent="Elegir Talla";
-        disponibilidad.appendChild(titulo);
-
-        const tallasUnicas=[...new Set(variantes.map(v=>String(v.talla||"").trim()).filter(Boolean))];
-        const orden={XS:1,S:2,M:3,L:4,XL:5,XXL:6,XXXL:7};
-        tallasUnicas.sort((a,b)=>(orden[a.toUpperCase()]||99)-(orden[b.toUpperCase()]||99)||a.localeCompare(b));
-
-        const pills=document.createElement("div");
-        pills.className="tallas-pills-row";
-        tallasUnicas.forEach(talla=>{
-            const btn=document.createElement("button");
-            btn.type="button";
-            btn.className="talla-pill";
-            btn.textContent=talla;
-            btn.setAttribute("aria-label",`Elegir talla ${talla}`);
-            btn.addEventListener("click",()=>seleccionarTallaPill(btn,p.id,talla));
-            pills.appendChild(btn);
-        });
-        disponibilidad.appendChild(pills);
-
-        const coloresBox=document.createElement("div");
-        coloresBox.className="box-colores-card";
-        coloresBox.id=`colores-card-${p.id}`;
-        const prompt=document.createElement("span");
-        prompt.className="text-prompt";
-        prompt.textContent="Toca una talla para ver colores";
-        coloresBox.appendChild(prompt);
-        disponibilidad.appendChild(coloresBox);
-        info.appendChild(disponibilidad);
-    }
+    const stockCatalogo=variantes.length
+        ? variantes.reduce((sum,v)=>sum+Number(v.stock||0),0)
+        : Number(p.stock||0);
 
     const acciones=document.createElement("div");
     acciones.className="p-actions";
     acciones.style.padding="8px 9px 10px";
-    const ver=document.createElement("button");
-    ver.className="btn-ver-mas";
-    ver.textContent="Ver opciones / Detalle";
-    ver.onclick=()=>abrirFicha(p.id);
+
+    const verTallas=document.createElement("button");
+    verTallas.type="button";
+    verTallas.className="btn-ver-tallas";
+    verTallas.textContent="Ver tallas y colores disponibles";
+    verTallas.title="Ver tallas y colores disponibles";
+    verTallas.onclick=()=>abrirFicha(p.id);
+
     const add=document.createElement("button");
+    add.type="button";
     add.className="btn-add";
     add.disabled=stockCatalogo<=0;
-    add.textContent=stockCatalogo>0?"Añadir":"Agotado";
-    if(stockCatalogo>0)add.onclick=()=>abrirFicha(p.id);
-    acciones.append(ver,add);
+    add.textContent=stockCatalogo>0?"Comprar / Añadir":"Agotado";
+    if(stockCatalogo>0) add.onclick=()=>abrirFicha(p.id);
+
+    acciones.append(verTallas,add);
     info.appendChild(acciones);
     card.appendChild(info);
 
