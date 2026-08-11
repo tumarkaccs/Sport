@@ -11,33 +11,18 @@
 
 <style>
 :root{
-    /* =========================
-       TU MARKA SPORT
-       IDENTIDAD VISUAL
-    ========================= */
-
-    --petroleo:#111111;
-    --purpura:#111111;
-    --azul-claro:#333333;
-
-    --fondo:#f7f7f7;
-    --blanco:#ffffff;
-
-    --texto:#171717;
-    --gris-suave:#f1f1f1;
-    --gris:#737373;
-
-    /* Estados */
+    --petroleo:#0979f7;
+    --purpura:#9b3081;
+    --azul-claro:#007bbd;
+    --fondo:#f8fafb;
+    --blanco:#fff;
     --verde-wa:#25D366;
+    --texto:#2c3e50;
+    --gris-suave:#f1f5f9;
+    --gris:#64748b;
     --rojo:#dc2626;
     --verde:#16a34a;
     --amarillo:#f59e0b;
-
-    /* Bordes */
-    --borde:#e5e5e5;
-
-    /* Color de acento */
-    --acento:#111111;
 }
 
 *{
@@ -2406,30 +2391,75 @@ function parseCSV(texto){
 
 
 /* =====================================================
+   CACHÉ LOCAL — FASE 1 VELOCIDAD
+   La caché permite mostrar la última versión conocida
+   inmediatamente y actualizarla en segundo plano.
+===================================================== */
+const TM_CACHE_VERSION = "v1";
+const TM_CATALOGO_CACHE_KEY = "tu_marka_catalogo_cache_" + TM_CACHE_VERSION;
+const TM_CONFIG_CACHE_KEY = "tu_marka_config_cache_" + TM_CACHE_VERSION;
+
+function tmCacheGet(key){
+    try{
+        const raw = localStorage.getItem(key);
+        if(!raw) return null;
+        const data = JSON.parse(raw);
+        if(!data || typeof data !== "object") return null;
+        return data;
+    }catch(e){
+        return null;
+    }
+}
+
+function tmCacheSet(key, data){
+    try{
+        localStorage.setItem(key, JSON.stringify({
+            timestamp:Date.now(),
+            data
+        }));
+    }catch(e){}
+}
+
+function tmCacheData(key){
+    const cached = tmCacheGet(key);
+    return cached ? cached.data : null;
+}
+
+function tmCacheAge(key){
+    const cached = tmCacheGet(key);
+    return cached && cached.timestamp ? Date.now() - cached.timestamp : Infinity;
+}
+
+function tmCatalogoCacheAplicar(data){
+    if(!Array.isArray(data) || !data.length) return false;
+    DB = data;
+    DB.forEach(p=>{ if(!Array.isArray(p.variantes)) p.variantes=[]; });
+    construirCategorias();
+    mostrar(mezclarProductos([...DB]));
+    return true;
+}
+
+function tmConfigCacheAplicar(texto){
+    if(!texto) return false;
+    try{
+        const filas = parseCSV(texto);
+        if(!filas.length) return false;
+        tmAplicarConfiguracionFilas(filas);
+        return true;
+    }catch(e){
+        console.warn("No se pudo aplicar configuración en caché:",e);
+        return false;
+    }
+}
+
+/* =====================================================
    CARGAR CONFIGURACIÓN
 ===================================================== */
 
-async function cargarConfiguracion(){
-
-    const response = await fetch(
-        CONFIG_URL + "&cache=" + Date.now()
-    );
-
-    if(!response.ok){
-        throw new Error("No se pudo cargar configuración");
-    }
-
-    const texto = await response.text();
-    const filas = parseCSV(texto);
-
+function tmAplicarConfiguracionFilas(filas){
     filas.forEach(fila=>{
-
-        const key = String(fila[0] || "")
-            .toLowerCase()
-            .trim();
-
+        const key = String(fila[0] || "").toLowerCase().trim();
         const value = String(fila[1] || "").trim();
-
         if(!key) return;
 
         if(key.includes("tel")){
@@ -2439,16 +2469,13 @@ async function cargarConfiguracion(){
 
         if(key.includes("logo")){
             CONFIG.logo = value;
-
             if(value && $("container-logo-nav")){
                 $("container-logo-nav").innerHTML = "";
-
                 const img = document.createElement("img");
                 img.src = value;
                 img.className = "nav-logo-img";
                 img.alt = "Tu Marka Sport";
                 img.loading = "eager";
-
                 $("container-logo-nav").appendChild(img);
             }
         }
@@ -2460,9 +2487,7 @@ async function cargarConfiguracion(){
                 .map(x=>x.trim())
                 .filter(Boolean);
 
-            if(!CONFIG.pagos.length){
-                CONFIG.pagos = [value];
-            }
+            if(!CONFIG.pagos.length) CONFIG.pagos = [value];
         }
 
         if(key.includes("banner") && !key.includes("titulo")){
@@ -2478,9 +2503,7 @@ async function cargarConfiguracion(){
     const adminPagoSelect = $("admin-payment-method");
 
     if(pagoSelect){
-        pagoSelect.innerHTML =
-            `<option value="">Selecciona un método de pago</option>`;
-
+        pagoSelect.innerHTML = `<option value="">Selecciona un método de pago</option>`;
         CONFIG.pagos.forEach(metodo=>{
             const option = document.createElement("option");
             option.value = metodo;
@@ -2490,9 +2513,7 @@ async function cargarConfiguracion(){
     }
 
     if(adminPagoSelect){
-        adminPagoSelect.innerHTML =
-            `<option value="">Método de pago</option>`;
-
+        adminPagoSelect.innerHTML = `<option value="">Método de pago</option>`;
         CONFIG.pagos.forEach(metodo=>{
             const option = document.createElement("option");
             option.value = metodo;
@@ -2508,6 +2529,7 @@ async function cargarConfiguracion(){
 
     const bannerBox = $("banner-box");
     const bannerImg = $("banner-imagen");
+
     if(CONFIG.banner && bannerBox && bannerImg){
         bannerBox.style.display = "flex";
         bannerImg.src = CONFIG.banner;
@@ -2521,6 +2543,27 @@ async function cargarConfiguracion(){
     }
 }
 
+async function tmRefrescarConfiguracion(){
+    const response = await fetch(CONFIG_URL + "&cache=" + Date.now());
+    if(!response.ok) throw new Error("No se pudo cargar configuración");
+    const texto = await response.text();
+    tmCacheSet(TM_CONFIG_CACHE_KEY,texto);
+    tmConfigCacheAplicar(texto);
+    return true;
+}
+
+async function cargarConfiguracion(){
+    const cache = tmCacheData(TM_CONFIG_CACHE_KEY);
+
+    if(cache && tmConfigCacheAplicar(cache)){
+        tmRefrescarConfiguracion().catch(error=>
+            console.warn("Actualización de configuración en segundo plano:",error)
+        );
+        return;
+    }
+
+    await tmRefrescarConfiguracion();
+}
 
 async function cargarVariantesPublicas(){
     try{
@@ -2560,84 +2603,77 @@ function colorCircleHTML(color, disponible=true){
    CARGAR PRODUCTOS
 ===================================================== */
 
-async function cargarProductos(){
-
-    const response = await fetch(
-        PRODUCTOS_URL + "&cache=" + Date.now()
-    );
-
-    if(!response.ok){
-        throw new Error("No se pudo cargar catálogo");
-    }
-
-    const texto = await response.text();
-
+function tmParsearCatalogoCSV(texto){
     const filas = parseCSV(texto);
 
-    DB = filas
+    return filas
         .slice(1)
         .map(c=>({
-
             id:String(c[0] || "").trim(),
-
             nombre:String(c[1] || "").trim(),
-
-            precio:parseFloat(
-                String(c[2] || "")
-                .replace(",",".")
-            ) || 0,
-
-            cat:String(c[3] || "")
-                .toLowerCase()
-                .trim(),
-
+            precio:parseFloat(String(c[2] || "").replace(",",".")) || 0,
+            cat:String(c[3] || "").toLowerCase().trim(),
             promo:String(c[4] || "").trim(),
-
             img:String(c[5] || "").trim(),
-
             stock:parseInt(c[6],10) || 0,
-
             desc:String(c[7] || "").trim(),
-
             colores:c[8]
-                ? String(c[8])
-                    .split(";")
-                    .map(x=>x.trim())
-                    .filter(Boolean)
+                ? String(c[8]).split(";").map(x=>x.trim()).filter(Boolean)
                 : [],
-
             tallas:c[9]
-                ? String(c[9])
-                    .split(";")
-                    .map(x=>x.trim())
-                    .filter(Boolean)
+                ? String(c[9]).split(";").map(x=>x.trim()).filter(Boolean)
                 : [],
-
             ventas:parseFloat(String(c[10] || "").replace(",",".")) || 0,
-            nuevo: String(c[11] || "").trim().toLowerCase() === "si",
-
-            costo:parseFloat(String(c[12] || "").replace(",",".")) || 0
-
+            nuevo:String(c[11] || "").trim().toLowerCase() === "si",
+            costo:parseFloat(String(c[12] || "").replace(",",".")) || 0,
+            variantes:[]
         }))
         .filter(p=>p.nombre);
+}
+
+async function tmRefrescarCatalogo(){
+    const response = await fetch(PRODUCTOS_URL + "&cache=" + Date.now());
+    if(!response.ok) throw new Error("No se pudo cargar catálogo");
+
+    const texto = await response.text();
+    const nuevoDB = tmParsearCatalogoCSV(texto);
 
     await cargarVariantesPublicas();
 
-    DB.forEach(p=>{
+    nuevoDB.forEach(p=>{
         p.variantes = VARIANTES[String(p.id)] || [];
         const totalVariantes = p.variantes.reduce((s,v)=>s + Number(v.stock || 0), 0);
         if(p.variantes.length) p.stock = totalVariantes;
-        p.colores = Array.from(new Set([...(p.colores || []), ...p.variantes.map(v=>v.color).filter(Boolean)]));
-        p.tallas = Array.from(new Set([...(p.tallas || []), ...p.variantes.map(v=>v.talla).filter(Boolean)]));
+        p.colores = Array.from(new Set([
+            ...(p.colores || []),
+            ...p.variantes.map(v=>v.color).filter(Boolean)
+        ]));
+        p.tallas = Array.from(new Set([
+            ...(p.tallas || []),
+            ...p.variantes.map(v=>v.talla).filter(Boolean)
+        ]));
     });
 
-    construirCategorias();
+    tmCacheSet(TM_CATALOGO_CACHE_KEY,nuevoDB);
 
-    mostrar(
-        mezclarProductos([...DB])
-    );
+    DB = nuevoDB;
+    construirCategorias();
+    mostrar(mezclarProductos([...DB]));
+    return true;
 }
 
+async function cargarProductos(){
+    const cache = tmCacheData(TM_CATALOGO_CACHE_KEY);
+
+    if(cache && tmCatalogoCacheAplicar(cache)){
+        tmRefrescarCatalogo().catch(error=>{
+            console.warn("Actualización de catálogo en segundo plano:",error);
+        });
+        return;
+    }
+
+    await tmRefrescarCatalogo();
+}
 
 $("auth-order-id")?.addEventListener(
     "change",
@@ -6309,3 +6345,4 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
+```1
