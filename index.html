@@ -714,7 +714,7 @@ header{
 /* =========================
    V8 ADMIN / VARIANTES
 ========================= */
-.admin-category-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;padding:8px 0;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.admin-category-title{font-weight:900;color:var(--petroleo);font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-list{display:flex;gap:6px;flex-wrap:wrap}.admin-category-list button{border:1px solid #c8cdd0;background:#fff;border-radius:999px;padding:6px 10px;font-weight:800;font-size:.72rem;cursor:pointer}.admin-category-list button.activo{background:var(--tm-lima);border-color:var(--tm-lima)}.admin-bulk-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#f8fafb}.admin-bulk-row strong{display:block;color:var(--petroleo);font-size:.82rem}.admin-bulk-row small{display:block;color:#64748b;font-size:.68rem;margin-top:2px}.admin-bulk-actions{display:flex;gap:6px;flex-wrap:wrap}#tm-bulk-stock-preview{margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#fff;font-size:.76rem}.tm-bulk-summary{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}.tm-bulk-summary b{color:var(--petroleo)}.tm-bulk-errors{margin-top:7px;color:#b91c1c}.tm-bulk-ok{color:#166534}@media(max-width:700px){.admin-bulk-row{align-items:flex-start;flex-direction:column}.admin-bulk-actions{width:100%}}
+.admin-category-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;padding:8px 0;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.admin-category-title{font-weight:900;color:#111827;font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-list{display:flex;gap:6px;flex-wrap:wrap}.admin-category-list button{border:1px solid #c8cdd0;background:#fff;border-radius:999px;padding:6px 10px;font-weight:800;font-size:.72rem;cursor:pointer}.admin-category-list button.activo{background:var(--tm-lima);border-color:var(--tm-lima)}.admin-category-create-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}.admin-category-create-title{font-weight:900;color:#111827;font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-create-controls{display:flex;align-items:center;gap:7px;flex:1;justify-content:flex-end}.admin-category-create-controls input{width:min(100%,340px);min-height:40px;box-sizing:border-box;padding:9px 11px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:#111827;outline:none}.admin-category-create-controls input:focus{border-color:#111827;box-shadow:0 0 0 3px rgba(17,24,39,.08)}.admin-bulk-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#f8fafb}.admin-bulk-row strong{display:block;color:#111827;font-size:.82rem}.admin-bulk-row small{display:block;color:#64748b;font-size:.68rem;margin-top:2px}.admin-bulk-actions{display:flex;gap:6px;flex-wrap:wrap}#tm-bulk-stock-preview{margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#fff;font-size:.76rem}.tm-bulk-summary{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}.tm-bulk-summary b{color:#111827}.tm-bulk-errors{margin-top:7px;color:#b91c1c}.tm-bulk-ok{color:#166534}@media(max-width:700px){.admin-bulk-row{align-items:flex-start;flex-direction:column}.admin-bulk-actions{width:100%}.admin-category-create-controls{width:100%;justify-content:stretch}.admin-category-create-controls input{flex:1;width:auto}.admin-category-create-controls .btn-opcion{white-space:nowrap}}
 .admin-stock-toolbar{
     display:grid;
     grid-template-columns:1fr auto auto;
@@ -3066,7 +3066,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
             style="margin-top:15px;padding:15px;background:#f8fafc;border-radius:10px;border:1px solid #e2e8f0"
         >
             <p
-                style="font-weight:900;margin:0 0 10px;color:var(--petroleo)"
+                style="font-weight:900;margin:0 0 10px;color:#111827"
             >
                 👤 Datos del cliente
             </p>
@@ -3177,7 +3177,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
         </button>
 
         <h2
-            style="text-align:center;color:var(--petroleo)"
+            style="text-align:center;color:#111827"
         >
             Preguntas Frecuentes
         </h2>
@@ -3248,7 +3248,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
         </button>
 
         <h2
-            style="text-align:center;color:var(--petroleo)"
+            style="text-align:center;color:#111827"
         >
             Administración
         </h2>
@@ -3416,11 +3416,19 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
                     <div class="admin-category-title">Categorías</div>
                     <div id="admin-category-list" class="admin-category-list"></div>
                 </div>
+                <div class="admin-category-create-row">
+                    <div class="admin-category-create-title">Crear categoría</div>
+                    <div class="admin-category-create-controls">
+                        <input id="admin-new-category" type="text" maxlength="40" placeholder="Ej: Franelas, Pantalones, Accesorios" autocomplete="off" onkeydown="if(event.key==='Enter'){event.preventDefault();tmCrearCategoria();}">
+                        <button class="btn-opcion" type="button" style="margin:0" onclick="tmCrearCategoria()">➕ Crear categoría</button>
+                    </div>
+                </div>
                 <div class="admin-bulk-row">
-                    <div><strong>📥 Entradas masivas</strong><small>El archivo siempre <b>suma</b> unidades al inventario existente.</small></div>
+                    <div><strong>📥 Entradas masivas</strong><small>La plantilla está preparada para Excel y Google Sheets. La entrada siempre <b>suma</b> unidades al inventario existente.</small></div>
                     <div class="admin-bulk-actions">
-                        <button class="btn-opcion" style="margin:0" onclick="tmDescargarPlantillaEntradaMasiva()">⬇️ Plantilla</button>
-                        <label class="btn-opcion" style="margin:0;cursor:pointer">📥 Cargar archivo<input id="tm-bulk-stock-file" type="file" accept=".csv,.txt" style="display:none" onchange="tmPrepararEntradaMasiva(this.files[0])"></label>
+                        <button class="btn-opcion" style="margin:0" onclick="tmDescargarPlantillaEntradaMasivaTSV()">⬇️ Plantilla universal (Excel / Sheets)</button>
+                        <button class="btn-opcion" style="margin:0" onclick="tmDescargarPlantillaEntradaMasiva()">⬇️ CSV compatible</button>
+                        <label class="btn-opcion" style="margin:0;cursor:pointer">📥 Cargar archivo<input id="tm-bulk-stock-file" type="file" accept=".csv,.tsv,.txt" style="display:none" onchange="tmPrepararEntradaMasiva(this.files[0])"></label>
                     </div>
                 </div>
                 <div id="tm-bulk-stock-preview" style="display:none"></div>
@@ -3483,7 +3491,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
                         <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Dirección / referencia</label><input id="admin-sale-address" placeholder="Solo si aplica"></div>
                     </div>
 
-                    <div style="font-weight:900;color:var(--petroleo);margin-top:4px">Agregar productos</div>
+                    <div style="font-weight:900;color:#111827;margin-top:4px">Agregar productos</div>
                     <div class="admin-sale-search-wrap">
                         <input id="admin-sale-product-search" type="search" placeholder="🔎 Buscar producto por nombre o ID..." autocomplete="off">
                         <button class="btn-opcion" type="button" style="margin:0" onclick="tmAdminSaleLimpiarBusqueda()">Limpiar</button>
@@ -3504,7 +3512,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
                         <div class="admin-sale-summary-row"><span>Total de la venta</span><b id="admin-sale-total">$0.00</b></div>
                     </div>
 
-                    <div style="font-weight:900;color:var(--petroleo);margin-top:4px">Pago</div>
+                    <div style="font-weight:900;color:#111827;margin-top:4px">Pago</div>
                     <div class="admin-sale-payment">
                         <div class="sale-mode">
                             <label><input type="radio" name="admin-sale-mode" value="pendiente" checked onchange="tmAdminSaleActualizarPago()"> Pago pendiente</label>
@@ -3620,7 +3628,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
 >
     <div class="modal-content" onclick="event.stopPropagation()">
         <button class="btn-close-modal" onclick="cerrarModalProductoAdmin()">×</button>
-        <h2 id="admin-product-title" style="text-align:center;color:var(--petroleo)">Nuevo producto</h2>
+        <h2 id="admin-product-title" style="text-align:center;color:#111827">Nuevo producto</h2>
 
         <div class="admin-product-grid">
             <div class="admin-field"><label for="admin-product-id">ID del producto</label><input id="admin-product-id" placeholder="Ej: FRANELA-001"></div>
@@ -6029,8 +6037,40 @@ function actualizarCabeceraVariantesAdmin(){
     if(head && !rows.length) head.remove();
 }
 
+const TM_CATEGORIAS_STORAGE_KEY="tm_categorias_definidas_v1";
+function tmLeerCategoriasGuardadas(){
+    try{
+        const raw=localStorage.getItem(TM_CATEGORIAS_STORAGE_KEY);
+        const arr=JSON.parse(raw||"[]");
+        return Array.isArray(arr)?arr.map(x=>String(x||"").trim().toLowerCase()).filter(Boolean):[];
+    }catch(e){return [];}
+}
+function tmGuardarCategoriasGuardadas(categorias){
+    try{localStorage.setItem(TM_CATEGORIAS_STORAGE_KEY,JSON.stringify([...new Set(categorias)].sort((a,b)=>a.localeCompare(b))));}catch(e){}
+}
 function tmCategoriasDefinidas(){
-    return [...new Set((DB||[]).map(p=>String(p.cat||"").trim().toLowerCase()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+    const delCatalogo=(DB||[]).map(p=>String(p.cat||"").trim().toLowerCase()).filter(Boolean);
+    const guardadas=tmLeerCategoriasGuardadas();
+    const todas=[...new Set([...delCatalogo,...guardadas])].sort((a,b)=>a.localeCompare(b));
+    if(guardadas.length!==todas.filter(c=>guardadas.includes(c)).length)tmGuardarCategoriasGuardadas(todas);
+    return todas;
+}
+function tmCrearCategoria(){
+    const input=$("admin-new-category");
+    if(!input)return;
+    const nombre=String(input.value||"").trim().replace(/\s+/g," ");
+    if(!nombre){alert("Escribe el nombre de la categoría.");input.focus();return;}
+    if(nombre.length<2){alert("La categoría debe tener al menos 2 caracteres.");input.focus();return;}
+    const normalizada=nombre.toLowerCase();
+    const categorias=tmCategoriasDefinidas();
+    if(categorias.includes(normalizada)){alert("Esa categoría ya existe.");input.select();return;}
+    categorias.push(normalizada);
+    tmGuardarCategoriasGuardadas(categorias);
+    input.value="";
+    tmRenderCategoriasAdmin();
+    const select=$("admin-product-cat");
+    if(select)select.value=normalizada;
+    mostrarToast(`Categoría “${nombre}” creada.`);
 }
 function tmRenderCategoriasAdmin(){
     const list=$("admin-category-list"), select=$("admin-product-cat");
@@ -6042,16 +6082,56 @@ function tmRenderCategoriasAdmin(){
     if(select){const actual=select.value;select.innerHTML='<option value="">Selecciona una categoría</option>'+cats.map(c=>`<option value="${escaparHTML(c)}">${escaparHTML(c.charAt(0).toUpperCase()+c.slice(1))}</option>`).join("");if(cats.includes(actual))select.value=actual;}
 }
 let TM_ADMIN_INVENTORY_CATEGORY="";
+function tmDetectarSeparador(text){
+    const muestra=String(text||"").replace(/^\uFEFF/,'').split(/\r?\n/).find(x=>x.trim())||"";
+    const candidatos=["\t",";",","];
+    let mejor=";",puntaje=-1;
+    candidatos.forEach(sep=>{
+        const n=(muestra.split(sep).length-1);
+        if(n>puntaje){puntaje=n;mejor=sep;}
+    });
+    return mejor;
+}
+function tmParsearTablaEntrada(text){
+    let limpio=String(text||"").replace(/^\uFEFF/,"");
+    const sep=tmDetectarSeparador(limpio);
+    if(sep===",") return parseCSV(limpio);
+    const filas=[];
+    limpio.split(/\r?\n/).forEach(linea=>{
+        if(!linea.trim()) return;
+        const fila=[]; let valor=""; let comillas=false;
+        for(let i=0;i<linea.length;i++){
+            const ch=linea[i],sig=linea[i+1];
+            if(ch==="" && comillas && sig===""){valor+="";i++;continue;}
+            if(ch===""){comillas=!comillas;continue;}
+            if(ch===sep && !comillas){fila.push(valor);valor="";continue;}
+            valor+=ch;
+        }
+        fila.push(valor); filas.push(fila);
+    });
+    return filas;
+}
 function tmCsvParseSimple(text){
-    const rows=parseCSV(String(text||"")); if(!rows.length)return [];
-    const headers=rows[0].map(x=>String(x||"").trim().toLowerCase().replace(/\s+/g,"_"));
-    const aliases={id:["id","id_producto","producto_id"],talla:["talla","size"],color:["color"],cantidad:["cantidad","entrada","unidades","stock_entrada"],costo:["costo","costo_unitario"]}; const idx={};
+    const rows=tmParsearTablaEntrada(text); if(!rows.length)return [];
+    const headers=rows[0].map(x=>String(x||"").trim().toLowerCase().replace(/^\uFEFF/,"").replace(/\s+/g,"_"));
+    const aliases={id:["producto_id","id_producto","id","producto"],talla:["talla","size"],color:["color"],cantidad:["cantidad","entrada","unidades","stock_entrada"],costo:["costo","costo_unitario"]}; const idx={};
     Object.keys(aliases).forEach(k=>idx[k]=aliases[k].map(a=>headers.indexOf(a)).find(i=>i>=0));
-    if(idx.id===undefined||idx.cantidad===undefined)throw new Error("La plantilla debe contener ID_PRODUCTO y CANTIDAD.");
-    return rows.slice(1).map((r,n)=>({fila:n+2,id:String(r[idx.id]||"").trim(),talla:idx.talla===undefined?"":String(r[idx.talla]||"").trim(),color:idx.color===undefined?"":String(r[idx.color]||"").trim(),cantidad:parseInt(String(r[idx.cantidad]||""),10),costo:idx.costo===undefined?null:Number(String(r[idx.costo]||"").replace(",","."))})).filter(x=>x.id||x.cantidad);
+    if(idx.id===undefined||idx.cantidad===undefined)throw new Error("La plantilla debe contener PRODUCTO_ID y CANTIDAD.");
+    return rows.slice(1).map((r,n)=>({fila:n+2,id:String(r[idx.id]||"").trim(),talla:idx.talla===undefined?"":String(r[idx.talla]||"").trim(),color:idx.color===undefined?"":String(r[idx.color]||"").trim(),cantidad:parseInt(String(r[idx.cantidad]||"").trim(),10),costo:idx.costo===undefined?null:Number(String(r[idx.costo]||"").replace(",","."))})).filter(x=>x.id||x.cantidad);
+}
+function tmDescargarArchivoTexto(contenido,nombre,tipo){
+    const blob=new Blob(["\uFEFF",contenido],{type:tipo+";charset=utf-8"}),a=document.createElement("a");
+    a.href=URL.createObjectURL(blob);a.download=nombre;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),500);
 }
 function tmDescargarPlantillaEntradaMasiva(){
-    const csv="ID_PRODUCTO,TALLA,COLOR,CANTIDAD,COSTO\nCAM-001,M,Negro,20,8.50\nCAM-001,L,Negro,15,8.50\n"; const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}),a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="plantilla_entradas_inventario.csv";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),500);
+    // Punto y coma: evita que Excel en configuraciones regionales en español coloque todo en una sola celda.
+    // PRODUCTO_ID evita además el falso aviso de archivo SYLK que Excel muestra cuando un CSV comienza por "ID".
+    const csv="PRODUCTO_ID;TALLA;COLOR;CANTIDAD;COSTO\r\nCAM-001;M;Negro;20;8.50\r\nCAM-001;L;Negro;15;8.50\r\n";
+    tmDescargarArchivoTexto(csv,"plantilla_entradas_inventario.csv","text/csv");
+}
+function tmDescargarPlantillaEntradaMasivaTSV(){
+    const tsv="PRODUCTO_ID\tTALLA\tCOLOR\tCANTIDAD\tCOSTO\r\nCAM-001\tM\tNegro\t20\t8.50\r\nCAM-001\tL\tNegro\t15\t8.50\r\n";
+    tmDescargarArchivoTexto(tsv,"plantilla_entradas_inventario.tsv","text/tab-separated-values");
 }
 async function tmPrepararEntradaMasiva(file){
     const box=$("tm-bulk-stock-preview");if(!box||!file)return;
