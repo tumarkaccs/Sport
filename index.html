@@ -2212,7 +2212,7 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 
         <div style="margin-top:12px">
             <div style="font-weight:900;margin-bottom:6px">Variantes por talla / color / stock / imagen</div>
-            <div id="admin-variants-list"></div>
+            <div class="admin-variants-wrap"><div class="admin-variants-wrap"><div id="admin-variants-list"></div></div></div>
             <button class="btn-opcion" style="margin-top:8px" onclick="agregarFilaVarianteAdmin()">➕ Agregar variante</button>
         </div>
 
@@ -4976,17 +4976,33 @@ async function guardarVarianteStockAdmin(varianteId,input,button){
 
 function agregarFilaVarianteAdmin(data={}){
     const box=$("admin-variants-list");
-    const row=document.createElement("div"); row.className="admin-variant-row";
+    if(!box) return;
+    if(!box.querySelector(":scope > .admin-variants-head")){
+        const head=document.createElement("div");
+        head.className="admin-variants-head";
+        head.innerHTML=`<span>Talla</span><span>Color</span><span>Stock</span><span>Imagen de variante</span><span>Costo fabricación</span><span>Estado</span><span>Acción</span>`;
+        box.appendChild(head);
+    }
+    const row=document.createElement("div");
+    row.className="admin-variant-row";
     row.innerHTML=`
         <div class="admin-variant-field"><label>Talla</label><input class="variant-talla" placeholder="Ej: M" value="${escaparHTML(data.talla||"")}"></div>
         <div class="admin-variant-field"><label>Color</label><input class="variant-color" placeholder="Ej: Negro" value="${escaparHTML(data.color||"")}"></div>
         <div class="admin-variant-field"><label>Stock</label><input class="variant-stock" type="number" min="0" value="${Number(data.stock||0)}"></div>
-        <div class="admin-variant-field"><label>Imagen de variante</label><input class="variant-imagen" placeholder="URL imagen" value="${escaparHTML(data.imagen||"")}"></div>
-        <div class="admin-variant-field"><label>Costo fabricación ($)</label><input class="variant-costo" type="number" min="0" step="0.01" placeholder="0.00" value="${Number(data.costo||0)}"></div>
-        <div class="admin-variant-field"><label>Estado</label><select class="variant-activo"><option value="SI" ${data.activo===false?"":"selected"}>Activo</option><option value="NO" ${data.activo===false?"selected":""}>Inactivo</option></select></div>
-        <button class="btn-opcion" style="margin:0;color:#b91c1c;align-self:end" onclick="this.parentElement.remove()">✕ Eliminar</button>`;
+        <div class="admin-variant-field variant-field-image"><label>Imagen de variante</label><input class="variant-imagen" placeholder="https://..." value="${escaparHTML(data.imagen||"")}"></div>
+        <div class="admin-variant-field variant-field-cost"><label>Costo fabricación ($)</label><input class="variant-costo" type="number" min="0" step="0.01" placeholder="0.00" value="${Number(data.costo||0)}"></div>
+        <div class="admin-variant-field variant-field-status"><label>Estado</label><select class="variant-activo"><option value="SI" ${data.activo===false?"":"selected"}>Activo</option><option value="NO" ${data.activo===false?"selected":""}>Inactivo</option></select></div>
+        <button class="btn-opcion" onclick="this.parentElement.remove();actualizarCabeceraVariantesAdmin()">✕ Eliminar</button>`;
     row.dataset.varianteId=data.varianteId||"";
     box.appendChild(row);
+}
+
+function actualizarCabeceraVariantesAdmin(){
+    const box=$("admin-variants-list");
+    if(!box) return;
+    const head=box.querySelector(":scope > .admin-variants-head");
+    const rows=box.querySelectorAll(":scope > .admin-variant-row");
+    if(head && !rows.length) head.remove();
 }
 
 async function abrirEditorProductoAdmin(id=""){
@@ -6706,6 +6722,215 @@ body{
         gap:6px!important;
     }
 }
+
+/* =========================================================
+   V28 — PANEL ADMINISTRATIVO PROFESIONAL
+   Escritorio: variantes como tabla horizontal.
+   Móvil: variantes como tarjetas verticales.
+========================================================= */
+#modalAdminProducto .modal-content{
+    box-sizing:border-box!important;
+}
+#modalAdminProducto .admin-product-grid{
+    align-items:start!important;
+}
+#modalAdminProducto #admin-product-desc{
+    min-height:150px!important;
+    height:150px!important;
+    line-height:1.45!important;
+    resize:vertical!important;
+}
+#modalAdminProducto #admin-variants-list{
+    width:100%!important;
+    min-width:0!important;
+}
+#modalAdminProducto .admin-variants-head{
+    display:grid!important;
+    grid-template-columns:80px 140px 80px minmax(300px,1fr) 120px 110px 100px!important;
+    gap:10px!important;
+    align-items:end!important;
+    padding:0 10px 6px!important;
+    color:#4B5563!important;
+    font-size:.68rem!important;
+    font-weight:900!important;
+    text-transform:none!important;
+}
+#modalAdminProducto .admin-variants-head span{
+    min-width:0!important;
+    line-height:1.15!important;
+}
+#modalAdminProducto .admin-variant-row{
+    display:grid!important;
+    grid-template-columns:80px 140px 80px minmax(300px,1fr) 120px 110px 100px!important;
+    gap:10px!important;
+    align-items:center!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding:10px!important;
+    margin:0 0 8px!important;
+    border:1px solid #E2E4E5!important;
+    border-radius:10px!important;
+    background:#FAFBFB!important;
+}
+#modalAdminProducto .admin-variant-field{
+    min-width:0!important;
+}
+#modalAdminProducto .admin-variant-field label{
+    display:none!important;
+}
+#modalAdminProducto .admin-variant-field input,
+#modalAdminProducto .admin-variant-field select{
+    width:100%!important;
+    min-width:0!important;
+    height:42px!important;
+    min-height:42px!important;
+    box-sizing:border-box!important;
+    padding:8px 9px!important;
+    border:1px solid #CBD5E1!important;
+    border-radius:8px!important;
+    background:#fff!important;
+}
+#modalAdminProducto .admin-variant-field input.variant-imagen{
+    font-size:.78rem!important;
+}
+#modalAdminProducto .admin-variant-row>button{
+    width:100%!important;
+    min-width:0!important;
+    height:42px!important;
+    min-height:42px!important;
+    margin:0!important;
+    padding:7px 8px!important;
+    white-space:nowrap!important;
+    overflow:hidden!important;
+    text-overflow:ellipsis!important;
+}
+#modalAdminProducto .admin-variants-head + .admin-variant-row{}
+#modalAdminProducto .admin-variant-row:focus-within{
+    border-color:#D2EC00!important;
+    box-shadow:0 0 0 2px rgba(210,236,0,.18)!important;
+}
+
+@media(min-width:721px){
+    #modalAdminProducto .modal-content{
+        width:min(1280px,calc(100vw - 40px))!important;
+        max-width:1280px!important;
+        max-height:94vh!important;
+        padding:26px 28px!important;
+    }
+    #modalAdminProducto .admin-product-grid{
+        grid-template-columns:repeat(3,minmax(220px,1fr))!important;
+        gap:14px!important;
+    }
+    #modalAdminProducto .admin-field-full{
+        grid-column:1/-1!important;
+    }
+    #modalAdminProducto .admin-product-grid input{
+        min-height:42px!important;
+    }
+    #modalAdminProducto #admin-product-desc{
+        grid-column:1/-1!important;
+    }
+    #modalAdminProducto .admin-variants-wrap{
+        overflow-x:auto!important;
+        padding-bottom:3px!important;
+    }
+}
+
+@media(min-width:721px) and (max-width:1150px){
+    #modalAdminProducto .modal-content{
+        width:calc(100vw - 30px)!important;
+        padding:22px!important;
+    }
+    #modalAdminProducto .admin-variants-head,
+    #modalAdminProducto .admin-variant-row{
+        grid-template-columns:75px 120px 75px minmax(230px,1fr) 105px 100px 90px!important;
+        gap:8px!important;
+    }
+}
+
+@media(max-width:720px){
+    #modalAdminProducto .modal-content{
+        width:calc(100vw - 20px)!important;
+        max-width:none!important;
+        max-height:94vh!important;
+        padding:18px!important;
+        border-radius:16px!important;
+    }
+    #modalAdminProducto .admin-product-grid{
+        grid-template-columns:1fr!important;
+        gap:10px!important;
+    }
+    #modalAdminProducto #admin-product-desc{
+        min-height:150px!important;
+        height:150px!important;
+    }
+    #modalAdminProducto .admin-variants-head{
+        display:none!important;
+    }
+    #modalAdminProducto .admin-variant-row{
+        display:grid!important;
+        grid-template-columns:1fr 1fr!important;
+        gap:9px!important;
+        padding:12px!important;
+        margin-bottom:10px!important;
+        background:#F7F8F8!important;
+        border:1px solid #E2E4E5!important;
+        border-radius:12px!important;
+    }
+    #modalAdminProducto .admin-variant-field label{
+        display:block!important;
+        margin-bottom:4px!important;
+        font-size:.65rem!important;
+        color:#4B5563!important;
+    }
+    #modalAdminProducto .admin-variant-field input,
+    #modalAdminProducto .admin-variant-field select{
+        height:42px!important;
+        min-height:42px!important;
+    }
+    #modalAdminProducto .admin-variant-field.variant-field-image{
+        grid-column:1/-1!important;
+    }
+    #modalAdminProducto .admin-variant-field.variant-field-cost,
+    #modalAdminProducto .admin-variant-field.variant-field-status{
+        grid-column:span 1!important;
+    }
+    #modalAdminProducto .admin-variant-row>button{
+        grid-column:1/-1!important;
+        height:42px!important;
+    }
+}
+
+@media(max-width:420px){
+    #modalAdminProducto .modal-content{
+        width:calc(100vw - 10px)!important;
+        padding:14px!important;
+    }
+    #modalAdminProducto .admin-variant-row{
+        grid-template-columns:1fr 1fr!important;
+        gap:8px!important;
+        padding:10px!important;
+    }
+}
+
+
+/* V28 PANEL ADMIN */
+#modalAdminProducto .modal-content{box-sizing:border-box!important}
+#modalAdminProducto #admin-product-desc{min-height:150px!important;height:150px!important;line-height:1.45!important;resize:vertical!important}
+#modalAdminProducto #admin-variants-list{width:100%!important;min-width:0!important}
+#modalAdminProducto .admin-variants-head{display:grid!important;grid-template-columns:80px 140px 80px minmax(300px,1fr) 120px 110px 100px!important;gap:10px!important;align-items:end!important;padding:0 10px 6px!important;color:#4B5563!important;font-size:.68rem!important;font-weight:900!important}
+#modalAdminProducto .admin-variants-head span{min-width:0!important;line-height:1.15!important}
+#modalAdminProducto .admin-variant-row{display:grid!important;grid-template-columns:80px 140px 80px minmax(300px,1fr) 120px 110px 100px!important;gap:10px!important;align-items:center!important;width:100%!important;box-sizing:border-box!important;padding:10px!important;margin:0 0 8px!important;border:1px solid #E2E4E5!important;border-radius:10px!important;background:#FAFBFB!important}
+#modalAdminProducto .admin-variant-field{min-width:0!important}
+#modalAdminProducto .admin-variant-field label{display:none!important}
+#modalAdminProducto .admin-variant-field input,#modalAdminProducto .admin-variant-field select{width:100%!important;min-width:0!important;height:42px!important;min-height:42px!important;box-sizing:border-box!important;padding:8px 9px!important;border:1px solid #CBD5E1!important;border-radius:8px!important;background:#fff!important}
+#modalAdminProducto .admin-variant-field input.variant-imagen{font-size:.78rem!important}
+#modalAdminProducto .admin-variant-row>button{width:100%!important;min-width:0!important;height:42px!important;min-height:42px!important;margin:0!important;padding:7px 8px!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+#modalAdminProducto .admin-variant-row:focus-within{border-color:#D2EC00!important;box-shadow:0 0 0 2px rgba(210,236,0,.18)!important}
+@media(min-width:721px){#modalAdminProducto .modal-content{width:min(1280px,calc(100vw - 40px))!important;max-width:1280px!important;max-height:94vh!important;padding:26px 28px!important}#modalAdminProducto .admin-product-grid{grid-template-columns:repeat(3,minmax(220px,1fr))!important;gap:14px!important}#modalAdminProducto .admin-field-full,#modalAdminProducto #admin-product-desc{grid-column:1/-1!important}#modalAdminProducto .admin-product-grid input{min-height:42px!important}.admin-variants-wrap{overflow-x:auto!important;padding-bottom:3px!important}}
+@media(min-width:721px) and (max-width:1150px){#modalAdminProducto .modal-content{width:calc(100vw - 30px)!important;padding:22px!important}#modalAdminProducto .admin-variants-head,#modalAdminProducto .admin-variant-row{grid-template-columns:75px 120px 75px minmax(230px,1fr) 105px 100px 90px!important;gap:8px!important}}
+@media(max-width:720px){#modalAdminProducto .modal-content{width:calc(100vw - 20px)!important;max-width:none!important;max-height:94vh!important;padding:18px!important;border-radius:16px!important}#modalAdminProducto .admin-product-grid{grid-template-columns:1fr!important;gap:10px!important}#modalAdminProducto #admin-product-desc{min-height:150px!important;height:150px!important}#modalAdminProducto .admin-variants-head{display:none!important}#modalAdminProducto .admin-variant-row{display:grid!important;grid-template-columns:1fr 1fr!important;gap:9px!important;padding:12px!important;margin-bottom:10px!important;background:#F7F8F8!important;border:1px solid #E2E4E5!important;border-radius:12px!important}#modalAdminProducto .admin-variant-field label{display:block!important;margin-bottom:4px!important;font-size:.65rem!important;color:#4B5563!important}#modalAdminProducto .admin-variant-field input,#modalAdminProducto .admin-variant-field select{height:42px!important;min-height:42px!important}#modalAdminProducto .variant-field-image{grid-column:1/-1!important}#modalAdminProducto .admin-variant-row>button{grid-column:1/-1!important;height:42px!important}}
+@media(max-width:420px){#modalAdminProducto .modal-content{width:calc(100vw - 10px)!important;padding:14px!important}#modalAdminProducto .admin-variant-row{grid-template-columns:1fr 1fr!important;gap:8px!important;padding:10px!important}}
 </style></head><body><main class="sheet">
     <div class="brand">${brandLogo}<div class="brand-copy"><h1>TU MARKA SPORT</h1><p>Comprobante de compra</p></div></div>
     <div class="order-title">PEDIDO ${escaparHTML(pedido.pedidoId||"")}</div>
@@ -6776,4 +7001,3 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
-```
