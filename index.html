@@ -6841,6 +6841,121 @@ body{
 }
 
 /* =========================================================
+   V29 — ESTRUCTURA UNIFORME DE TARJETAS EN LA GRILLA
+   Imagen → nombre/precio → disponibilidad fija → acciones
+========================================================= */
+.producto{
+    display:flex!important;
+    flex-direction:column!important;
+    height:100%!important;
+    min-height:0!important;
+    overflow:hidden!important;
+}
+.producto > .producto-img-box{
+    flex:0 0 auto!important;
+    width:100%!important;
+    aspect-ratio:4/5!important;
+}
+.producto > .p-info{
+    flex:0 0 82px!important;
+    height:82px!important;
+    min-height:82px!important;
+    max-height:82px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+}
+.producto > .p-info .p-nombre{
+    min-height:3.75em!important;
+    max-height:3.75em!important;
+    overflow:hidden!important;
+}
+.producto > .catalogo-disponibilidad{
+    flex:0 0 126px!important;
+    height:126px!important;
+    min-height:126px!important;
+    max-height:126px!important;
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+    padding:9px 10px 7px!important;
+    margin:0!important;
+    border-top:1px solid #EEF0F1!important;
+    background:#fff!important;
+}
+.producto > .catalogo-disponibilidad .catalogo-disponibilidad-titulo{
+    min-height:1.2em!important;
+    height:1.2em!important;
+    margin:0 0 7px!important;
+    line-height:1.2!important;
+    overflow:hidden!important;
+    white-space:nowrap!important;
+    text-overflow:ellipsis!important;
+}
+.producto > .catalogo-disponibilidad .catalogo-talla-row{
+    height:28px!important;
+    min-height:28px!important;
+    margin:4px 0!important;
+}
+.producto > .catalogo-disponibilidad .catalogo-talla-box{
+    width:28px!important;
+    height:28px!important;
+    flex:0 0 28px!important;
+}
+.producto > .catalogo-disponibilidad .catalogo-colores-por-talla{
+    min-width:0!important;
+    overflow:hidden!important;
+    flex-wrap:nowrap!important;
+}
+.producto > .catalogo-disponibilidad .catalogo-color-option{
+    flex:0 0 auto!important;
+}
+.producto > .p-actions{
+    flex:0 0 auto!important;
+    margin-top:auto!important;
+    width:100%!important;
+    box-sizing:border-box!important;
+    padding:8px 10px 10px!important;
+    display:flex!important;
+    flex-direction:column!important;
+    gap:7px!important;
+    background:#fff!important;
+}
+.producto > .p-actions .btn-ver-mas,
+.producto > .p-actions .btn-add{
+    width:100%!important;
+    min-height:36px!important;
+    margin:0!important;
+}
+@media(max-width:767px){
+    .producto > .p-info{
+        flex-basis:76px!important;
+        height:76px!important;
+        min-height:76px!important;
+        max-height:76px!important;
+    }
+    .producto > .catalogo-disponibilidad{
+        flex-basis:116px!important;
+        height:116px!important;
+        min-height:116px!important;
+        max-height:116px!important;
+        padding:8px 9px 6px!important;
+    }
+    .producto > .catalogo-disponibilidad .catalogo-talla-row{
+        height:26px!important;
+        min-height:26px!important;
+        margin:3px 0!important;
+    }
+    .producto > .catalogo-disponibilidad .catalogo-talla-box{
+        width:26px!important;
+        height:26px!important;
+        flex-basis:26px!important;
+    }
+    .producto > .p-actions{
+        padding:7px 9px 9px!important;
+        gap:6px!important;
+    }
+}
+
+/* =========================================================
    V28 — PANEL ADMINISTRATIVO PROFESIONAL
    Escritorio: variantes como tabla horizontal.
    Móvil: variantes como tarjetas verticales.
@@ -7129,4 +7244,3 @@ window.cargarPedidosAdmin=async function(){
 
 </body>
 </html>
-```
