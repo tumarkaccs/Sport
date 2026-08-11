@@ -1071,58 +1071,6 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 .admin-product-visual{width:68px;height:68px;object-fit:contain;border-radius:9px;background:#fff;border:1px solid #E2E4E5;flex:0 0 68px}.admin-stock-product-head{display:flex;align-items:center;gap:10px;min-width:0}.admin-stock-product-info{min-width:0;flex:1}.admin-stock-product-info b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.admin-stock-variant-row{display:flex;align-items:center;gap:8px;padding:7px 0;border-top:1px solid #EEF0F1}.admin-stock-size{width:30px;height:30px;flex:0 0 30px;border:1px solid var(--tm-oliva);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:900}.admin-stock-color-info{display:flex;align-items:center;gap:6px;flex:1;min-width:0}.admin-stock-color-info .color-dot{width:19px;height:19px;flex:0 0 19px}.admin-stock-color-name{font-size:.72rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.admin-stock-qty{font-size:.7rem;font-weight:900;color:var(--tm-oliva);white-space:nowrap}
 .site-footer{background:linear-gradient(135deg,var(--tm-negro),var(--tm-oliva))}#f-total{color:var(--tm-oliva)}.spinner{border-top-color:var(--tm-lima)}
 
-/* Ampliar modal de edición en pantalla de PC */
-#modalAdminProducto .modal-content,
-#modalAdminProducto .modal-body {
-    max-width: 900px !important;
-    width: 90% !important;
-}
-
-/* Encabezado limpio para la tabla de variantes */
-.admin-variants-header {
-    display: grid;
-    grid-template-columns: 80px 110px 80px 100px 1fr 100px 110px;
-    gap: 8px;
-    font-weight: bold;
-    font-size: 0.8rem;
-    color: #475569;
-    margin-bottom: 8px;
-    padding: 0 4px;
-}
-
-/* Filas alineadas en horizontal */
-.admin-variant-row {
-    display: grid;
-    grid-template-columns: 80px 110px 80px 100px 1fr 100px 110px;
-    gap: 8px;
-    align-items: center;
-    margin-bottom: 8px;
-    background: #f8fafc;
-    padding: 8px;
-    border-radius: 6px;
-    border: 1px solid #e2e8f0;
-}
-
-.admin-variant-row input,
-.admin-variant-row select {
-    width: 100%;
-    padding: 6px 8px;
-    font-size: 0.85rem;
-    box-sizing: border-box;
-}
-
-.admin-variant-row .btn-del {
-    margin-top: 0 !important;
-    padding: 6px 10px;
-    background: #fee2e2;
-    color: #991b1b;
-    border: 1px solid #fca5a5;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.75rem;
-    white-space: nowrap;
-}
-
 
 
 /* =========================================================
@@ -1378,6 +1326,106 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
 }
 @media(min-width:768px){.tm-skeleton-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;}}
 @media(min-width:1024px){.tm-skeleton-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px;}}
+
+/* =====================================================
+   V28 — GRILLA LIMPIA DE VARIANTES ADMIN
+===================================================== */
+#modalAdminProducto .modal-content,
+#modalAdminProducto .modal-body {
+    max-width: 900px !important;
+    width: 90% !important;
+}
+
+.admin-variants-header {
+    display: grid;
+    grid-template-columns: 80px 110px 80px 100px 1fr 100px 110px;
+    gap: 8px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    color: #475569;
+    margin-bottom: 8px;
+    padding: 0 4px;
+}
+
+.admin-variant-row {
+    display: grid !important;
+    grid-template-columns: 80px 110px 80px 100px 1fr 100px 110px !important;
+    gap: 8px !important;
+    align-items: center !important;
+    margin-bottom: 8px !important;
+    background: #f8fafc !important;
+    padding: 8px !important;
+    border-radius: 6px !important;
+    border: 1px solid #e2e8f0 !important;
+    box-sizing: border-box !important;
+}
+
+.admin-variant-row input,
+.admin-variant-row select {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 0.85rem;
+    box-sizing: border-box;
+    min-width: 0;
+}
+
+.admin-variant-row .btn-del {
+    margin-top: 0 !important;
+    padding: 6px 10px;
+    background: #fee2e2;
+    color: #991b1b;
+    border: 1px solid #fca5a5;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    white-space: nowrap;
+}
+
+@media (max-width: 720px) {
+    #modalAdminProducto .modal-content,
+    #modalAdminProducto .modal-body {
+        width: calc(100vw - 20px) !important;
+        max-width: none !important;
+    }
+
+    .admin-variants-header {
+        display: none !important;
+    }
+
+    .admin-variant-row {
+        grid-template-columns: 1fr 1fr !important;
+        gap: 9px !important;
+        padding: 12px !important;
+        margin-bottom: 10px !important;
+    }
+
+    .admin-variant-row input,
+    .admin-variant-row select {
+        min-height: 42px;
+    }
+
+    .admin-variant-row .v-img {
+        grid-column: 1 / -1;
+    }
+
+    .admin-variant-row .btn-del {
+        grid-column: 1 / -1;
+        min-height: 42px;
+    }
+}
+
+@media (max-width: 420px) {
+    #modalAdminProducto .modal-content,
+    #modalAdminProducto .modal-body {
+        width: calc(100vw - 10px) !important;
+    }
+
+    .admin-variant-row {
+        gap: 8px !important;
+        padding: 10px !important;
+    }
+}
+
 </style>
 </head>
 
@@ -2262,25 +2310,11 @@ header.tm-header-oculto{transform:translateY(calc(-100% - 45px));opacity:0;point
             <div class="admin-field admin-field-full"><label for="admin-product-desc">Descripción</label><textarea id="admin-product-desc" rows="3" placeholder="Descripción del producto"></textarea></div>
         </div>
 
-<div class="form-group">
-    <h3>Variantes por talla / color / stock / imagen</h3>
-    
-    <!-- Encabezado de columnas -->
-    <div class="admin-variants-header">
-        <span>Talla</span>
-        <span>Color</span>
-        <span>Stock</span>
-        <span>Costo ($)</span>
-        <span>Imagen URL</span>
-        <span>Estado</span>
-        <span>Acción</span>
-    </div>
-
-    <!-- Lista de filas dinámicas -->
-    <div id="admin-variants-list"></div>
-    
-    <button type="button" class="btn-opcion" onclick="agregarFilaVarianteAdmin()">+ Agregar Variante</button>
-</div>
+        <div style="margin-top:12px">
+            <div style="font-weight:900;margin-bottom:6px">Variantes por talla / color / stock / imagen</div>
+            <div class="admin-variants-wrap"><div class="admin-variants-wrap"><div class="admin-variants-header"><span>Talla</span><span>Color</span><span>Stock</span><span>Costo ($)</span><span>Imagen variante</span><span>Estado</span><span>Acción</span></div><div id="admin-variants-list"></div></div></div>
+            <button class="btn-opcion" style="margin-top:8px" onclick="agregarFilaVarianteAdmin()">➕ Agregar variante</button>
+        </div>
 
         <button class="btn-add" id="btn-save-product-admin" style="margin-top:15px" onclick="guardarProductoAdminFrontend()">💾 Guardar producto</button>
     </div>
@@ -5042,8 +5076,10 @@ async function guardarVarianteStockAdmin(varianteId,input,button){
 
 function agregarFilaVarianteAdmin(data = {}){
     const container = $("admin-variants-list");
+    if(!container) return;
     const div = document.createElement("div");
     div.className = "admin-variant-row";
+    div.dataset.varianteId = data.varianteId || "";
 
     div.innerHTML = `
         <input class="v-talla" value="${escaparHTML(data.talla || '')}" placeholder="Talla (S, M...)">
@@ -5055,12 +5091,11 @@ function agregarFilaVarianteAdmin(data = {}){
             <option value="Activo" ${data.estado === 'Activo' ? 'selected' : ''}>Activo</option>
             <option value="Inactivo" ${data.estado === 'Inactivo' ? 'selected' : ''}>Inactivo</option>
         </select>
-        <button class="btn-del" type="button" onclick="this.parentElement.remove()">✕ Eliminar</button>
+        <button class="btn-del" type="button" onclick="this.parentElement.remove();actualizarCabeceraVariantesAdmin()">✕ Eliminar</button>
     `;
 
     container.appendChild(div);
 }
-
 function actualizarCabeceraVariantesAdmin(){
     const box=$("admin-variants-list");
     if(!box) return;
@@ -5084,7 +5119,7 @@ async function abrirEditorProductoAdmin(id=""){
         $("admin-product-name").value=producto.nombre||""; $("admin-product-price").value=producto.precio||0; $("admin-product-cat").value=producto.cat||"";
         $("admin-product-promo").value=producto.promo||""; $("admin-product-img").value=producto.img||""; $("admin-product-stock").value=producto.stock||0;
         $("admin-product-colors").value=(producto.colores||[]).join(";"); $("admin-product-sizes").value=(producto.tallas||[]).join(";"); $("admin-product-desc").value=producto.desc||"";
-        (producto.variantes||[]).forEach(v=>agregarFilaVarianteAdmin(v));
+        (producto.variantes||[]).forEach(v=>agregarFilaVarianteAdmin({...v,estado:v.activo===false?"Inactivo":"Activo"}));
     }
     $("modalAdminProducto").style.display="flex";
 }
@@ -5099,7 +5134,7 @@ async function guardarProductoAdminFrontend(){
         colores:$("admin-product-colors").value.split(";").map(x=>x.trim()).filter(Boolean), tallas:$("admin-product-sizes").value.split(";").map(x=>x.trim()).filter(Boolean), desc:$("admin-product-desc").value.trim(), variantes:[]
     };
     document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>{
-        data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),costo:Math.max(0,Number(row.querySelector(".variant-costo")?.value||0)),activo:row.querySelector(".variant-activo").value!=="NO"});
+        data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".v-talla").value.trim(),color:row.querySelector(".v-color").value.trim(),stock:parseInt(row.querySelector(".v-stock").value,10)||0,imagen:row.querySelector(".v-img").value.trim(),costo:Math.max(0,Number(row.querySelector(".v-costo")?.value||0)),activo:row.querySelector(".v-estado").value==="Activo"});
     });
     if(!id||!data.nombre){alert("ID y nombre son obligatorios.");return;}
     const btn=$("btn-save-product-admin"); btn.disabled=true; btn.textContent="Guardando...";
@@ -6073,7 +6108,7 @@ guardarProductoAdminFrontend=async function(){
     const old=window.guardarProductoAdminFrontend; // referencia informativa
     const id=$("admin-product-id").value.trim();
     const data={action:"guardar_producto",id,nombre:$("admin-product-name").value.trim(),precio:Number($("admin-product-price").value),cat:$("admin-product-cat").value.trim(),promo:$("admin-product-promo").value.trim(),img:$("admin-product-img").value.trim(),stock:parseInt($("admin-product-stock").value,10)||0,costo:Math.max(0,Number($("admin-product-cost")?.value||0)),colores:$("admin-product-colors").value.split(";").map(x=>x.trim()).filter(Boolean),tallas:$("admin-product-sizes").value.split(";").map(x=>x.trim()).filter(Boolean),desc:$("admin-product-desc").value.trim(),variantes:[]};
-    document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".variant-talla").value.trim(),color:row.querySelector(".variant-color").value.trim(),stock:parseInt(row.querySelector(".variant-stock").value,10)||0,imagen:row.querySelector(".variant-imagen").value.trim(),costo:Math.max(0,Number(row.querySelector(".variant-costo")?.value||0)),activo:row.querySelector(".variant-activo").value!=="NO"}));
+    document.querySelectorAll("#admin-variants-list .admin-variant-row").forEach(row=>data.variantes.push({varianteId:row.dataset.varianteId||"",talla:row.querySelector(".v-talla").value.trim(),color:row.querySelector(".v-color").value.trim(),stock:parseInt(row.querySelector(".v-stock").value,10)||0,imagen:row.querySelector(".v-img").value.trim(),costo:Math.max(0,Number(row.querySelector(".v-costo")?.value||0)),activo:row.querySelector(".v-estado").value==="Activo"}));
     if(!id||!data.nombre){alert("ID y nombre son obligatorios.");return;}
     const btn=$("btn-save-product-admin");btn.disabled=true;btn.textContent="Guardando...";
     try{const r=await adminRequest(data);if(r.status!=="success")throw new Error(r.message||"No se pudo guardar.");tmInvalidarCatalogoLocal();cerrarModalProductoAdmin();await cargarProductos();renderInventarioAdmin();mostrarToast(r.message||"Producto guardado.");}catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="💾 Guardar producto";}
