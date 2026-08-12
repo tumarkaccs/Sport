@@ -714,7 +714,29 @@ header{
 /* =========================
    V8 ADMIN / VARIANTES
 ========================= */
-.admin-category-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;padding:8px 0;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.admin-category-title{font-weight:900;color:#111827;font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-list{display:flex;gap:6px;flex-wrap:wrap}.admin-category-list button{border:1px solid #c8cdd0;background:#fff;border-radius:999px;padding:6px 10px;font-weight:800;font-size:.72rem;cursor:pointer}.admin-category-list button.activo{background:var(--tm-lima);border-color:var(--tm-lima)}.admin-category-create-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}.admin-category-create-title{font-weight:900;color:#111827;font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-create-controls{display:flex;align-items:center;gap:7px;flex:1;justify-content:flex-end}.admin-category-create-controls input{width:min(100%,340px);min-height:40px;box-sizing:border-box;padding:9px 11px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:#111827;outline:none}.admin-category-create-controls input:focus{border-color:#111827;box-shadow:0 0 0 3px rgba(17,24,39,.08)}.admin-bulk-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#f8fafb}.admin-bulk-row strong{display:block;color:#111827;font-size:.82rem}.admin-bulk-row small{display:block;color:#64748b;font-size:.68rem;margin-top:2px}.admin-bulk-actions{display:flex;gap:6px;flex-wrap:wrap}#tm-bulk-stock-preview{margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#fff;font-size:.76rem}.tm-bulk-summary{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}.tm-bulk-summary b{color:#111827}.tm-bulk-errors{margin-top:7px;color:#b91c1c}.tm-bulk-ok{color:#166534}@media(max-width:700px){.admin-bulk-row{align-items:flex-start;flex-direction:column}.admin-bulk-actions{width:100%}.admin-category-create-controls{width:100%;justify-content:stretch}.admin-category-create-controls input{flex:1;width:auto}.admin-category-create-controls .btn-opcion{white-space:nowrap}}
+.admin-category-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0;padding:8px 0;border-top:1px solid #e5e7eb;border-bottom:1px solid #e5e7eb}.admin-category-title{font-weight:900;color:#111827;font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-list{display:flex;gap:6px;flex-wrap:wrap}.admin-category-list button{border:1px solid #c8cdd0;background:#fff;border-radius:999px;padding:6px 10px;font-weight:800;font-size:.72rem;cursor:pointer}.admin-category-list button.activo{background:var(--tm-lima);border-color:var(--tm-lima)}.admin-category-create-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:8px 0;padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff}.admin-category-create-title{font-weight:900;color:#111827;font-size:.78rem;text-transform:uppercase;letter-spacing:.7px}.admin-category-create-controls{display:flex;align-items:center;gap:7px;flex:1;justify-content:flex-end}.admin-category-create-controls input{width:min(100%,340px);min-height:40px;box-sizing:border-box;padding:9px 11px;border:1px solid #cbd5e1;border-radius:9px;background:#fff;color:#111827;outline:none}.admin-category-create-controls input:focus{border-color:#111827;box-shadow:0 0 0 3px rgba(17,24,39,.08)}
+/* Gestión de categorías + documentos de cliente */
+.admin-category-list{align-items:center!important}
+.admin-category-item{display:inline-flex;align-items:center;gap:2px;border:1px solid #c8cdd0;border-radius:999px;background:#fff;overflow:hidden}
+.admin-category-item .admin-category-filter{border:0!important;border-radius:999px 0 0 999px!important;background:transparent!important;padding:7px 10px!important;color:#111827!important}
+.admin-category-item .admin-category-filter.activo{background:var(--tm-lima)!important}
+.admin-category-action{border:0;background:#f8fafc;min-width:28px;height:28px;padding:0 5px;cursor:pointer;font-size:.7rem}
+.admin-category-action.edit{border-left:1px solid #e5e7eb}
+.admin-category-action.delete{border-left:1px solid #e5e7eb}
+.admin-delete-product-btn{color:#b42318!important;border-color:#fecaca!important}
+.tm-document-toggle{display:flex;align-items:center;gap:7px;margin-top:10px;font-size:.72rem;font-weight:800;color:#374151;cursor:pointer}
+.tm-document-toggle input{width:16px;height:16px;flex:0 0 16px}
+.admin-sale-document-toggle{align-self:end;padding:9px 10px;border:1px solid #e2e4e5;border-radius:9px;background:#f8fafb}
+.admin-sale-document-toggle input{width:16px;height:16px}
+.admin-sale-document-toggle #admin-sale-documento{width:100%;height:40px;box-sizing:border-box;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff}
+@media(max-width:700px){
+  .admin-category-create-controls{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;width:100%!important;gap:6px!important}
+  .admin-category-create-controls input{width:100%!important;min-width:0!important}
+  .admin-category-create-controls .btn-opcion{width:auto!important;max-width:145px!important;padding:8px 10px!important;font-size:.68rem!important;white-space:nowrap!important}
+  .admin-category-list{width:100%!important;overflow-x:auto!important;flex-wrap:nowrap!important;padding-bottom:2px}
+  .admin-category-item{flex:0 0 auto}
+}
+.admin-bulk-row{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#f8fafb}.admin-bulk-row strong{display:block;color:#111827;font-size:.82rem}.admin-bulk-row small{display:block;color:#64748b;font-size:.68rem;margin-top:2px}.admin-bulk-actions{display:flex;gap:6px;flex-wrap:wrap}#tm-bulk-stock-preview{margin:8px 0;padding:10px;border:1px solid #dbe2e6;border-radius:10px;background:#fff;font-size:.76rem}.tm-bulk-summary{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:8px}.tm-bulk-summary b{color:#111827}.tm-bulk-errors{margin-top:7px;color:#b91c1c}.tm-bulk-ok{color:#166534}@media(max-width:700px){.admin-bulk-row{align-items:flex-start;flex-direction:column}.admin-bulk-actions{width:100%}.admin-category-create-controls{width:100%;justify-content:stretch}.admin-category-create-controls input{flex:1;width:auto}.admin-category-create-controls .btn-opcion{white-space:nowrap}}
 .admin-stock-toolbar{
     display:grid;
     grid-template-columns:1fr auto auto;
@@ -3089,6 +3111,16 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
                 inputmode="tel"
                 style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box"
             >
+
+            <label class="tm-document-toggle">
+                <input type="checkbox" id="cliente-requiere-documento" onchange="tmToggleDocumentoCliente()">
+                <span>Necesito nota de entrega / recibo de compra</span>
+            </label>
+
+            <div id="cliente-documento-box" style="display:none;margin-top:10px">
+                <label for="cliente-documento" style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px;color:#374151">RIF / Cédula</label>
+                <input type="text" id="cliente-documento" maxlength="30" placeholder="Ej: V-12345678 / J-12345678-9" autocomplete="off" inputmode="text" style="width:100%;padding:12px;border-radius:8px;border:1px solid #ddd;box-sizing:border-box">
+            </div>
         </div>
 
         <p style="font-weight:bold;margin-bottom:5px">
@@ -3489,6 +3521,15 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
                         <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Teléfono / WhatsApp</label><input id="admin-sale-phone" placeholder="0412-000-0000" inputmode="tel"></div>
                         <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Forma de entrega</label><select id="admin-sale-delivery"><option value="Retiro en Tienda">Retiro en Tienda</option><option value="Delivery">Delivery</option><option value="Envíos Nacionales">Envíos Nacionales</option></select></div>
                         <div><label style="display:block;font-size:.72rem;font-weight:800;margin-bottom:4px">Dirección / referencia</label><input id="admin-sale-address" placeholder="Solo si aplica"></div>
+                        <div class="admin-sale-document-toggle">
+                            <label style="display:flex;align-items:center;gap:7px;font-size:.72rem;font-weight:800;cursor:pointer">
+                                <input type="checkbox" id="admin-sale-requiere-documento" onchange="tmToggleAdminDocumentoCliente()">
+                                Solicita nota de entrega / recibo
+                            </label>
+                            <div id="admin-sale-documento-box" style="display:none;margin-top:7px">
+                                <input id="admin-sale-documento" maxlength="30" placeholder="RIF / Cédula" inputmode="text">
+                            </div>
+                        </div>
                     </div>
 
                     <div style="font-weight:900;color:#111827;margin-top:4px">Agregar productos</div>
@@ -3646,7 +3687,7 @@ footer a:hover,.footer a:hover{color:var(--tm-lime)!important;}
 
         <div style="margin-top:12px">
             <div style="font-weight:900;margin-bottom:6px">Variantes por talla / color / stock / imagen</div>
-            <div class="admin-variants-wrap"><div class="admin-variants-wrap"><div class="admin-variants-header"><span>Talla</span><span>Color</span><span>Stock</span><span>Costo ($)</span><span>Imagen variante</span><span>Estado</span><span>Acción</span></div><div id="admin-variants-list"></div></div></div>
+            <div class="admin-variants-wrap"><div class="admin-variants-wrap"><div class="admin-variants-head"><span>Talla</span><span>Color</span><span>Stock</span><span>Costo ($)</span><span>Imagen variante</span><span>Estado</span><span>Acción</span></div><div id="admin-variants-list"></div></div></div>
             <button class="btn-opcion" style="margin-top:8px" onclick="agregarFilaVarianteAdmin()">➕ Agregar variante</button>
         </div>
 
@@ -4938,6 +4979,8 @@ async function crearPedidoBackend(datos){
                         action:"crear_pedido",
                         cliente:datos.cliente,
                         telefono:datos.telefono,
+                        requiereDocumento:!!datos.requiereDocumento,
+                        documentoCliente:datos.documentoCliente||"",
                         entrega:datos.entrega,
                         direccion:datos.direccion,
                         metodoPago:datos.metodoPago,
@@ -4970,6 +5013,20 @@ async function crearPedidoBackend(datos){
 }
 
 /* =====================================================
+   DOCUMENTO CLIENTE
+===================================================== */
+function tmToggleDocumentoCliente(){
+    const checked=!!$("cliente-requiere-documento")?.checked;
+    const box=$("cliente-documento-box");if(box)box.style.display=checked?"block":"none";
+    if(!checked&&$("cliente-documento"))$("cliente-documento").value="";
+}
+function tmToggleAdminDocumentoCliente(){
+    const checked=!!$("admin-sale-requiere-documento")?.checked;
+    const box=$("admin-sale-documento-box");if(box)box.style.display=checked?"block":"none";
+    if(!checked&&$("admin-sale-documento"))$("admin-sale-documento").value="";
+}
+
+/* =====================================================
    WHATSAPP
 ===================================================== */
 
@@ -4987,6 +5044,8 @@ async function enviarWAOriginal(){
 
     const clienteTelefono =
         $("cliente-telefono").value.trim().slice(0,30);
+    const requiereDocumento=!!$("cliente-requiere-documento")?.checked;
+    const clienteDocumento=requiereDocumento?String($("cliente-documento")?.value||"").trim().slice(0,30):"";
 
     if(!clienteNombre){
         alert("Por favor, ingresa tu nombre y apellido.");
@@ -4997,6 +5056,11 @@ async function enviarWAOriginal(){
     if(!clienteTelefono){
         alert("Por favor, ingresa tu teléfono o WhatsApp.");
         $("cliente-telefono").focus();
+        return;
+    }
+    if(requiereDocumento&&!clienteDocumento){
+        alert("Ingresa el RIF o Cédula para emitir la nota de entrega / recibo.");
+        $("cliente-documento").focus();
         return;
     }
 
@@ -5055,6 +5119,8 @@ async function enviarWAOriginal(){
             await crearPedidoBackend({
                 cliente: clienteNombre,
                 telefono: clienteTelefono,
+                requiereDocumento,
+                documentoCliente:clienteDocumento,
                 entrega: entregaM,
                 direccion,
                 metodoPago,
@@ -5088,7 +5154,9 @@ async function enviarWAOriginal(){
             `*PEDIDO ${numeroPedido}*\n` +
             `--------------------------------\n` +
             `👤 *Cliente:* ${clienteNombre}\n` +
-            `📞 *Teléfono:* ${clienteTelefono}\n\n`;
+            `📞 *Teléfono:* ${clienteTelefono}\n` +
+            (requiereDocumento?`🧾 *RIF / Cédula:* ${clienteDocumento}\n`:"") +
+            `\n`;
 
         CART.forEach((item,index)=>{
 
@@ -5163,6 +5231,8 @@ async function enviarWAOriginal(){
                 fecha:new Date().toISOString(),
                 cliente:clienteNombre,
                 telefono:clienteTelefono,
+                requiereDocumento,
+                documentoCliente:clienteDocumento,
                 items:CART,
                 total,
                 pago:metodoPago,
@@ -5198,6 +5268,9 @@ async function enviarWAOriginal(){
         $("dir-val").style.display = "none";
         $("cliente-nombre").value = "";
         $("cliente-telefono").value = "";
+        if($("cliente-requiere-documento"))$("cliente-requiere-documento").checked=false;
+        if($("cliente-documento"))$("cliente-documento").value="";
+        tmToggleDocumentoCliente();
         $("metodo-pago").value = "";
 
         document
@@ -5801,6 +5874,7 @@ async function cargarPedidosAdminOriginal(){
                  <div>📞 <b>Teléfono:</b> ${escaparHTML(
                     pedido.telefono || "No indicado"
                 )}</div>
+                 ${pedido.requiereDocumento && pedido.documentoCliente ? `<div>🧾 <b>RIF / Cédula:</b> ${escaparHTML(pedido.documentoCliente)}</div>` : ""}
                  <div>📍 <b>Entrega:</b> ${escaparHTML(
                     pedido.entrega || "No indicada"
                 )}</div>
@@ -5958,7 +6032,8 @@ function renderInventarioAdmin(){
         const input=document.createElement("input");input.type="number";input.min="0";input.className="input-stock";input.value=Number(item.stock||0);input.dataset.id=item.id;
         const button=document.createElement("button");button.className="btn-save-stock";button.textContent="Guardar stock total";button.onclick=()=>guardarStockAdmin(item.id,input,button);
         const edit=document.createElement("button");edit.className="btn-opcion";edit.style.margin="0";edit.textContent="✏️ Editar";edit.onclick=()=>abrirEditorProductoAdmin(item.id);
-        control.appendChild(input);control.appendChild(button);control.appendChild(edit);row.appendChild(control);
+        const del=document.createElement("button");del.className="btn-opcion admin-delete-product-btn";del.style.margin="0";del.textContent="🗑️ Eliminar";del.onclick=()=>tmEliminarProductoAdmin(item.id);
+        control.appendChild(input);control.appendChild(button);control.appendChild(edit);control.appendChild(del);row.appendChild(control);
         const variantes=(item.variantes||[]).filter(v=>v.activo!==false);
         if(variantes.length){
             const vbox=document.createElement("div");vbox.style.marginTop="10px";const titulo=document.createElement("div");titulo.style.cssText="font-size:.68rem;font-weight:900;color:var(--tm-negro);margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px";titulo.textContent="Stock por talla y color";vbox.appendChild(titulo);
@@ -6052,34 +6127,69 @@ function tmCategoriasDefinidas(){
     const delCatalogo=(DB||[]).map(p=>String(p.cat||"").trim().toLowerCase()).filter(Boolean);
     const guardadas=tmLeerCategoriasGuardadas();
     const todas=[...new Set([...delCatalogo,...guardadas])].sort((a,b)=>a.localeCompare(b));
-    if(guardadas.length!==todas.filter(c=>guardadas.includes(c)).length)tmGuardarCategoriasGuardadas(todas);
+    const unionGuardadas=[...new Set([...guardadas,...delCatalogo])];
+    if(JSON.stringify([...guardadas].sort())!==JSON.stringify([...unionGuardadas].sort()))tmGuardarCategoriasGuardadas(unionGuardadas);
     return todas;
 }
+function tmNombreCategoria(cat){const s=String(cat||"").trim();return s?s.charAt(0).toUpperCase()+s.slice(1):"";}
 function tmCrearCategoria(){
-    const input=$("admin-new-category");
-    if(!input)return;
+    const input=$("admin-new-category"); if(!input)return;
     const nombre=String(input.value||"").trim().replace(/\s+/g," ");
     if(!nombre){alert("Escribe el nombre de la categoría.");input.focus();return;}
     if(nombre.length<2){alert("La categoría debe tener al menos 2 caracteres.");input.focus();return;}
     const normalizada=nombre.toLowerCase();
     const categorias=tmCategoriasDefinidas();
     if(categorias.includes(normalizada)){alert("Esa categoría ya existe.");input.select();return;}
-    categorias.push(normalizada);
-    tmGuardarCategoriasGuardadas(categorias);
-    input.value="";
-    tmRenderCategoriasAdmin();
-    const select=$("admin-product-cat");
-    if(select)select.value=normalizada;
+    categorias.push(normalizada);tmGuardarCategoriasGuardadas(categorias);input.value="";tmRenderCategoriasAdmin();
+    const select=$("admin-product-cat");if(select)select.value=normalizada;
     mostrarToast(`Categoría “${nombre}” creada.`);
 }
+async function tmEditarCategoria(cat){
+    const actual=String(cat||"").trim().toLowerCase(); if(!actual)return;
+    const nuevo=prompt("Nuevo nombre de la categoría:",tmNombreCategoria(actual));
+    if(nuevo===null)return;
+    const nombre=String(nuevo).trim().replace(/\s+/g," "); if(!nombre)return;
+    const nuevoCat=nombre.toLowerCase();
+    if(nuevoCat===actual)return;
+    const cats=tmCategoriasDefinidas();
+    if(cats.includes(nuevoCat)){alert("Ya existe una categoría con ese nombre.");return;}
+    const productos=(DB||[]).filter(p=>String(p.cat||"").trim().toLowerCase()===actual);
+    if(productos.length){
+        if(!confirm(`La categoría “${tmNombreCategoria(actual)}” está asignada a ${productos.length} producto(s). ¿Quieres renombrarla también en esos productos?`))return;
+        try{
+            for(const p of productos){
+                const payload={action:"guardar_producto",id:p.id,nombre:p.nombre,precio:Number(p.precio||0),cat:nuevoCat,promo:p.promo||"",img:p.img||"",stock:Number(p.stock||0),costo:Number(p.costo||0),colores:p.colores||[],tallas:p.tallas||[],desc:p.desc||"",variantes:(p.variantes||[]).map(v=>({varianteId:v.varianteId||"",talla:v.talla||"",color:v.color||"",stock:Number(v.stock||0),imagen:v.imagen||v.img||"",costo:Number(v.costo||0),activo:v.activo!==false}))};
+                const r=await adminRequest(payload);if(r.status!=="success")throw new Error(r.message||`No se pudo actualizar ${p.id}.`);
+            }
+            await cargarProductos();
+        }catch(e){alert(`No se pudo renombrar la categoría. ${e.message}`);return;}
+    }
+    const actualizadas=tmLeerCategoriasGuardadas().filter(c=>c!==actual);actualizadas.push(nuevoCat);tmGuardarCategoriasGuardadas(actualizadas);
+    tmRenderCategoriasAdmin();renderInventarioAdmin();mostrarToast(`Categoría renombrada a “${tmNombreCategoria(nuevoCat)}”.`);
+}
+function tmEliminarCategoria(cat){
+    const actual=String(cat||"").trim().toLowerCase();if(!actual)return;
+    const productos=(DB||[]).filter(p=>String(p.cat||"").trim().toLowerCase()===actual);
+    if(productos.length){alert(`No puedes eliminar “${tmNombreCategoria(actual)}” porque está asignada a ${productos.length} producto(s). Primero cambia la categoría de esos productos.`);return;}
+    if(!confirm(`¿Eliminar la categoría “${tmNombreCategoria(actual)}”?`))return;
+    tmGuardarCategoriasGuardadas(tmLeerCategoriasGuardadas().filter(c=>c!==actual));
+    if(TM_ADMIN_INVENTORY_CATEGORY===actual)TM_ADMIN_INVENTORY_CATEGORY="";
+    tmRenderCategoriasAdmin();renderInventarioAdmin();mostrarToast(`Categoría “${tmNombreCategoria(actual)}” eliminada.`);
+}
 function tmRenderCategoriasAdmin(){
-    const list=$("admin-category-list"), select=$("admin-product-cat");
-    if(!list)return;
+    const list=$("admin-category-list"), select=$("admin-product-cat"); if(!list)return;
     const cats=tmCategoriasDefinidas(); list.innerHTML="";
-    const all=document.createElement("button"); all.type="button"; all.textContent="Todas"; all.className="activo";
-    all.onclick=()=>{TM_ADMIN_INVENTORY_CATEGORY="";document.querySelectorAll("#admin-category-list button").forEach(x=>x.classList.remove("activo"));all.classList.add("activo");renderInventarioAdmin();}; list.appendChild(all);
-    cats.forEach(cat=>{const b=document.createElement("button");b.type="button";b.textContent=cat.charAt(0).toUpperCase()+cat.slice(1);b.onclick=()=>{TM_ADMIN_INVENTORY_CATEGORY=cat;document.querySelectorAll("#admin-category-list button").forEach(x=>x.classList.remove("activo"));b.classList.add("activo");renderInventarioAdmin();};list.appendChild(b);});
-    if(select){const actual=select.value;select.innerHTML='<option value="">Selecciona una categoría</option>'+cats.map(c=>`<option value="${escaparHTML(c)}">${escaparHTML(c.charAt(0).toUpperCase()+c.slice(1))}</option>`).join("");if(cats.includes(actual))select.value=actual;}
+    const all=document.createElement("button");all.type="button";all.textContent="Todas";all.className=TM_ADMIN_INVENTORY_CATEGORY?"":"activo";
+    all.onclick=()=>{TM_ADMIN_INVENTORY_CATEGORY="";tmRenderCategoriasAdmin();renderInventarioAdmin();};list.appendChild(all);
+    cats.forEach(cat=>{
+        const wrap=document.createElement("div");wrap.className="admin-category-item";
+        const b=document.createElement("button");b.type="button";b.className="admin-category-filter";b.textContent=tmNombreCategoria(cat);if(TM_ADMIN_INVENTORY_CATEGORY===cat)b.classList.add("activo");
+        b.onclick=()=>{TM_ADMIN_INVENTORY_CATEGORY=cat;tmRenderCategoriasAdmin();renderInventarioAdmin();};
+        const edit=document.createElement("button");edit.type="button";edit.className="admin-category-action edit";edit.title="Editar categoría";edit.textContent="✏️";edit.onclick=e=>{e.stopPropagation();tmEditarCategoria(cat);};
+        const del=document.createElement("button");del.type="button";del.className="admin-category-action delete";del.title="Eliminar categoría";del.textContent="🗑️";del.onclick=e=>{e.stopPropagation();tmEliminarCategoria(cat);};
+        wrap.append(b,edit,del);list.appendChild(wrap);
+    });
+    if(select){const actual=select.value;select.innerHTML='<option value="">Selecciona una categoría</option>'+cats.map(c=>`<option value="${escaparHTML(c)}">${escaparHTML(tmNombreCategoria(c))}</option>`).join("");if(cats.includes(actual))select.value=actual;}
 }
 let TM_ADMIN_INVENTORY_CATEGORY="";
 function tmDetectarSeparador(text){
@@ -6194,6 +6304,16 @@ async function guardarProductoAdminFrontend(){
         const r=await adminRequest(data); if(r.status!=="success") throw new Error(r.message||"No se pudo guardar.");
         cerrarModalProductoAdmin(); await cargarProductos(); renderInventarioAdmin(); mostrarToast(r.message||"Producto guardado.");
     }catch(e){alert(e.message)}finally{btn.disabled=false;btn.textContent="💾 Guardar producto";}
+}
+
+async function tmEliminarProductoAdmin(id){
+    const p=DB.find(x=>String(x.id)===String(id));if(!p)return;
+    if(!confirm(`¿Eliminar el producto “${p.nombre}” (${p.id})?\n\nEsta acción no debe usarse para ajustar stock; elimina el producto del catálogo.`))return;
+    try{
+        const r=await adminRequest({action:"eliminar_producto",id:String(id)});
+        if(r.status!=="success")throw new Error(r.message||"El servidor no pudo eliminar el producto.");
+        await cargarProductos();tmRenderCategoriasAdmin();renderInventarioAdmin();mostrarToast(`Producto “${p.nombre}” eliminado.`);
+    }catch(e){alert(`No se pudo eliminar el producto. ${e.message}`);}
 }
 
 /* =====================================================
@@ -7377,7 +7497,9 @@ function tmAdminSaleActualizarPago(){
 }
 function tmAdminSaleLimpiar(){
     TM_ADMIN_SALE_ITEMS=[]; TM_ADMIN_LAST_SALE=null;
-    ["admin-sale-client","admin-sale-phone","admin-sale-address"].forEach(id=>{if($(id))$(id).value="";});
+    ["admin-sale-client","admin-sale-phone","admin-sale-address","admin-sale-documento"].forEach(id=>{if($(id))$(id).value="";});
+    if($("admin-sale-requiere-documento"))$("admin-sale-requiere-documento").checked=false;
+    tmToggleAdminDocumentoCliente();
     if($("admin-sale-delivery"))$("admin-sale-delivery").value="Retiro en Tienda";
     if($("admin-sale-payment-method"))$("admin-sale-payment-method").value="";
     const r=document.querySelector('input[name="admin-sale-mode"][value="pendiente"]');if(r)r.checked=true;
@@ -7393,26 +7515,23 @@ function tmQrUrl(text){return "https://api.qrserver.com/v1/create-qr-code/?size=
 function tmFacturaHTML(pedido,items,tipo){
     const thermal=tipo==="thermal";
     const logo=String(CONFIG.logo||"").trim();
-    const rows=(items||[]).map(it=>`<tr><td>${Number(it.cantidad||0)}x ${escaparHTML(it.nombre||"")}<small>${it.talla?`Talla: ${escaparHTML(it.talla)} `:""}${it.color?`Color: ${escaparHTML(it.color)}`:""}${it.nota?`<br>Nota: ${escaparHTML(it.nota)}`:""}</small></td><td>$${Number(it.subtotal||0).toFixed(2)}</td></tr>`).join("");
+    const requested=pedido.requiereDocumento===true||String(pedido.requiereDocumento).toLowerCase()==="true"||!!pedido.documentoCliente;
+    const rows=(items||[]).map(it=>`<tr><td><b>${Number(it.cantidad||0)}x</b> ${escaparHTML(it.nombre||"")}<small>${it.talla?`Talla: ${escaparHTML(it.talla)} `:""}${it.color?`Color: ${escaparHTML(it.color)}`:""}${it.nota?`<br>Nota: ${escaparHTML(it.nota)}`:""}</small></td><td>$${Number(it.subtotal||0).toFixed(2)}</td></tr>`).join("");
     const brandLogo=logo?`<img class="brand-logo" src="${escaparHTML(logo)}" alt="Tu Marka Sport">`:"";
     const qr=tmQrUrl(TM_QR_DESTINO);
-    return `<!doctype html><html><head><meta charset="utf-8"><title>Comprobante ${escaparHTML(pedido.pedidoId||"")}</title></head><body><main class="sheet">
-    <div class="brand">${brandLogo}<div class="brand-copy"><h1>TU MARKA SPORT</h1><p>Comprobante de compra</p></div></div>
-    <div class="order-title">PEDIDO ${escaparHTML(pedido.pedidoId||"")}</div>
-    <div class="meta"><div><b>Fecha:</b> ${tmFacturaFecha(pedido.fecha)}</div><div><b>Estado:</b> ${escaparHTML(pedido.estado||"")}</div><div class="full client"><b>Cliente:</b> ${escaparHTML(pedido.cliente||"")}</div><div><b>Teléfono:</b> ${escaparHTML(pedido.telefono||"")}</div><div><b>Entrega:</b> ${escaparHTML(pedido.entrega||"")}</div><div><b>Pago:</b> ${escaparHTML(pedido.metodoPago||"Pendiente")}</div></div>
-    <table class="items"><thead><tr><th>Detalle</th><th>Importe</th></tr></thead><tbody>${rows}</tbody></table>
-    <div class="totals"><div>Total: <span class="total">$${Number(pedido.total||0).toFixed(2)}</span></div><div>Pagado: $${Number(pedido.montoPagado||0).toFixed(2)}</div><div>Saldo pendiente: $${Number(pedido.saldoPendiente||0).toFixed(2)}</div></div>${pedido.direccion?`<div class="note"><b>Dirección:</b> ${escaparHTML(pedido.direccion)}</div>`:""}
-    <div class="qrbox"><img src="${qr}" alt="Código QR"><div>Escanea para visitar nuestro Instagram</div></div><div class="note">Este documento es un comprobante interno de compra y no sustituye una factura fiscal cuando esta sea legalmente exigible.</div><div class="print">Tu Marka Sport · Gracias por su compra.</div></main>
-<footer class="tm-footer-wrap">
-  <div class="tm-footer">
-    <div class="tm-footer-brand"><strong>TU MARKA SPORT</strong><p class="tm-footer-tagline">Rendimiento. Estilo. Actitud.</p><p>Ropa deportiva para entrenar, competir y representar tu estilo.</p></div>
-    <div><h3>Tienda</h3><div class="tm-footer-links"><a href="#">Inicio</a><a href="#section-nueva-coleccion">Nueva colección</a><a href="#section-mas-vendidos">Más vendidos</a><a href="#section-catalogo-general">Catálogo</a></div></div>
-    <div><h3>Ayuda y contacto</h3><div class="tm-footer-links"><a href="#">Cómo comprar</a><a href="#">Métodos de pago</a><a href="#">Envíos</a><a href="#">Cambios y devoluciones</a><a href="#">Contacto</a></div></div>
-  </div>
-  <div class="tm-footer-bottom">© 2026 Tu Marka Sport · Todos los derechos reservados.</div>
-</footer>
-
-</body></html>`;
+    const docBlock=requested?`<div class="document-banner"><b>${pedido.tipoDocumento||"NOTA DE ENTREGA / RECIBO DE COMPRA"}</b><div>RIF / Cédula: ${escaparHTML(pedido.documentoCliente||"No indicado")}</div></div>`:"";
+    return `<!doctype html><html><head><meta charset="utf-8"><title>${requested?"Nota / Recibo":"Comprobante"} ${escaparHTML(pedido.pedidoId||"")}</title><style>
+*{box-sizing:border-box}html,body{margin:0;padding:0;width:${thermal?'58mm':'100%'};max-width:${thermal?'58mm':'100%'};font-family:Arial,Helvetica,sans-serif;color:#181A1C;background:#fff;overflow-x:hidden}.sheet{margin:0 auto;padding:${thermal?'3mm':'14mm'};width:${thermal?'58mm':'5.5in'};max-width:${thermal?'58mm':'5.5in'};font-size:${thermal?'10px':'11px'};line-height:1.32}.brand{display:flex;align-items:center;justify-content:center;gap:${thermal?'5px':'9px'};border-bottom:2px solid #181A1C;padding-bottom:7px;margin-bottom:8px}.brand-logo{width:${thermal?'38px':'62px'};height:${thermal?'38px':'62px'};object-fit:contain}.brand-copy{text-align:center;min-width:0}.brand h1{font-size:${thermal?'13px':'20px'};margin:0;line-height:1.05}.brand p{margin:3px 0 0;font-size:8px;color:#6C7075}.order-title{text-align:center;font-size:${thermal?'11px':'15px'};font-weight:900;margin:7px 0 9px;text-transform:uppercase}.document-banner{border:1px solid #181A1C;padding:6px;text-align:center;margin:0 0 9px;font-size:${thermal?'8px':'10px'}}.document-banner b{display:block;margin-bottom:3px}.meta{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;margin-bottom:8px}.meta div{min-width:0}.meta .full{grid-column:1/-1}.meta b{font-size:8px}.items{width:100%;table-layout:fixed;border-collapse:collapse;margin-top:6px}.items th{text-align:left;border-bottom:1px solid #181A1C;padding:4px 0;font-size:8px}.items th:first-child,.items td:first-child{width:72%;padding-right:5px;overflow-wrap:anywhere}.items th:last-child,.items td:last-child{width:28%;text-align:right;white-space:nowrap}.items td{vertical-align:top;padding:5px 0;border-bottom:1px dashed #b8bcc0;overflow-wrap:anywhere}.items small{display:block;color:#5f6368;font-size:7px;margin-top:2px}.totals{margin-top:8px;border-top:1px solid #181A1C;padding-top:6px}.totals div{margin:2px 0;text-align:right}.total{font-size:${thermal?'14px':'18px'};font-weight:900}.note{margin-top:8px;padding-top:6px;border-top:1px solid #e2e4e5;font-size:7px;color:#6C7075}.qrbox{text-align:center;margin-top:10px;padding-top:7px;border-top:1px solid #e2e4e5}.qrbox img{width:${thermal?'52px':'72px'};height:${thermal?'52px':'72px'};object-fit:contain}.qrbox div{font-size:7px;color:#6C7075;margin-top:3px}.thanks{text-align:center;margin-top:8px;font-weight:800;font-size:8px}@media print{@page{size:${thermal?'58mm auto':'letter'};margin:0}.sheet{width:${thermal?'58mm':'5.5in'};max-width:${thermal?'58mm':'5.5in'};padding:${thermal?'3mm':'0'}}}
+</style></head><body><main class="sheet">
+<div class="brand">${brandLogo}<div class="brand-copy"><h1>TU MARKA SPORT</h1><p>Rendimiento · Estilo · Actitud</p></div></div>
+<div class="order-title">${requested?"NOTA DE ENTREGA / RECIBO DE COMPRA":"COMPROBANTE DE PEDIDO"}<br><span style="font-size:${thermal?'9px':'11px'}">${escaparHTML(pedido.pedidoId||"")}</span></div>
+${docBlock}
+<div class="meta"><div><b>Fecha:</b> ${tmFacturaFecha(pedido.fecha)}</div><div><b>Estado:</b> ${escaparHTML(pedido.estado||"")}</div><div class="full"><b>Cliente:</b> ${escaparHTML(pedido.cliente||"")}</div><div><b>Teléfono:</b> ${escaparHTML(pedido.telefono||"")}</div><div><b>Entrega:</b> ${escaparHTML(pedido.entrega||"")}</div><div><b>Pago:</b> ${escaparHTML(pedido.metodoPago||"Pendiente")}</div>${pedido.direccion?`<div class="full"><b>Dirección:</b> ${escaparHTML(pedido.direccion)}</div>`:""}</div>
+<table class="items"><thead><tr><th>Detalle</th><th>Importe</th></tr></thead><tbody>${rows}</tbody></table>
+<div class="totals"><div>Total: <span class="total">$${Number(pedido.total||0).toFixed(2)}</span></div><div>Pagado: $${Number(pedido.montoPagado||0).toFixed(2)}</div><div>Saldo pendiente: $${Number(pedido.saldoPendiente||0).toFixed(2)}</div></div>
+${requested?`<div class="note"><b>Documento solicitado por el cliente.</b> RIF / Cédula: ${escaparHTML(pedido.documentoCliente||"")}</div>`:`<div class="note">Comprobante interno de pedido. No constituye factura fiscal.</div>`}
+<div class="qrbox"><img src="${qr}" alt="Código QR"><div>Visítanos en Instagram</div></div><div class="thanks">Gracias por su compra.</div>
+</main></body></html>`;
 }
 function tmImprimirComprobante(pedido,items,tipo){
     const w=window.open("","_blank","width=700,height=850");if(!w){alert("El navegador bloqueó la ventana de impresión. Permite ventanas emergentes para este sitio.");return;}w.document.open();w.document.write(tmFacturaHTML(pedido,items,tipo));w.document.close();w.focus();setTimeout(()=>w.print(),300);
@@ -7423,7 +7542,7 @@ function tmElegirTipoImpresion(pedido,items){
     const modal=document.createElement("div");
     modal.id="tm-print-choice-modal";
     modal.style.cssText="position:fixed;inset:0;background:rgba(24,26,28,.72);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;";
-    modal.innerHTML=`<div style="width:100%;max-width:420px;background:#fff;border-radius:18px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.3);text-align:center;"><div style="font-size:1.1rem;font-weight:900;color:#181A1C;margin-bottom:6px;">Tipo de impresión</div><div style="font-size:.82rem;color:#6C7075;margin-bottom:20px;">Selecciona el formato que deseas utilizar.</div><div style="display:grid;grid-template-columns:1fr;gap:10px;"><button type="button" id="tm-print-letter" style="border:0;border-radius:12px;padding:14px;background:#2A2D32;color:#fff;font-weight:800;font-size:.9rem;cursor:pointer;">Impresora convencional<br><small style="font-weight:600;opacity:.8;">Carta / media hoja</small></button><button type="button" id="tm-print-thermal" style="border:0;border-radius:12px;padding:14px;background:#D2EC00;color:#181A1C;font-weight:900;font-size:.9rem;cursor:pointer;">Impresora térmica<br><small style="font-weight:700;opacity:.8;">58 mm · DP58U-05</small></button><button type="button" id="tm-print-cancel" style="border:1px solid #E2E4E5;border-radius:12px;padding:10px;background:#fff;color:#6C7075;font-weight:700;cursor:pointer;">Cancelar</button></div></div>`;
+    modal.innerHTML=`<div style="width:100%;max-width:420px;background:#fff;border-radius:18px;padding:24px;box-shadow:0 20px 50px rgba(0,0,0,.3);text-align:center;"><div style="font-size:1.1rem;font-weight:900;color:#181A1C;margin-bottom:6px;">Tipo de impresión</div><div style="font-size:.82rem;color:#6C7075;margin-bottom:20px;">Selecciona el formato que deseas utilizar.</div><div style="display:grid;grid-template-columns:1fr;gap:10px;"><button type="button" id="tm-print-letter" style="border:0;border-radius:12px;padding:14px;background:#2A2D32;color:#fff;font-weight:800;font-size:.9rem;cursor:pointer;">Impresora convencional<br><small style="font-weight:600;opacity:.8;">Carta</small></button><button type="button" id="tm-print-thermal" style="border:0;border-radius:12px;padding:14px;background:#D2EC00;color:#181A1C;font-weight:900;font-size:.9rem;cursor:pointer;">Impresora térmica<br><small style="font-weight:700;opacity:.8;">58 mm · DP58U-05</small></button><button type="button" id="tm-print-cancel" style="border:1px solid #E2E4E5;border-radius:12px;padding:10px;background:#fff;color:#6C7075;font-weight:700;cursor:pointer;">Cancelar</button></div></div>`;
     document.body.appendChild(modal);
     document.getElementById("tm-print-letter").onclick=()=>{modal.remove();tmImprimirComprobante(pedido,items,"letter");};
     document.getElementById("tm-print-thermal").onclick=()=>{modal.remove();tmImprimirComprobante(pedido,items,"thermal");};
@@ -7433,11 +7552,14 @@ function tmElegirTipoImpresion(pedido,items){
 async function tmImprimirPedidoAdmin(pedidoId){try{const r=await consultarPedidoAdmin(pedidoId);if(r.status!=="success")throw new Error(r.message||"No se pudo consultar el pedido.");tmElegirTipoImpresion(r.pedido,r.items||[]);}catch(e){alert(e.message);}}
 function tmAdminSaleResultado(r){
     const box=$("admin-sale-result");if(!box)return;TM_ADMIN_LAST_SALE=r;const p=r.pedido||{};
-    box.style.display="block";box.innerHTML=`<b>Venta registrada: ${escaparHTML(p.pedidoId||r.pedidoId||"")}</b><br>Cliente: ${escaparHTML(p.cliente||"")}<br>Total: <b>$${Number(p.total||0).toFixed(2)}</b> · Pagado: <b>$${Number(p.montoPagado||0).toFixed(2)}</b> · Saldo: <b>$${Number(p.saldoPendiente||0).toFixed(2)}</b><div class="admin-sale-result-buttons"><button class="btn-opcion" type="button" onclick="tmElegirTipoImpresion(TM_ADMIN_LAST_SALE.pedido,TM_ADMIN_LAST_SALE.items||[])">🖨 Imprimir comprobante</button>${r.whatsappUrl?`<button class="btn-add" type="button" onclick="window.open('${r.whatsappUrl.replace(/'/g,"%27")}','_blank','noopener,noreferrer')">WhatsApp</button>`:""}</div>`;
+    box.style.display="block";box.innerHTML=`<b>Venta registrada: ${escaparHTML(p.pedidoId||r.pedidoId||"")}</b><br>Cliente: ${escaparHTML(p.cliente||"")}${p.requiereDocumento&&p.documentoCliente?`<br>RIF / Cédula: ${escaparHTML(p.documentoCliente)}`:""}<br>Total: <b>$${Number(p.total||0).toFixed(2)}</b> · Pagado: <b>$${Number(p.montoPagado||0).toFixed(2)}</b> · Saldo: <b>$${Number(p.saldoPendiente||0).toFixed(2)}</b><div class="admin-sale-result-buttons"><button class="btn-opcion" type="button" onclick="tmElegirTipoImpresion(TM_ADMIN_LAST_SALE.pedido,TM_ADMIN_LAST_SALE.items||[])">🖨 Imprimir comprobante</button>${r.whatsappUrl?`<button class="btn-add" type="button" onclick="window.open('${r.whatsappUrl.replace(/'/g,"%27")}','_blank','noopener,noreferrer')">WhatsApp</button>`:""}</div>`;
 }
 async function tmAdminCrearVenta(){
     if(!TM_ADMIN_SALE_ITEMS.length){alert("Agrega al menos un producto.");return;}
     const cliente=$("admin-sale-client").value.trim();if(!cliente){alert("Ingresa el nombre del cliente.");return;}
+    const requiereDocumento=!!$("admin-sale-requiere-documento")?.checked;
+    const documentoCliente=requiereDocumento?String($("admin-sale-documento")?.value||"").trim().slice(0,30):"";
+    if(requiereDocumento&&!documentoCliente){alert("Ingresa el RIF o Cédula del cliente.");$("admin-sale-documento")?.focus();return;}
     const modo=tmAdminSaleModo(), total=tmAdminSaleTotal(), metodo=$("admin-sale-payment-method").value.trim();
     let monto=Number($("admin-sale-payment-amount").value||0);
     if(modo!=="pendiente"&&!metodo){alert("Selecciona el método de pago.");return;}
@@ -7445,7 +7567,7 @@ async function tmAdminCrearVenta(){
     if(modo==="completo")monto=total;
     const btn=$("btn-admin-create-sale");btn.disabled=true;btn.textContent="Registrando...";
     try{
-        const r=await adminRequest({action:"crear_venta_admin",cliente,telefono:$("admin-sale-phone").value.trim(),entrega:$("admin-sale-delivery").value,direccion:$("admin-sale-address").value.trim(),metodoPago:metodo,modalidadPago:modo,montoPago:monto,items:TM_ADMIN_SALE_ITEMS.map(x=>({id:x.id,nombre:x.nombre,precio:x.precio,cantidad:x.cantidad,talla:x.talla,color:x.color,nota:x.nota}))});
+        const r=await adminRequest({action:"crear_venta_admin",cliente,telefono:$("admin-sale-phone").value.trim(),requiereDocumento,documentoCliente,entrega:$("admin-sale-delivery").value,direccion:$("admin-sale-address").value.trim(),metodoPago:metodo,modalidadPago:modo,montoPago:monto,items:TM_ADMIN_SALE_ITEMS.map(x=>({id:x.id,nombre:x.nombre,precio:x.precio,cantidad:x.cantidad,talla:x.talla,color:x.color,nota:x.nota}))});
         if(r.status!=="success")throw new Error(r.message||"No se pudo registrar la venta.");
         tmAdminSaleResultado(r);
         if(r.whatsappUrl)window.open(r.whatsappUrl,"_blank","noopener,noreferrer");
