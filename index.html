@@ -730,9 +730,11 @@ header{
 .admin-sale-document-toggle input{width:16px;height:16px}
 .admin-sale-document-toggle #admin-sale-documento{width:100%;height:40px;box-sizing:border-box;padding:8px 10px;border:1px solid #cbd5e1;border-radius:8px;background:#fff}
 @media(max-width:700px){
-  .admin-category-create-controls{display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;align-items:center!important;width:100%!important;gap:6px!important}
-  .admin-category-create-controls input{width:100%!important;min-width:0!important}
-  .admin-category-create-controls .btn-opcion{width:auto!important;max-width:145px!important;padding:8px 10px!important;font-size:.68rem!important;white-space:nowrap!important}
+  .admin-category-create-row{display:block!important;width:100%!important;box-sizing:border-box!important}
+  .admin-category-create-title{margin-bottom:8px!important}
+  .admin-category-create-controls{display:flex!important;flex-direction:column!important;align-items:stretch!important;width:100%!important;gap:8px!important}
+  .admin-category-create-controls input{display:block!important;width:100%!important;min-width:0!important;min-height:46px!important;height:46px!important;box-sizing:border-box!important;padding:10px 12px!important;font-size:16px!important}
+  .admin-category-create-controls .btn-opcion{display:block!important;width:100%!important;max-width:none!important;min-height:42px!important;padding:10px 12px!important;font-size:.78rem!important;white-space:nowrap!important}
   .admin-category-list{width:100%!important;overflow-x:auto!important;flex-wrap:nowrap!important;padding-bottom:2px}
   .admin-category-item{flex:0 0 auto}
 }
@@ -6112,37 +6114,47 @@ function actualizarCabeceraVariantesAdmin(){
     if(head && !rows.length) head.remove();
 }
 
-const TM_CATEGORIAS_STORAGE_KEY="tm_categorias_definidas_v1";
-function tmLeerCategoriasGuardadas(){
-    try{
-        const raw=localStorage.getItem(TM_CATEGORIAS_STORAGE_KEY);
-        const arr=JSON.parse(raw||"[]");
-        return Array.isArray(arr)?arr.map(x=>String(x||"").trim().toLowerCase()).filter(Boolean):[];
-    }catch(e){return [];}
-}
-function tmGuardarCategoriasGuardadas(categorias){
-    try{localStorage.setItem(TM_CATEGORIAS_STORAGE_KEY,JSON.stringify([...new Set(categorias)].sort((a,b)=>a.localeCompare(b))));}catch(e){}
+let TM_CATEGORIAS_SERVER = [];
+function tmNombreCategoria(cat){
+    const s=String(cat||"").trim();
+    return s?s.charAt(0).toUpperCase()+s.slice(1):"";
 }
 function tmCategoriasDefinidas(){
-    const delCatalogo=(DB||[]).map(p=>String(p.cat||"").trim().toLowerCase()).filter(Boolean);
-    const guardadas=tmLeerCategoriasGuardadas();
-    const todas=[...new Set([...delCatalogo,...guardadas])].sort((a,b)=>a.localeCompare(b));
-    const unionGuardadas=[...new Set([...guardadas,...delCatalogo])];
-    if(JSON.stringify([...guardadas].sort())!==JSON.stringify([...unionGuardadas].sort()))tmGuardarCategoriasGuardadas(unionGuardadas);
-    return todas;
+    return [...new Set((TM_CATEGORIAS_SERVER||[]).map(x=>{
+        if(typeof x==="string") return x.trim().toLowerCase();
+        return String(x?.categoria||"").trim().toLowerCase();
+    }).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
 }
-function tmNombreCategoria(cat){const s=String(cat||"").trim();return s?s.charAt(0).toUpperCase()+s.slice(1):"";}
-function tmCrearCategoria(){
+async function tmCargarCategoriasAdmin(silencioso=false){
+    try{
+        const r=await adminRequest({action:"listar_categorias"});
+        if(r.status!=="success") throw new Error(r.message||"No se pudieron cargar las categorías.");
+        TM_CATEGORIAS_SERVER=Array.isArray(r.categorias)?r.categorias.filter(x=>x&&x.activa!==false):[];
+        tmRenderCategoriasAdmin();
+        return TM_CATEGORIAS_SERVER;
+    }catch(e){
+        if(!silencioso) console.error("Categorías:",e);
+        throw e;
+    }
+}
+async function tmCrearCategoria(){
     const input=$("admin-new-category"); if(!input)return;
     const nombre=String(input.value||"").trim().replace(/\s+/g," ");
     if(!nombre){alert("Escribe el nombre de la categoría.");input.focus();return;}
     if(nombre.length<2){alert("La categoría debe tener al menos 2 caracteres.");input.focus();return;}
-    const normalizada=nombre.toLowerCase();
     const categorias=tmCategoriasDefinidas();
-    if(categorias.includes(normalizada)){alert("Esa categoría ya existe.");input.select();return;}
-    categorias.push(normalizada);tmGuardarCategoriasGuardadas(categorias);input.value="";tmRenderCategoriasAdmin();
-    const select=$("admin-product-cat");if(select)select.value=normalizada;
-    mostrarToast(`Categoría “${nombre}” creada.`);
+    if(categorias.includes(nombre.toLowerCase())){alert("Esa categoría ya existe.");input.select();return;}
+    const btn=document.querySelector(".admin-category-create-controls .btn-opcion");
+    if(btn){btn.disabled=true;btn.textContent="Creando...";}
+    try{
+        const r=await adminRequest({action:"crear_categoria",categoria:nombre});
+        if(r.status!=="success")throw new Error(r.message||"No se pudo crear la categoría.");
+        input.value="";
+        await tmCargarCategoriasAdmin();
+        const select=$("admin-product-cat"); if(select&&r.categoria)select.value=String(r.categoria).toLowerCase();
+        mostrarToast(r.message||`Categoría “${nombre}” creada.`);
+    }catch(e){alert(`No se pudo crear la categoría. ${e.message}`);}
+    finally{if(btn){btn.disabled=false;btn.textContent="➕ Crear categoría";}}
 }
 async function tmEditarCategoria(cat){
     const actual=String(cat||"").trim().toLowerCase(); if(!actual)return;
@@ -6151,30 +6163,27 @@ async function tmEditarCategoria(cat){
     const nombre=String(nuevo).trim().replace(/\s+/g," "); if(!nombre)return;
     const nuevoCat=nombre.toLowerCase();
     if(nuevoCat===actual)return;
-    const cats=tmCategoriasDefinidas();
-    if(cats.includes(nuevoCat)){alert("Ya existe una categoría con ese nombre.");return;}
-    const productos=(DB||[]).filter(p=>String(p.cat||"").trim().toLowerCase()===actual);
-    if(productos.length){
-        if(!confirm(`La categoría “${tmNombreCategoria(actual)}” está asignada a ${productos.length} producto(s). ¿Quieres renombrarla también en esos productos?`))return;
-        try{
-            for(const p of productos){
-                const payload={action:"guardar_producto",id:p.id,nombre:p.nombre,precio:Number(p.precio||0),cat:nuevoCat,promo:p.promo||"",img:p.img||"",stock:Number(p.stock||0),costo:Number(p.costo||0),colores:p.colores||[],tallas:p.tallas||[],desc:p.desc||"",variantes:(p.variantes||[]).map(v=>({varianteId:v.varianteId||"",talla:v.talla||"",color:v.color||"",stock:Number(v.stock||0),imagen:v.imagen||v.img||"",costo:Number(v.costo||0),activo:v.activo!==false}))};
-                const r=await adminRequest(payload);if(r.status!=="success")throw new Error(r.message||`No se pudo actualizar ${p.id}.`);
-            }
-            await cargarProductos();
-        }catch(e){alert(`No se pudo renombrar la categoría. ${e.message}`);return;}
-    }
-    const actualizadas=tmLeerCategoriasGuardadas().filter(c=>c!==actual);actualizadas.push(nuevoCat);tmGuardarCategoriasGuardadas(actualizadas);
-    tmRenderCategoriasAdmin();renderInventarioAdmin();mostrarToast(`Categoría renombrada a “${tmNombreCategoria(nuevoCat)}”.`);
+    if(tmCategoriasDefinidas().includes(nuevoCat)){alert("Ya existe una categoría con ese nombre.");return;}
+    try{
+        const r=await adminRequest({action:"editar_categoria",categoriaActual:actual,nuevaCategoria:nuevoCat});
+        if(r.status!=="success")throw new Error(r.message||"No se pudo editar la categoría.");
+        await tmCargarCategoriasAdmin();
+        await cargarProductos();
+        renderInventarioAdmin();
+        mostrarToast(r.message||`Categoría renombrada a “${tmNombreCategoria(nuevoCat)}”.`);
+    }catch(e){alert(`No se pudo editar la categoría. ${e.message}`);}
 }
-function tmEliminarCategoria(cat){
+async function tmEliminarCategoria(cat){
     const actual=String(cat||"").trim().toLowerCase();if(!actual)return;
-    const productos=(DB||[]).filter(p=>String(p.cat||"").trim().toLowerCase()===actual);
-    if(productos.length){alert(`No puedes eliminar “${tmNombreCategoria(actual)}” porque está asignada a ${productos.length} producto(s). Primero cambia la categoría de esos productos.`);return;}
     if(!confirm(`¿Eliminar la categoría “${tmNombreCategoria(actual)}”?`))return;
-    tmGuardarCategoriasGuardadas(tmLeerCategoriasGuardadas().filter(c=>c!==actual));
-    if(TM_ADMIN_INVENTORY_CATEGORY===actual)TM_ADMIN_INVENTORY_CATEGORY="";
-    tmRenderCategoriasAdmin();renderInventarioAdmin();mostrarToast(`Categoría “${tmNombreCategoria(actual)}” eliminada.`);
+    try{
+        const r=await adminRequest({action:"eliminar_categoria",categoria:actual});
+        if(r.status!=="success")throw new Error(r.message||"No se pudo eliminar la categoría.");
+        if(TM_ADMIN_INVENTORY_CATEGORY===actual)TM_ADMIN_INVENTORY_CATEGORY="";
+        await tmCargarCategoriasAdmin();
+        renderInventarioAdmin();
+        mostrarToast(r.message||`Categoría “${tmNombreCategoria(actual)}” eliminada.`);
+    }catch(e){alert(`No se pudo eliminar la categoría. ${e.message}`);}
 }
 function tmRenderCategoriasAdmin(){
     const list=$("admin-category-list"), select=$("admin-product-cat"); if(!list)return;
@@ -6189,7 +6198,11 @@ function tmRenderCategoriasAdmin(){
         const del=document.createElement("button");del.type="button";del.className="admin-category-action delete";del.title="Eliminar categoría";del.textContent="🗑️";del.onclick=e=>{e.stopPropagation();tmEliminarCategoria(cat);};
         wrap.append(b,edit,del);list.appendChild(wrap);
     });
-    if(select){const actual=select.value;select.innerHTML='<option value="">Selecciona una categoría</option>'+cats.map(c=>`<option value="${escaparHTML(c)}">${escaparHTML(tmNombreCategoria(c))}</option>`).join("");if(cats.includes(actual))select.value=actual;}
+    if(select){
+        const actual=String(select.value||"").trim().toLowerCase();
+        select.innerHTML='<option value="">Selecciona una categoría</option>'+cats.map(c=>`<option value="${escaparHTML(c)}">${escaparHTML(tmNombreCategoria(c))}</option>`).join("");
+        if(cats.includes(actual))select.value=actual;
+    }
 }
 let TM_ADMIN_INVENTORY_CATEGORY="";
 function tmDetectarSeparador(text){
@@ -6212,8 +6225,8 @@ function tmParsearTablaEntrada(text){
         const fila=[]; let valor=""; let comillas=false;
         for(let i=0;i<linea.length;i++){
             const ch=linea[i],sig=linea[i+1];
-            if(ch==="" && comillas && sig===""){valor+="";i++;continue;}
-            if(ch===""){comillas=!comillas;continue;}
+            if(ch==='"' && comillas && sig==='"'){valor+='"';i++;continue;}
+            if(ch==='"'){comillas=!comillas;continue;}
             if(ch===sep && !comillas){fila.push(valor);valor="";continue;}
             valor+=ch;
         }
@@ -6234,8 +6247,6 @@ function tmDescargarArchivoTexto(contenido,nombre,tipo){
     a.href=URL.createObjectURL(blob);a.download=nombre;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),500);
 }
 function tmDescargarPlantillaEntradaMasiva(){
-    // Punto y coma: evita que Excel en configuraciones regionales en español coloque todo en una sola celda.
-    // PRODUCTO_ID evita además el falso aviso de archivo SYLK que Excel muestra cuando un CSV comienza por "ID".
     const csv="PRODUCTO_ID;TALLA;COLOR;CANTIDAD;COSTO\r\nCAM-001;M;Negro;20;8.50\r\nCAM-001;L;Negro;15;8.50\r\n";
     tmDescargarArchivoTexto(csv,"plantilla_entradas_inventario.csv","text/csv");
 }
@@ -6245,26 +6256,49 @@ function tmDescargarPlantillaEntradaMasivaTSV(){
 }
 async function tmPrepararEntradaMasiva(file){
     const box=$("tm-bulk-stock-preview");if(!box||!file)return;
-    try{const rows=tmCsvParseSimple(await file.text()),byId=new Map(),errores=[];
-        rows.forEach(r=>{const p=DB.find(x=>String(x.id).trim()===r.id);if(!p)errores.push(`Fila ${r.fila}: producto ${r.id} no existe.`);else if(!Number.isInteger(r.cantidad)||r.cantidad<=0)errores.push(`Fila ${r.fila}: CANTIDAD debe ser un entero mayor que 0.`);else if(p.variantes?.length&&(!r.talla||!r.color))errores.push(`Fila ${r.fila}: ${r.id} tiene variantes; TALLA y COLOR son obligatorios.`);else if(p.variantes?.length&&!p.variantes.some(v=>String(v.talla||"").toLowerCase()===r.talla.toLowerCase()&&String(v.color||"").toLowerCase()===r.color.toLowerCase()))errores.push(`Fila ${r.fila}: no existe la variante ${r.id} / ${r.talla} / ${r.color}.`);else if(!p.variantes?.length&&(r.talla||r.color))errores.push(`Fila ${r.fila}: ${r.id} no tiene variantes; deja TALLA y COLOR vacíos.`);else{if(!byId.has(r.id))byId.set(r.id,[]);byId.get(r.id).push(r);}});
-        const cambios=[...byId].map(([id,items])=>({p:DB.find(x=>String(x.id)===id),items,total:items.reduce((s,r)=>s+r.cantidad,0)})); window.TM_BULK_IMPORT={cambios,errores};
-        box.style.display="block";box.innerHTML=`<div class="tm-bulk-summary"><span>Filas: <b>${rows.length}</b></span><span>Productos: <b>${cambios.length}</b></span><span>Unidades a sumar: <b>${cambios.reduce((s,x)=>s+x.total,0)}</b></span><span>Errores: <b>${errores.length}</b></span></div>${errores.length?`<div class="tm-bulk-errors">${errores.map(escaparHTML).join("<br>")}</div>`:'<div class="tm-bulk-ok">✓ Archivo validado correctamente.</div>'}<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:8px"><button class="btn-opcion" style="margin:0" onclick="tmCancelarEntradaMasiva()">Cancelar</button>${!errores.length&&cambios.length?'<button class="btn-add" style="margin:0" onclick="tmAplicarEntradaMasiva()">📥 Aplicar entrada</button>':''}</div>`;
+    try{
+        const rows=tmCsvParseSimple(await file.text()),byId=new Map(),errores=[];
+        rows.forEach(r=>{
+            const p=DB.find(x=>String(x.id).trim()===r.id);
+            if(!p)errores.push(`Fila ${r.fila}: producto ${r.id} no existe.`);
+            else if(!Number.isInteger(r.cantidad)||r.cantidad<=0)errores.push(`Fila ${r.fila}: CANTIDAD debe ser un entero mayor que 0.`);
+            else if(p.variantes?.length&&(!r.talla||!r.color))errores.push(`Fila ${r.fila}: ${r.id} tiene variantes; TALLA y COLOR son obligatorios.`);
+            else if(p.variantes?.length&&!p.variantes.some(v=>String(v.talla||"").toLowerCase()===r.talla.toLowerCase()&&String(v.color||"").toLowerCase()===r.color.toLowerCase()))errores.push(`Fila ${r.fila}: no existe la variante ${r.id} / ${r.talla} / ${r.color}.`);
+            else if(!p.variantes?.length&&(r.talla||r.color))errores.push(`Fila ${r.fila}: ${r.id} no tiene variantes; deja TALLA y COLOR vacíos.`);
+            else{if(!byId.has(r.id))byId.set(r.id,[]);byId.get(r.id).push(r);}
+        });
+        const cambios=[...byId].map(([id,items])=>({p:DB.find(x=>String(x.id)===id),items,total:items.reduce((s,r)=>s+r.cantidad,0)}));
+        window.TM_BULK_IMPORT={cambios,errores,rows};
+        box.style.display="block";
+        box.innerHTML=`<div class="tm-bulk-summary"><span>Filas: <b>${rows.length}</b></span><span>Productos: <b>${cambios.length}</b></span><span>Unidades a sumar: <b>${cambios.reduce((s,x)=>s+x.total,0)}</b></span><span>Errores: <b>${errores.length}</b></span></div>${errores.length?`<div class="tm-bulk-errors">${errores.map(escaparHTML).join("<br>")}</div>`:'<div class="tm-bulk-ok">✓ Archivo validado correctamente.</div>'}<div style="display:flex;gap:6px;justify-content:flex-end;margin-top:8px"><button class="btn-opcion" style="margin:0" onclick="tmCancelarEntradaMasiva()">Cancelar</button>${!errores.length&&cambios.length?'<button class="btn-add" style="margin:0" onclick="tmAplicarEntradaMasiva()">📥 Aplicar entrada</button>':''}</div>`;
     }catch(e){box.style.display="block";box.innerHTML=`<div class="tm-bulk-errors">❌ ${escaparHTML(e.message)}</div>`;window.TM_BULK_IMPORT=null;}
 }
 function tmCancelarEntradaMasiva(){window.TM_BULK_IMPORT=null;const b=$("tm-bulk-stock-preview"),f=$("tm-bulk-stock-file");if(b){b.style.display="none";b.innerHTML=""}if(f)f.value="";}
 async function tmAplicarEntradaMasiva(){
-    const imp=window.TM_BULK_IMPORT;if(!imp||imp.errores.length)return; const btn=document.querySelector("#tm-bulk-stock-preview .btn-add");if(btn){btn.disabled=true;btn.textContent="Aplicando...";}
-    try{let actualizados=0;
-        for(const x of imp.cambios){const p=JSON.parse(JSON.stringify(x.p));
-            if(Array.isArray(p.variantes)&&p.variantes.length){for(const r of x.items){const v=p.variantes.find(v=>String(v.talla||"").toLowerCase()===r.talla.toLowerCase()&&String(v.color||"").toLowerCase()===r.color.toLowerCase());if(!v)throw new Error(`No existe la variante ${p.id} / ${r.talla} / ${r.color}.`);v.stock=Number(v.stock||0)+r.cantidad;if(r.costo!==null&&!Number.isNaN(r.costo))v.costo=Math.max(0,r.costo);}p.stock=p.variantes.reduce((s,v)=>s+Number(v.stock||0),0);}else{p.stock=Number(p.stock||0)+x.total;const c=x.items.find(r=>r.costo!==null&&!Number.isNaN(r.costo));if(c)p.costo=Math.max(0,c.costo);}
-            const payload={action:"guardar_producto",id:p.id,nombre:p.nombre,precio:Number(p.precio||0),cat:p.cat||"",promo:p.promo||"",img:p.img||"",stock:Number(p.stock||0),costo:Number(p.costo||0),colores:p.colores||[],tallas:p.tallas||[],desc:p.desc||"",variantes:(p.variantes||[]).map(v=>({varianteId:v.varianteId||"",talla:v.talla||"",color:v.color||"",stock:Number(v.stock||0),imagen:v.imagen||v.img||"",costo:Number(v.costo||0),activo:v.activo!==false}))};
-            const r=await adminRequest(payload);if(r.status!=="success")throw new Error(r.message||`No se pudo actualizar ${p.id}.`);actualizados++;}
-        await cargarProductos();tmRenderCategoriasAdmin();renderInventarioAdmin();mostrarToast(`Entrada aplicada: ${actualizados} producto(s) actualizados.`);tmCancelarEntradaMasiva();
-    }catch(e){alert(`No se aplicó la entrada. ${e.message}`);if(btn){btn.disabled=false;btn.textContent="📥 Aplicar entrada";}}
+    const imp=window.TM_BULK_IMPORT;
+    if(!imp||imp.errores.length)return;
+    const btn=document.querySelector("#tm-bulk-stock-preview .btn-add");if(btn){btn.disabled=true;btn.textContent="Aplicando...";}
+    try{
+        const entradas=imp.rows.map(r=>({productoId:r.id,talla:r.talla,color:r.color,cantidad:r.cantidad,costo:r.costo}));
+        const r=await adminRequest({action:"entrada_masiva",entradas});
+        if(r.status!=="success")throw new Error(r.message||"No se pudo aplicar la entrada.");
+        await cargarProductos();
+        await tmCargarCategoriasAdmin(true);
+        renderInventarioAdmin();
+        mostrarToast(`${r.message||"Entrada aplicada correctamente."} ${r.unidades?`Unidades: ${r.unidades}.`:""}`);
+        tmCancelarEntradaMasiva();
+    }catch(e){
+        alert(`No se aplicó la entrada. ${e.message}`);
+        if(btn){btn.disabled=false;btn.textContent="📥 Aplicar entrada";}
+    }
 }
 
 async function abrirEditorProductoAdmin(id=""){
-    tmRenderCategoriasAdmin();
+    if(!tmCategoriasDefinidas().length){
+        try{await tmCargarCategoriasAdmin(true);}catch(e){}
+    }else{
+        tmRenderCategoriasAdmin();
+    }
     adminProductEditingId=id||"";
     $("admin-product-title").textContent=id?"Editar producto":"Nuevo producto";
     $("admin-product-id").disabled=!!id;
@@ -6288,6 +6322,9 @@ function cerrarModalProductoAdmin(){ $("modalAdminProducto").style.display="none
 async function guardarProductoAdminFrontend(){
     const id=$("admin-product-id").value.trim();
     const categoriaSeleccionada=String($("admin-product-cat")?.value||"").trim().toLowerCase();
+    if(!categoriaSeleccionada||!tmCategoriasDefinidas().includes(categoriaSeleccionada)){
+        try{await tmCargarCategoriasAdmin(true);}catch(e){}
+    }
     if(!categoriaSeleccionada||!tmCategoriasDefinidas().includes(categoriaSeleccionada)){alert("Debes seleccionar una categoría de la lista existente.");return;}
     const data={
         action:"guardar_producto", id,
@@ -7175,7 +7212,12 @@ switchAdminTab=function(tab){
     document.querySelectorAll(".tab-admin-btn").forEach(b=>b.classList.remove("activo"));
     ["view-admin-orders","view-admin-stock","view-admin-discount","view-admin-accounting","view-admin-sale"].forEach(id=>{if($(id))$(id).style.display="none";});
     if(tab==="orders"){$("tab-btn-orders")?.classList.add("activo");$("view-admin-orders")&&($("view-admin-orders").style.display="block");cargarPedidosAdmin();return;}
-    if(tab==="stock"){$("tab-btn-stock")?.classList.add("activo");$("view-admin-stock")&&($("view-admin-stock").style.display="block");tmRenderCategoriasAdmin();renderInventarioAdmin();return;}
+    if(tab==="stock"){
+        $("tab-btn-stock")?.classList.add("activo");
+        $("view-admin-stock")&&($("view-admin-stock").style.display="block");
+        tmCargarCategoriasAdmin(true).then(()=>renderInventarioAdmin()).catch(e=>{console.error(e);renderInventarioAdmin();});
+        return;
+    }
     if(tab==="discount"){$("tab-btn-discount")?.classList.add("activo");$("view-admin-discount")&&($("view-admin-discount").style.display="block");return;}
     if(tab==="accounting"){$("tab-btn-accounting")?.classList.add("activo");$("view-admin-accounting")&&($("view-admin-accounting").style.display="block");tmActualizarFiltroContabilidad();cargarContabilidadAdmin();return;}
     if(tab==="sale"){$("tab-btn-sale")?.classList.add("activo");$("view-admin-sale")&&($("view-admin-sale").style.display="block");tmAdminSaleInicializar();return;}
